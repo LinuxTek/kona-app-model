@@ -4,48 +4,34 @@
 package com.linuxtek.kona.app.service;
 
 import com.linuxtek.kona.app.entity.KUser;
-import com.linuxtek.kona.app.entity.KUserAuth;
 import com.linuxtek.kona.data.service.KDataService;
-import com.linuxtek.kona.remote.service.KService;
-import com.linuxtek.kona.remote.service.KServiceRelativePath;
 
+import com.linuxtek.kona.remote.service.KService;
+import com.linuxtek.kona.remote.service.KServiceClient;
 
 /**
  * The client side stub for the RPC service.
  */
-@KServiceRelativePath(KUserService.SERVICE_PATH)
-public interface KUserService<U extends KUser, A extends KUserAuth> 
-        extends KService, KDataService<U> {
-
-    // NOTE: SERVICE_PATH must begin with rpc/ prefix
-    public static final String SERVICE_PATH = "rpc/kona/UserService";
-    
-	public U registerUser(Long appId, Long typeId, Long accountId, Long roles, 
-			String uid, String username, String password, String firstName, 
-			String lastName, String email, String mobileNumber, 
-			String hostname, String browser, String accessToken, Integer signupTime);
-
-    /*
-    public <T extends KToken> void updateRegistration(T token, 
-            Registration registration);
-    */
-
-    public U validateCredentials(String username, String password);
-
-    public U fetchByUsername(String username);
+public interface KUserService<U extends KUser> extends KService, KDataService<U> {
+	public static final String SERVICE_PATH = "rpc/kona/UserService";
+	
+	public U registerUser(U user, KServiceClient client);
 
     public U fetchByUid(String uid);
-    
-    public U fetchByAccessToken(String accessToken);
 
+    public U fetchByUsername(String username);
+    
     public U fetchByEmail(String email);
 
-    public A setPassword(Long userId, String password);
+    public U fetchByAccessToken(String accessToken);
     
-    public A setEncryptedPassword(Long userId, String encryptedPassword);
-
-    public String resetPassword(Long userId);
-
 	public U retire(U user);
+	
+    public U validateCredentials(String username, String password);
 
+    public void setPlainPassword(Long userId, String password);
+    
+    public void setEncryptedPassword(Long userId, String encryptedPassword);
+
+    public void resetPassword(Long userId);
 }

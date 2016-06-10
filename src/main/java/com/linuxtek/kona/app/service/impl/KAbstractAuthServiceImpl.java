@@ -6,10 +6,8 @@ package com.linuxtek.kona.app.service.impl;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
-//import org.springframework.stereotype.Service;
-//import org.springframework.transaction.annotation.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.linuxtek.kona.app.entity.KToken;
 import com.linuxtek.kona.app.entity.KTokenLog;
@@ -19,10 +17,9 @@ import com.linuxtek.kona.remote.service.KServiceClient;
 import com.linuxtek.kona.util.KClassUtil;
 import com.linuxtek.kona.util.KDateUtil;
 
-public abstract class KAbstractAuthServiceImpl<T extends KToken> implements KAuthService<T> {
+public abstract class KAbstractAuthServiceImpl<U extends KUser, T extends KToken> implements KAuthService<U, T> {
 
-    private static Logger logger = 
-        Logger.getLogger(KAbstractAuthServiceImpl.class);
+    private static Logger logger = LoggerFactory.getLogger(KAbstractAuthServiceImpl.class);
 
     /**
      * Login the user and return a token.
@@ -83,9 +80,8 @@ public abstract class KAbstractAuthServiceImpl<T extends KToken> implements KAut
     
     @Override
     public T createToken(String clientId, KUser user, String scope) {
-    	boolean sandbox = isSandboxClientId(clientId);
-    	String accessToken = generateToken(sandbox);
-    	String refreshToken = generateToken(sandbox);
+    	String accessToken = generateTokenString();
+    	String refreshToken = generateTokenString();
         
     	Date now = new Date();
         Date accessExpiration = null;
@@ -123,7 +119,6 @@ public abstract class KAbstractAuthServiceImpl<T extends KToken> implements KAut
     	token.setAccessExpirationDate(accessExpiration);
     	token.setRefreshExpirationDate(refreshExpiration);
     	token.setActive(true);
-    	token.setSandbox(sandbox);
 
     	token = addToken(token);
         return token;
@@ -358,9 +353,8 @@ public abstract class KAbstractAuthServiceImpl<T extends KToken> implements KAut
     protected abstract <U extends KUser> U 
             validateCredentials(String username, String password);
     
-    protected abstract boolean isSandboxClientId(String clientId);
     
     protected abstract Long getAppId(String clientId);
     
-    protected abstract String generateToken(boolean sandbox);
+    protected abstract String generateTokenString();
 }

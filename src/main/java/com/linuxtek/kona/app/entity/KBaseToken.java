@@ -24,7 +24,6 @@ public class KBaseToken implements KToken {
 	private boolean active;
 	private boolean approved;
     private boolean guest;
-    private boolean sandbox;
     private Long accessCount;
     private Date lastLoginDate;
     private Date loginDate;
@@ -175,15 +174,6 @@ public class KBaseToken implements KToken {
         this.guest = guest;
     }
 
-    @Override
-    public boolean isSandbox() {
-        return sandbox;
-    }
-
-    @Override
-    public void setSandbox(boolean sandbox) {
-        this.sandbox = sandbox;
-    }
 
     @Override
     public Long getAccessCount() {

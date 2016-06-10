@@ -16,9 +16,4 @@ public interface KServiceFactory {
     
     @SuppressWarnings("rawtypes")
     public KFileService getFileService();
-    /*
-    public <A extends KAuthService> A getAuthService();
-    public <U extends KUserService> U getUserService();
-    public <F extends KFileService> F getFileService();
-    */
 }

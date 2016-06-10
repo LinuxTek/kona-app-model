@@ -40,13 +40,6 @@ public interface KToken extends KEntityObject {
 
 
     /** 
-     * Is this a sandbox token.
-     * Could be independently set or determined by whether or not clientId is sandbox.
-     */
-    public boolean isSandbox();
-    public void setSandbox(boolean sandbox);
-    
-    /** 
      * UserId of this system that has granted permission
      * to the app.  Token issued will be used to access 
      * this system on behalf of this user.
@@ -54,11 +47,13 @@ public interface KToken extends KEntityObject {
     public Long getUserId(); 
     public void setUserId(Long userId);
     
+    
     /** 
      * Token sent to app to access system on behalf of user.
      */
     public String getAccessToken(); 
     public void setAccessToken(String accessToken);
+    
     
     /** 
      * Refresh token used by app to upd
@@ -66,12 +61,14 @@ public interface KToken extends KEntityObject {
     public String getRefreshToken(); 
     public void setRefreshToken(String refreshToken);
 
+    
     /** 
      * Username of the client. 
      */
     public String getUsername(); 
     public void setUsername(String username);
 
+    
     /** 
      * Host from which user logged in. 
      */
@@ -96,13 +93,16 @@ public interface KToken extends KEntityObject {
     public String getScope();
     public void setScope(String scope);
     
+    /**
+     * Spring security oauth2 authentication object.
+     */
     public byte[] getAuthentication(); 
     public void setAuthentication(byte[] authentication);
 
     /** 
      * Flag to determine if token is active. A token can be
-     *  manually disabled by an administrator to effectively 
-     *  logout the current user and force a new login. 
+     * manually disabled by an administrator to effectively 
+     * logout the current user and force a new login. 
      */
     public boolean isActive();
     public void setActive(boolean active);
@@ -139,7 +139,6 @@ public interface KToken extends KEntityObject {
     /** 
      * Date client logged in. 
      */
-    
     public Date getLastLoginDate();
     public void setLastLoginDate(Date lastLoginDate);
     
@@ -162,7 +161,7 @@ public interface KToken extends KEntityObject {
     public void setRefreshExpirationDate(Date refreshExpirationDate);
 
     /** 
-     * The date this token record was last updated.
+     * Date this token record was last updated.
      */
     public Date getLastUpdated();
     public void setLastUpdated(Date lastUpdated);

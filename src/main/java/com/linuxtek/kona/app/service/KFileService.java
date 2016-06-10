@@ -15,11 +15,7 @@ import com.linuxtek.kona.remote.service.KServiceRelativePath;
 /**
  * The client side stub for the RPC service.
  */
-@KServiceRelativePath(KFileService.SERVICE_PATH)
-public interface KFileService<F extends KFile> 
-        extends KService, KDataService<F> {
-
-    // SERVICE_PATH must begin with rpc/ prefix
+public interface KFileService<F extends KFile> extends KService, KDataService<F> {
     public static final String SERVICE_PATH = "rpc/kona/FileService";
     
     public F fetchById(Long id, boolean withData) throws IOException;
