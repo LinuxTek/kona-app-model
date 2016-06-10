@@ -23,8 +23,7 @@ public abstract class KAbstractAuthServiceImpl<U extends KUser, T extends KToken
 
     /**
      * Login the user and return a token.
-     *  - If the credentials match, a token is returned; if not, 
-     *    null is returned.
+     *  - If the credentials match, a token is returned; if not, null is returned.
      */
     @Override 
     public T login(String clientId, String username, String password) {
@@ -34,21 +33,19 @@ public abstract class KAbstractAuthServiceImpl<U extends KUser, T extends KToken
         //
         // NOTE: a Guest Token is not necessarily the same as a Guest User
         // which could be a normal user called guest with reduced privileges.
-        KUser user = null;
+        U user = null;
         if (username != null) {
             // Get the user
             user = validateCredentials(username, password);
 
             if (user == null) {
                 logger.info("Invalid username and/or password:" 
-                            + "\n\tusername: " + username
-                            + "\n\tpassword: " + password);
-                //setSessionAccessToken(null);
-                return (null);
+                            + "\nusername: {}\npassword: {}", username, password);
+                return null;
             }
 
             // see if we have an active token for this user and app
-            T activeToken = getActiveToken(clientId, user.getId());
+            T activeToken = getTokenService().fetchActiveByClientIdAndUserId(clientId, user.getId());
             if (activeToken != null) {
 
                 Long accessCount = activeToken.getAccessCount();
@@ -63,7 +60,7 @@ public abstract class KAbstractAuthServiceImpl<U extends KUser, T extends KToken
 
                 logger.debug("Active Token:\n" + activeToken);
 
-                updateToken(activeToken);
+                getTokenService().update(activeToken);
                 loginUser(user, activeToken);
                 return (activeToken);
             }
