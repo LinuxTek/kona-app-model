@@ -17,9 +17,13 @@ public interface KAuthService<U extends KUser, T extends KToken> extends KServic
 
     public T login(String clientId, String username, String password) throws KAuthException;
     
+    public T login(String clientId, U user);
+    
     public T login(T token, KServiceClient client) throws KAuthException;
     
     public T login(String accessToken, KServiceClient client) throws KAuthException;
+    
+    public void logout(U user);
     
     public void logout(T token);
     

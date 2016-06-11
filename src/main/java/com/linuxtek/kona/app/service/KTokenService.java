@@ -16,54 +16,55 @@ import com.linuxtek.kona.remote.service.KService;
 public interface KTokenService<T extends KToken> extends KService, KDataService<T> {
 	public static final String SERVICE_PATH = "rpc/kona/TokenService";
 
-	public T fetchByAccessToken(String accessToken);
-	
-	public T fetchByRefreshToken(String refreshToken);
-	
-	public T fetchActiveByClientIdAndUserId(String clientId, Long userId);
-	
-	public List<T> fetchActiveByUserId(Long userId);
-	
-	public List<T> fetchByFilter(Map<String,Object> filter);
-	
-	public T expire(T token);
-	
-    /**
-     * Check if a token is valid.  The token will first be refreshed
-     * with the latest attributes before it is checked.
-     */
-    public boolean isValid(T token);
-    
-    /**
-     * Check if a token is valid.  Set fetchFreshToken to true to 
-     * first refresh the token's attributes before checking its validity.
-     */
-    public boolean isValid(T token, boolean fetchFreshToken);
-    
-    
-    /**
+	/**
 	 * Return a valid token for the specified accessToken.  
-     * 
-     * Equivalent to getToken(accessToken, true);
+	 * 
+	 * Equivalent to fetchByAccessToken(accessToken, false);
 	 *
 	 * @return A valid Token object or null if the accessToken is not valid.
 	 */
-    public T getToken(String accessToken);
+	public T fetchByAccessToken(String accessToken);
     
-    
-    
-    /**
+	/**
 	 * Return a token for the specified accessToken.  
-     * 
-     * If checkValid is true, first run a check to see if the token
-     * is currently valid.  If not, return null. 
-     * 
-     * If checkValid is false, this method will return a Token
-     * if one is found for this accessToken.  It's up to the calling
-     * program to check if the returned token is active and 
-     * has not expired
+	 * 
+	 * If checkValid is true, first run a check to see if the token
+	 * is currently valid.  If not, return null. 
+	 * 
+	 * If checkValid is false, this method will return a Token
+	 * if one is found for this accessToken.  It's up to the calling
+	 * program to check if the returned token is active and 
+	 * has not expired
 	 *
 	 * @return A valid Token object or null if the accessToken is not valid.
 	 */
-	public T getToken(String accessToken, boolean checkValid);
+	public T fetchByAccessToken(String accessToken, boolean checkValid);
+
+	public T fetchByRefreshToken(String refreshToken);
+
+	public T fetchActiveByClientIdAndUserId(String clientId, Long userId);
+
+	public List<T> fetchActiveByUserId(Long userId);
+
+	public List<T> fetchByFilter(Map<String,Object> filter);
+
+	public T expire(T token);
+
+	/**
+	 * Check if a token is valid.  The token will first be refreshed
+	 * with the latest attributes before it is checked.
+	 */
+	public boolean isValid(T token);
+    
+	public boolean isValid(String accessToken);
+    
+
+	/**
+	 * Check if a token is valid.  Set fetchFreshToken to true to 
+	 * first refresh the token's attributes before checking its validity.
+	 */
+	public boolean isValid(T token, boolean fetchFreshToken);
+    
+	public boolean isValid(String accessToken, boolean fetchFreshToken);
+
 }
