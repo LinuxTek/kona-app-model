@@ -115,11 +115,7 @@ public interface KToken extends KEntityObject {
     public boolean isApproved();
     public void setApproved(boolean approved);
 
-    /** 
-     * Flag to determine if this token belongs to a guest user. 
-     */
-    public boolean isGuest();
-    public void setGuest(boolean guest);
+   
 
     /** 
      * Number of time this token has accessed a resource. 

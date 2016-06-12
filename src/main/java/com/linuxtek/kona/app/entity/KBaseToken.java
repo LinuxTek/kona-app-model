@@ -23,7 +23,6 @@ public class KBaseToken implements KToken {
     private String appBuild;
 	private boolean active;
 	private boolean approved;
-    private boolean guest;
     private Long accessCount;
     private Date lastLoginDate;
     private Date loginDate;
@@ -164,17 +163,7 @@ public class KBaseToken implements KToken {
         this.approved = approved;
     }
 
-    @Override
-    public boolean isGuest() {
-        return guest;
-    }
-
-    @Override
-    public void setGuest(boolean guest) {
-        this.guest = guest;
-    }
-
-
+  
     @Override
     public Long getAccessCount() {
         return accessCount;
