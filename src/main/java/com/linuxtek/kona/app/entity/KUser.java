@@ -102,26 +102,20 @@ public interface KUser extends KEntityObject {
     /**
      * The user's gender.
      */
-    /*
     public String getGender();
     public void setGender(String gender);
-    */
 
     /**
      * The user's date of birth.
      */
-    /*
     public Date getBirthDate();
     public void setBirthDate(Date birthDate);
-    */
 
     /**
-     * The user's "home" zip code.
+     * The user's postal code.
      */
-    /*
     public String getPostalCode();
     public void setPostalCode(String postalCode);
-    */
 
     /** 
      * The user's default locale.

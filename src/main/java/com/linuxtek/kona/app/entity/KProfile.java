@@ -29,9 +29,9 @@ public interface KProfile extends KEntityObject {
     public Long getUserId(); 
     public void setUserId(Long userId);
 
-
+    
     /**
-     * The a reference to the user's photo.
+     * Reference to the user's photo.
      */
     public Long getPhotoId(); 
     public void setPhotoId(Long photoId);

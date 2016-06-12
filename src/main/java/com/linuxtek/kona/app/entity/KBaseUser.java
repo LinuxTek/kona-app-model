@@ -11,7 +11,6 @@ public class KBaseUser implements KUser {
     private Long typeId;
     private Long roles;
     private Long accountId;
-    //private Long photoId;
     private Long statusId;
     private Long presenceId;
     private String uid;
@@ -21,8 +20,8 @@ public class KBaseUser implements KUser {
     private String displayName;
     private String email;
     private String mobileNumber;
-    //private String gender;
-    //private Date birthDate;
+    private String gender;
+    private Date birthDate;
     private String postalCode;
     private String locale;
     private String timeZone;
@@ -153,7 +152,6 @@ public class KBaseUser implements KUser {
         this.mobileNumber = mobileNumber == null ? null : mobileNumber.trim();
     }
 
-    /*
     public String getGender() {
         return gender;
     }
@@ -169,7 +167,6 @@ public class KBaseUser implements KUser {
     public void setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
     }
-    */
 
     public String getPostalCode() {
         return postalCode;
