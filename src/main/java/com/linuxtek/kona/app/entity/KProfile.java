@@ -20,11 +20,6 @@ public interface KProfile extends KEntityObject {
     public Long getId(); 
     public void setId(Long id);
 
-    /** 
-     * The user's publicly visible identifier.
-     */
-    public String getUid(); 
-    public void setUid(String uid);
 
     public Long getUserId(); 
     public void setUserId(Long userId);
@@ -49,4 +44,34 @@ public interface KProfile extends KEntityObject {
     public Date getBirthDate();
     public void setBirthDate(Date birthDate);
 
+
+    /** 
+     * The user's default locale.
+     */
+    public String getLocale();
+    public void setLocale(String locale);
+
+    /**
+     * The users' default time zone.
+     */
+    public String getTimeZone();
+    public void setTimeZone(String timeZone);
+
+    /**
+     * The latitude of the user's current geolocation.
+     */
+    public Double getLatitude();
+    public void setLatitude(Double latitude);
+
+    /**
+     * The longitude of the user's current geolocation.
+     */
+    public Double getLongitude();
+    public void setLongitude(Double longitude);
+    
+    /**
+     * The floor of the user's current geolocation.
+     */
+    public Integer getFloor();
+    public void setFloor(Integer floor);
 }

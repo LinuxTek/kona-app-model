@@ -5,6 +5,7 @@ package com.linuxtek.kona.app.service;
 
 import com.linuxtek.kona.app.entity.KToken;
 import com.linuxtek.kona.app.entity.KUser;
+import com.linuxtek.kona.app.entity.KUserAuth;
 import com.linuxtek.kona.remote.service.KService;
 import com.linuxtek.kona.remote.service.KServiceClient;
 
@@ -42,16 +43,11 @@ public interface KAuthService<U extends KUser, T extends KToken> extends KServic
     /** Default scope assigned to this client */
     public String getClientDefaultScope(String clientId);
     
-
     /**
      * Create a token without logging the user in.
      * 
      * This method does not check if the user already has an active token associated with this clientId.
      */
 	public T createToken(U user, String clientId, String scope);
-
-    public <S extends KTokenService<T>> S getTokenService();
-    
-    public <S extends KUserService<U>> S getUserService();
 
 }

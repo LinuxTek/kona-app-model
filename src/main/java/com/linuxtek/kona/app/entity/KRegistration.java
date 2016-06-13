@@ -52,18 +52,10 @@ public interface KRegistration extends KEntityObject {
 
     public Integer getSignupTime();
     public void setSignupTime(Integer signupTime);
+    
+    public boolean isVerified();
+    public void setVerified(boolean verified);
 
-    public Boolean getEmailVerified();
-    public void setEmailVerified(Boolean emailVerified);
-
-    public Boolean getEmailPending();
-    public void setEmailPending(Boolean emailPending);
-
-    public Boolean getMobileVerified();
-    public void setMobileVerified(Boolean mobileVerified);
-
-    public Boolean getMobilePending();
-    public void setMobilePending(Boolean mobilePending);
 
     public Date getCreatedDate();
     public void setCreatedDate(Date createdDate);

@@ -27,11 +27,5 @@ public interface KUserService<U extends KUser> extends KService, KDataService<U>
     
 	public U retire(U user);
 	
-    public U validateCredentials(String username, String password);
-
-    public void setPlainPassword(Long userId, String password);
-    
-    public void setEncryptedPassword(Long userId, String encryptedPassword);
-
-    public void resetPassword(Long userId);
+	public boolean isUsernameAvailable(String name);
 }

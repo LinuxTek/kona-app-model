@@ -46,15 +46,6 @@ public interface KUser extends KEntityObject {
     public Long getPresenceId();
     public void setPresenceId(Long presenceId);
     
-
-    /**
-     * The a reference to the user's photo.
-     */
-    /*
-    public Long getPhotoId(); 
-    public void setPhotoId(Long photoId);
-    */
-
     
     /** 
      * The user's publicly visible identifier.
@@ -99,47 +90,6 @@ public interface KUser extends KEntityObject {
     public String getMobileNumber();
     public void setMobileNumber(String mobileNumber);
 
-    /**
-     * The user's gender.
-     */
-    public String getGender();
-    public void setGender(String gender);
-
-    /**
-     * The user's date of birth.
-     */
-    public Date getBirthDate();
-    public void setBirthDate(Date birthDate);
-
-    /**
-     * The user's postal code.
-     */
-    public String getPostalCode();
-    public void setPostalCode(String postalCode);
-
-    /** 
-     * The user's default locale.
-     */
-    public String getLocale();
-    public void setLocale(String locale);
-
-    /**
-     * The users' default time zone.
-     */
-    public String getTimeZone();
-    public void setTimeZone(String timeZone);
-
-    /**
-     * The latitude of the user's current geolocation.
-     */
-    public Double getLatitude();
-    public void setLatitude(Double latitude);
-
-    /**
-     * The longitude of the user's current geolocation.
-     */
-    public Double getLongitude();
-    public void setLongitude(Double longitude);
     
     /**
      * Flag to indicate if this user account is currently enabled.
@@ -165,13 +115,7 @@ public interface KUser extends KEntityObject {
     public boolean isActive();
     public void setActive(boolean active);
 
-    /**
-     * Flag to indicate if this user account has passed all verification
-     * requirements.  Note that an account might be simultaneously
-     * enabled and not verified.
-     */
-    public boolean isVerified();
-    public void setVerified(boolean verified);
+
 
     /**
      * Flag to indicate if this user is currently logged in. If 

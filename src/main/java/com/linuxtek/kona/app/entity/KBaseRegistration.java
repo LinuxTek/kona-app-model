@@ -25,10 +25,10 @@ public class KBaseRegistration implements KRegistration {
     private Long platformId;
     private String platformVersion;
     private Integer signupTime;
-    private Boolean emailVerified;
-    private Boolean emailPending;
-    private Boolean mobileVerified;
-    private Boolean mobilePending;
+    private boolean emailVerified;
+    private boolean emailPending;
+    private boolean mobileVerified;
+    private boolean mobilePending;
     private Date createdDate;
     private Date remindedDate;
     private Date registeredDate;
@@ -187,45 +187,7 @@ public class KBaseRegistration implements KRegistration {
         this.signupTime = signupTime;
     }
 
-    @Override
-    public Boolean getEmailVerified() {
-        return emailVerified;
-    }
 
-    @Override
-    public void setEmailVerified(Boolean emailVerified) {
-        this.emailVerified = emailVerified;
-    }
-
-    @Override
-    public Boolean getEmailPending() {
-        return emailPending;
-    }
-
-    @Override
-    public void setEmailPending(Boolean emailPending) {
-        this.emailPending = emailPending;
-    }
-
-    @Override
-    public Boolean getMobileVerified() {
-        return mobileVerified;
-    }
-
-    @Override
-    public void setMobileVerified(Boolean mobileVerified) {
-        this.mobileVerified = mobileVerified;
-    }
-
-    @Override
-    public Boolean getMobilePending() {
-        return mobilePending;
-    }
-
-    @Override
-    public void setMobilePending(Boolean mobilePending) {
-        this.mobilePending = mobilePending;
-    }
 
     @Override
     public Date getCreatedDate() {
@@ -265,6 +227,54 @@ public class KBaseRegistration implements KRegistration {
     @Override
     public void setLastUpdated(Date lastUpdated) {
         this.lastUpdated = lastUpdated;
+    }
+    
+    
+    public boolean isEmailVerified() {
+        return emailVerified;
+    }
+
+    public void setEmailVerified(boolean emailVerified) {
+        this.emailVerified = emailVerified;
+    }
+
+    public boolean isEmailPending() {
+        return emailPending;
+    }
+
+    public void setEmailPending(boolean emailPending) {
+        this.emailPending = emailPending;
+    }
+
+    public boolean isMobileVerified() {
+        return mobileVerified;
+    }
+
+    public void setMobileVerified(boolean mobileVerified) {
+        this.mobileVerified = mobileVerified;
+    }
+
+    public boolean isMobilePending() {
+        return mobilePending;
+    }
+
+    public void setMobilePending(boolean mobilePending) {
+        this.mobilePending = mobilePending;
+    }
+    
+    @Override
+    public boolean isVerified() {
+        return isMobileVerified() && isEmailVerified();
+    }
+    
+    @Override
+    public void setVerified(boolean verified) {
+        setEmailVerified(verified);
+        setMobileVerified(verified);
+        if (verified) {
+        	setEmailPending(false);
+        	setMobilePending(false);
+        }
     }
 
     @Override

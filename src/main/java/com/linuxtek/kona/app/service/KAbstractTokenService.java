@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2011 LINUXTEK, Inc.  All Rights Reserved.
  */
-package com.linuxtek.kona.app.service.impl;
+package com.linuxtek.kona.app.service;
 
 import java.util.Date;
 
@@ -9,11 +9,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.linuxtek.kona.app.entity.KToken;
-import com.linuxtek.kona.app.service.KTokenService;
 
-public abstract class KAbstractTokenServiceImpl<T extends KToken> implements KTokenService<T> {
+public abstract class KAbstractTokenService<T extends KToken> implements KTokenService<T> {
 
-    private static Logger logger = LoggerFactory.getLogger(KAbstractTokenServiceImpl.class);
+    private static Logger logger = LoggerFactory.getLogger(KAbstractTokenService.class);
     
     @Override
     public boolean isValid(T token) {
@@ -37,7 +36,7 @@ public abstract class KAbstractTokenServiceImpl<T extends KToken> implements KTo
     @Override
     public boolean isValid(T token, boolean fetchFreshToken) {
 
-        logger.debug("KAbstractTokenServiceImpl: isValid: "
+        logger.debug("KAbstractTokenService: isValid: "
                     + "token: {}  fetchFreshToken: {}", token, fetchFreshToken);
 
         // check if we have a token for this token string

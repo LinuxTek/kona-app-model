@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2011 LINUXTEK, Inc.  All Rights Reserved.
  */
-package com.linuxtek.kona.app.service.impl;
+package com.linuxtek.kona.app.service;
 
 import java.util.Date;
 import java.util.List;
@@ -11,14 +11,21 @@ import org.slf4j.LoggerFactory;
 
 import com.linuxtek.kona.app.entity.KToken;
 import com.linuxtek.kona.app.entity.KUser;
-import com.linuxtek.kona.app.service.KAuthException;
-import com.linuxtek.kona.app.service.KAuthService;
+import com.linuxtek.kona.app.entity.KUserAuth;
 import com.linuxtek.kona.remote.service.KServiceClient;
 import com.linuxtek.kona.util.KDateUtil;
 
-public abstract class KAbstractAuthServiceImpl<U extends KUser, T extends KToken> implements KAuthService<U, T> {
+public abstract class KAbstractAuthService<U extends KUser, UA extends KUserAuth, T extends KToken> 
+		implements KAuthService<U, T> {
 
-    private static Logger logger = LoggerFactory.getLogger(KAbstractAuthServiceImpl.class);
+    private static Logger logger = LoggerFactory.getLogger(KAbstractAuthService.class);
+    
+    protected abstract <S extends KTokenService<T>> S getTokenService();
+    
+    protected abstract <S extends KUserService<U>> S getUserService();
+    
+    protected abstract <S extends KUserAuthService<U,UA>> S getUserAuthService();
+    
 
     /**
      * Login the user and return a token.
@@ -31,12 +38,12 @@ public abstract class KAbstractAuthServiceImpl<U extends KUser, T extends KToken
     	}
 
     	// Get the user
-    	U user = getUserService().validateCredentials(username, password);
-
-    	if (user == null) {
-    		logger.info("KAbstractAuthServiceImpl: login: Invalid username and/or password:" 
-    				+ "\nusername: {}  password: {}", username, password);
-    		return null;
+    	U user = null;
+    	
+    	try {
+    		user = getUserAuthService().validateCredentials(username, password);
+    	} catch (KAuthException e) {
+    		logger.debug(e.getMessage(), e);
     	}
         
         return login(clientId, user);
@@ -96,7 +103,7 @@ public abstract class KAbstractAuthServiceImpl<U extends KUser, T extends KToken
             refreshExpiration = KDateUtil.addSecs(new Date(), timeout);
         }
 
-        T token = getTokenInstance();
+        T token = getNewTokenObject();
         token.setAccessCount(1L);
         token.setCreatedDate(now);
         token.setClientId(clientId);
@@ -222,7 +229,7 @@ public abstract class KAbstractAuthServiceImpl<U extends KUser, T extends KToken
     }
 
    
-    protected abstract T getTokenInstance();
+    protected abstract T getNewTokenObject();
 
     protected abstract Long getAppId(String clientId);
     
