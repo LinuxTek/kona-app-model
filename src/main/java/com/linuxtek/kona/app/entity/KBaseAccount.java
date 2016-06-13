@@ -11,10 +11,10 @@ import java.util.Date;
 @SuppressWarnings("serial")
 public class KBaseAccount implements KAccount {
 	private Long id;
-	private Long userId;
+	private String uid;
+	private Long ownerId;
 	private String name;
 	private String displayName;
-	private String uid;
     private boolean enabled;
     private boolean active;
     private boolean verified;
@@ -28,11 +28,11 @@ public class KBaseAccount implements KAccount {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public Long getUserId() {
-		return userId;
+	public Long getOwnerId() {
+		return ownerId;
 	}
-	public void setUserId(Long userId) {
-		this.userId = userId;
+	public void setOwnerId(Long ownerId) {
+		this.ownerId = ownerId;
 	}
 	public String getName() {
 		return name;

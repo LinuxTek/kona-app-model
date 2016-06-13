@@ -18,9 +18,16 @@ public interface KAccount extends KEntityObject {
      */
     public Long getId(); 
     public void setId(Long id);
+    
+    /** 
+     * Unique account number that can be exported or referenced externally.
+     */
+    public String getUid(); 
+    public void setUid(String uid);
 
-    public Long getUserId(); 
-    public void setUserId(Long userId);
+    
+    public Long getOwnerId(); 
+    public void setOwnerId(Long ownerId);
     
     public String getName(); 
     public void setName(String name);
@@ -28,11 +35,7 @@ public interface KAccount extends KEntityObject {
     public String getDisplayName(); 
     public void setDisplayName(String displayName);
 
-    /** 
-     * Unique account number that can be exported or referenced externally.
-     */
-    public String getUid(); 
-    public void setUid(String uid);
+  
 
     /**
      * Flag to indicate if this account is currently enabled.
