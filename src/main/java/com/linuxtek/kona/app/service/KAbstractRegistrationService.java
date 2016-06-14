@@ -19,6 +19,7 @@ public abstract class KAbstractRegistrationService<R extends KRegistration, U ex
 
 	protected abstract R getNewRegistrationObject();
 
+    @Override
 	public R createRegistration(U user, KServiceClient client, Integer signupTime) {
 
 		R reg = getNewRegistrationObject();

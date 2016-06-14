@@ -32,7 +32,9 @@ public abstract class KAbstractUserService<U extends KUser, UA extends KUserAuth
     
 	protected abstract <S extends KAccountService<A>> S getAccountService();
 	protected abstract <S extends KUserAuthService<U,UA>> S getUserAuthService();
-	protected abstract <S extends KRegistrationService<R>> S getRegistrationService();
+	protected abstract <S extends KRegistrationService<R,U>> S getRegistrationService();
+    
+	protected abstract void sendRegisteredUserEmail(Long appId, U user);
 	
 	protected void checkUserExists(String username, String email) {
 		if (username == null) {
@@ -123,9 +125,10 @@ public abstract class KAbstractUserService<U extends KUser, UA extends KUserAuth
         }
         
         // log registration record
-     
+        Integer signupTime = null;
+        getRegistrationService().createRegistration(user, client, signupTime);
 
-        //sendWelcomeEmail(appId, user, betaTester);
+        sendRegisteredUserEmail(client.getAppId(), user);
         return user;
 	}
 	

@@ -20,5 +20,5 @@ public interface KRegistrationService<R extends KRegistration, U extends KUser>
     
 	public R fetchByUserId(Long userId);
     
-	public R createRegistration(U user, KServiceClient client);
+	public R createRegistration(U user, KServiceClient client, Integer signupTime);
 }
