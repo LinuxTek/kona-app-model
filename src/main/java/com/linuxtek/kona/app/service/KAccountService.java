@@ -17,4 +17,12 @@ public interface KAccountService<A extends KAccount> extends KService, KDataServ
     public A fetchByUid(String uid);
 
 	public A retire(A account);
+    
+	public A fetchByName(String name);
+    
+	public A fetchByUserId(Long userId);
+    
+	public A createAccount(String displayName);
+    
+	public boolean isAccountNameAvailable(String name);
 }

@@ -15,7 +15,7 @@ import com.linuxtek.kona.remote.service.KServiceClient;
 public interface KUserService<U extends KUser> extends KService, KDataService<U> {
 	public static final String SERVICE_PATH = "rpc/kona/UserService";
 	
-	public U registerUser(U user, KServiceClient client);
+	public U registerUser(U user, String password, KServiceClient client);
 
     public U fetchByUid(String uid);
 

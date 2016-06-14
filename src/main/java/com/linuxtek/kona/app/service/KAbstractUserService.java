@@ -8,11 +8,16 @@ import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.linuxtek.kona.app.entity.KAccount;
+import com.linuxtek.kona.app.entity.KRegistration;
 import com.linuxtek.kona.app.entity.KUser;
+import com.linuxtek.kona.app.entity.KUserAuth;
 import com.linuxtek.kona.remote.service.KServiceClient;
 import com.linuxtek.kona.util.KStringUtil;
 
-public abstract class KAbstractUserService<U extends KUser> implements KUserService<U> {
+public abstract class KAbstractUserService<U extends KUser, UA extends KUserAuth, 
+										   A extends KAccount, R extends KRegistration> 
+		implements KUserService<U> {
 
 	private static Logger logger = LoggerFactory.getLogger(KAbstractUserService.class);
 
@@ -24,6 +29,10 @@ public abstract class KAbstractUserService<U extends KUser> implements KUserServ
 	protected abstract Long getDefaultRoles();
 	protected abstract Long getDefaultStatusId();
 	protected abstract Long getDefaultPresenceId();
+    
+	protected abstract <S extends KAccountService<A>> S getAccountService();
+	protected abstract <S extends KUserAuthService<U,UA>> S getUserAuthService();
+	protected abstract <S extends KRegistrationService<R>> S getRegistrationService();
 	
 	protected void checkUserExists(String username, String email) {
 		if (username == null) {
@@ -43,7 +52,7 @@ public abstract class KAbstractUserService<U extends KUser> implements KUserServ
 	}
 	
 	@Override
-	public U registerUser(U user, KServiceClient client) {
+	public U registerUser(U user, String password, KServiceClient client) {
         if (user.getUid() == null) {
             user.setUid(generateUid());
         }
@@ -70,6 +79,41 @@ public abstract class KAbstractUserService<U extends KUser> implements KUserServ
             user.setPresenceId(getDefaultPresenceId());
         }
         
+        
+        String displayName = KStringUtil.createFullName(user.getFirstName(), user.getLastName());
+        if (displayName == null || displayName.length() == 0) {
+            displayName = user.getUsername();
+        }
+
+        
+        A account = null;
+        if (user.getAccountId() == null) {
+            account = getAccountService().createAccount(null);
+            user.setAccountId(account.getId());
+        } 
+        
+        user.setDisplayName(displayName);
+        user.setActive(true);
+        user.setCreatedDate(new Date());
+
+        user = add(user);
+
+        // update account record
+        if (account == null) {
+            account = getAccountService().createAccount(null);
+        }
+
+        if (account.getOwnerId() == null) {
+            account.setOwnerId(user.getId());
+            getAccountService().update(account);
+        }
+        
+    
+        // update auth record
+        if (password != null) {
+        	getUserAuthService().setPlainPassword(user.getId(), password);
+        }
+
         if (client == null) {
         	client = new KServiceClient();
         }
@@ -77,74 +121,9 @@ public abstract class KAbstractUserService<U extends KUser> implements KUserServ
         if (client.getHostname() == null) {
             client.setHostname("127.0.0.1"); // hostname cannot be null in registration table
         }
-
-
-        Account account = null;
         
-        user.setActive(true);
-        user.setCreatedDate(new Date());
-
-        String displayName = KStringUtil.createFullName(user.getFirstName(), user.getLastName());
-        if (displayName == null || displayName.length() == 0) {
-            displayName = user.getUsername();
-        }
-        user.setDisplayName(displayName);
-
-
-        // First get or create an account
-        if (accountId == null) {
-            account = accountService.createAccount(null);
-            accountId = account.getId();
-        } else {
-            account = accountService.fetchById(accountId);
-        }
-
-        user.setAccountId(accountId);
-        userDao.insert(user);
-
-        // sanity check
-        if (user.getId() == null) {
-            throw new IllegalStateException(
-                    "Error inserting record: " + user);
-        }
-
-        // update account record
-        if (account.getUserId() == null) {
-            account.setUserId(user.getId());
-            accountService.update(account);
-        }
-
-        // if a user is created with a null password then the 
-        // the account is set to isActive = false
-        if (password != null) {
-            // encrypt the password
-            String passwordx = KStringUtil.encryptSHA1(password);
-
-            UserAuth userAuth = new UserAuth();
-            userAuth.setUserId(user.getId());
-            userAuth.setPassword(passwordx);
-            userAuth.setCreatedDate(new Date());
-            userAuthDao.insert(userAuth);
-
-            // sanity check
-            if (userAuth.getId() == null) {
-                throw new IllegalStateException(
-                        "Error inserting record: " + userAuth);
-            }
-        }
-
         // log registration record
-        Registration reg = new Registration();
-        reg.setAppId(appId);
-        reg.setUserId(user.getId());
-        reg.setUsername(username);
-        reg.setHostname(hostname);
-        reg.setBrowser(browser);
-        reg.setSessionId(sessionId);
-        reg.setAccessToken(accessToken);
-        reg.setSignupTime(signupTime);
-        reg.setCreatedDate(new Date());
-        registrationDao.insert(reg);
+     
 
         //sendWelcomeEmail(appId, user, betaTester);
         return user;
