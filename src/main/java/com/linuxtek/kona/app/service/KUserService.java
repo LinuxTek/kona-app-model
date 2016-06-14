@@ -23,7 +23,7 @@ public interface KUserService<U extends KUser> extends KService, KDataService<U>
     
     public U fetchByEmail(String email);
 
-    public U fetchByAccessToken(String accessToken);
+    public U fetchByAccessToken(String accessToken, boolean validateToken);
     
 	public U retire(U user);
 	
