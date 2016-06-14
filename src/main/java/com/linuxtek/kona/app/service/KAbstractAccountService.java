@@ -15,8 +15,13 @@ public abstract class KAbstractAccountService<A extends KAccount> implements KAc
 
     private static Logger logger = LoggerFactory.getLogger(KAbstractAccountService.class);
     
-    protected abstract A getNewAcountObject();
+    // ----------------------------------------------------------------------------
+    
+    protected abstract A getNewAccountObject();
+    
     protected abstract String generateUid();
+    
+    // ----------------------------------------------------------------------------
     
 	@Override 
 	public void validate(A account) {
@@ -35,6 +40,8 @@ public abstract class KAbstractAccountService<A extends KAccount> implements KAc
 		String name = KInflector.getInstance().slug(account.getDisplayName());
 		account.setName(name);
 	}
+	
+	// ----------------------------------------------------------------------------
     
     @Override
 	public A createAccount(String displayName) {
@@ -51,11 +58,14 @@ public abstract class KAbstractAccountService<A extends KAccount> implements KAc
 		if (!isAccountNameAvailable(displayName)) {
 			throw new IllegalArgumentException("Account name already exists: " + displayName);
 		}
+		
+		String name = KInflector.getInstance().slug(displayName);
 
-		A account = getNewAcountObject();
+		A account = getNewAccountObject();
 		account.setUid(uid);
 		account.setOwnerId(null);
 		account.setDisplayName(displayName);
+		account.setName(name);
 		account.setEnabled(true);
 		account.setActive(true);
 		account.setVerified(false);
@@ -75,4 +85,6 @@ public abstract class KAbstractAccountService<A extends KAccount> implements KAc
 
 		return add(account);
 	}
+    
+    // ----------------------------------------------------------------------------
 }

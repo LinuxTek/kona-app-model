@@ -15,8 +15,9 @@ import com.linuxtek.kona.app.entity.KUserAuth;
 import com.linuxtek.kona.remote.service.KServiceClient;
 import com.linuxtek.kona.util.KStringUtil;
 
-public abstract class KAbstractUserService<U extends KUser, UA extends KUserAuth, 
+public abstract class KAbstractUserService<U extends KUser, UEXAMPLE, UA extends KUserAuth, 
 										   A extends KAccount, R extends KRegistration> 
+		extends KAbstractService<U,UEXAMPLE>
 		implements KUserService<U> {
 
 	private static Logger logger = LoggerFactory.getLogger(KAbstractUserService.class);

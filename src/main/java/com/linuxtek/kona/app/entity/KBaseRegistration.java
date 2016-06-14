@@ -22,7 +22,7 @@ public class KBaseRegistration implements KRegistration {
     private String browser;
     private String deviceName;
     private String deviceUuid;
-    private Long platformId;
+    private String platformName;
     private String platformVersion;
     private Integer signupTime;
     private boolean emailVerified;
@@ -158,13 +158,13 @@ public class KBaseRegistration implements KRegistration {
     }
 
     @Override
-    public Long getPlatformId() {
-        return platformId;
+    public String getPlatformName() {
+        return platformName;
     }
 
     @Override
-    public void setPlatformId(Long platformId) {
-        this.platformId = platformId;
+    public void setPlatformName(String platformName) {
+        this.platformName = platformName;
     }
 
     @Override
@@ -296,7 +296,7 @@ public class KBaseRegistration implements KRegistration {
         sb.append(", browser=").append(browser);
         sb.append(", deviceName=").append(deviceName);
         sb.append(", deviceUuid=").append(deviceUuid);
-        sb.append(", platformId=").append(platformId);
+        sb.append(", platformName=").append(platformName);
         sb.append(", platformVersion=").append(platformVersion);
         sb.append(", signupTime=").append(signupTime);
         sb.append(", emailVerified=").append(emailVerified);

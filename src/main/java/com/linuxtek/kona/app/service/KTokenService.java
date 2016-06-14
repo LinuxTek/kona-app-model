@@ -49,6 +49,8 @@ public interface KTokenService<T extends KToken> extends KService, KDataService<
 	public List<T> fetchByFilter(Map<String,Object> filter);
 
 	public T expire(T token);
+	
+	public void expireByClientId(String clientId);
 
 	/**
 	 * Check if a token is valid.  The token will first be refreshed

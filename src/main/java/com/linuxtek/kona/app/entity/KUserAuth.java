@@ -3,6 +3,8 @@
  */
 package com.linuxtek.kona.app.entity;
 
+import java.util.Date;
+
 import com.linuxtek.kona.data.entity.KEntityObject;
 
 /**
@@ -49,4 +51,11 @@ public interface KUserAuth extends KEntityObject {
 
     public String getDuressAnswer2(); 
     public void setDuressAnswer2(String duressAnswer2);
+    
+    public Date getCreatedDate();
+    public void setCreatedDate(Date createdDate);
+    
+    public Date getLastUpdated();
+    public void setLastUpdated(Date lastUpdated);
+
 }

@@ -15,12 +15,12 @@ public interface KAccountService<A extends KAccount> extends KService, KDataServ
     public static final String SERVICE_PATH = "rpc/kona/AccountService";
     
     public A fetchByUid(String uid);
-
-	public A retire(A account);
     
 	public A fetchByName(String name);
     
 	public A fetchByUserId(Long userId);
+	
+	public A retire(A account);
     
 	public A createAccount(String displayName);
     

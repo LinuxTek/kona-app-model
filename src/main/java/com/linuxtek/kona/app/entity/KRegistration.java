@@ -44,8 +44,8 @@ public interface KRegistration extends KEntityObject {
     public String getDeviceUuid();
     public void setDeviceUuid(String deviceUuid);
 
-    public Long getPlatformId();
-    public void setPlatformId(Long platformId);
+    public String getPlatformName();
+    public void setPlatformName(String platformName);
 
     public String getPlatformVersion();
     public void setPlatformVersion(String platformVersion);

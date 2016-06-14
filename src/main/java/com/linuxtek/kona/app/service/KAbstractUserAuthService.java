@@ -6,17 +6,20 @@ package com.linuxtek.kona.app.service;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.linuxtek.kona.app.entity.KUser;
 import com.linuxtek.kona.app.entity.KUserAuth;
+import com.linuxtek.kona.data.mybatis.KMyBatisUtil;
 import com.linuxtek.kona.encryption.KEncryptUtil;
 import com.linuxtek.kona.util.KPassGen;
-import com.linuxtek.kona.util.KStringUtil;
 
-public abstract class KAbstractUserAuthService<U extends KUser, UA extends KUserAuth> implements KUserAuthService<U, UA> {
+public abstract class KAbstractUserAuthService<U extends KUser, UA extends KUserAuth, UAEXAMPLE> 
+		extends KAbstractService<UA,UAEXAMPLE>
+		implements KUserAuthService<U, UA> {
 
 	private static Logger logger = LoggerFactory.getLogger(KAbstractUserAuthService.class);
 
@@ -26,6 +29,16 @@ public abstract class KAbstractUserAuthService<U extends KUser, UA extends KUser
 	protected abstract UA getNewUserAuthObject();
 
 	protected abstract void sendPasswordResetEmail(U user, String password);
+	
+	// ----------------------------------------------------------------------------
+	
+	@Override
+	public UA fetchByUserId(Long userId) {
+        Map<String,Object> filter = KMyBatisUtil.createFilter("userId", userId);
+        return KMyBatisUtil.fetchOne(fetchByCriteria(0, 99999, null, filter, false));
+	}
+	
+	// ----------------------------------------------------------------------------
 
 	@Override
 	public UA resetPassword(Long userId) {
@@ -35,6 +48,8 @@ public abstract class KAbstractUserAuthService<U extends KUser, UA extends KUser
 		sendPasswordResetEmail(user, password);
 		return userAuth;
 	}
+	
+	// ----------------------------------------------------------------------------
 
 	@Override 
 	public UA setEncryptedPassword(Long userId, String encryptedPassword) {
@@ -43,6 +58,7 @@ public abstract class KAbstractUserAuthService<U extends KUser, UA extends KUser
 			userAuth = getNewUserAuthObject();
 			userAuth.setUserId(userId);
 			userAuth.setPassword(encryptedPassword);
+			userAuth.setCreatedDate(new Date());
 			userAuth = add(userAuth);
 
 			// if user didn't have a password, user is most likely
@@ -59,6 +75,8 @@ public abstract class KAbstractUserAuthService<U extends KUser, UA extends KUser
 
 		return userAuth;
 	}
+	
+	// ----------------------------------------------------------------------------
 
 	@Override 
 	public UA setPlainPassword(Long userId, String password) {
@@ -69,6 +87,8 @@ public abstract class KAbstractUserAuthService<U extends KUser, UA extends KUser
 			throw new KAuthException("Error creating encrypted password", KAuthException.Type.INVALID_PASSWORD, e);
 		}
 	}
+	
+	// ----------------------------------------------------------------------------
 
 	@Override
 	public U validateCredentials(String username, String password) throws KAuthException {

@@ -3,6 +3,8 @@
  */
 package com.linuxtek.kona.app.entity;
 
+import java.util.Date;
+
 public class KBaseUserAuth implements KUserAuth {
 	private static final long serialVersionUID = 1L;
 
@@ -20,6 +22,10 @@ public class KBaseUserAuth implements KUserAuth {
     private String question2;
     private String answer2;
     private String duressAnswer2;
+    
+    private Date createdDate;
+    private Date lastUpdated;
+    
 
 	@Override
     public Long getId() {
@@ -130,5 +136,25 @@ public class KBaseUserAuth implements KUserAuth {
 	@Override
 	public void setDuressAnswer2(String duressAnswer2) {
 		this.duressAnswer2 = duressAnswer2;
+	}
+
+	@Override
+	public Date getCreatedDate() {
+		return createdDate;
+	}
+
+	@Override
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
+	}
+
+	@Override
+	public Date getLastUpdated() {
+		return lastUpdated;
+	}
+
+	@Override
+	public void setLastUpdated(Date lastUpdated) {
+		this.lastUpdated = lastUpdated;
 	}
 }
