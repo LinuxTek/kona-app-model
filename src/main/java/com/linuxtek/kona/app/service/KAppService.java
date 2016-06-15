@@ -21,7 +21,7 @@ public interface KAppService<A extends KApp> extends KService, KDataService<A> {
     public A create(A app, String apiVersion, String redirectUri, String scope, 
             String clientId, String clientSecret);
     
-    public A update(A app, String apiVersion, String redirectUri, String scope);
+    public A update(A app, String clientId, String apiVersion, String redirectUri, String scope);
     
     public A fetchByName(String name);
     

@@ -100,7 +100,17 @@ public abstract class KAbstractTokenService<T extends KToken,TEXAMPLE>
     @Override
 	public T fetchByAccessToken(String accessToken, boolean checkValid) {
 		Map<String,Object> filter = KMyBatisUtil.createFilter("accessToken", accessToken);
-		return KMyBatisUtil.fetchOne(fetchByCriteria(0, 99999, null, filter, false));
+        
+		T token = KMyBatisUtil.fetchOne(fetchByCriteria(0, 99999, null, filter, false));
+        
+		if (token != null && checkValid) {
+    		// NOTE: boolean argument must be FALSE
+    		if (!isValid(token, false)) {
+    			token = null;
+    		}
+    	}
+        
+        return token;
 	}
     
 	// ----------------------------------------------------------------------------

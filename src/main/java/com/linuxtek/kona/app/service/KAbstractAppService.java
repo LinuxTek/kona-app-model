@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import com.linuxtek.kona.app.entity.KApp;
 import com.linuxtek.kona.app.entity.KAppCreds;
 import com.linuxtek.kona.data.mybatis.KMyBatisUtil;
+import com.linuxtek.kona.util.KStringUtil;
 
 public abstract class KAbstractAppService<A extends KApp,AEXAMPLE,AC extends KAppCreds> 
 		extends KAbstractService<A,AEXAMPLE>
@@ -23,6 +24,16 @@ public abstract class KAbstractAppService<A extends KApp,AEXAMPLE,AC extends KAp
 	// ----------------------------------------------------------------------------
 	
 	protected abstract A getNewAppObject();
+    
+	protected abstract AC getNewAppCredsObject();
+    
+    protected abstract Long toApiVersionId(String version);
+    
+    protected abstract Integer getDefaultAccessTokenTimeout(Long appId);
+    
+    protected abstract Integer getDefaultRefreshTokenTimeout(Long appId);
+    
+    protected abstract List<String> getDefaultScopeList(Long appId);
 	
 	protected abstract <S extends KAppCredsService<AC>> S getAppCredsService();
 	
@@ -77,4 +88,73 @@ public abstract class KAbstractAppService<A extends KApp,AEXAMPLE,AC extends KAp
         getAppCredsService().expireAppTokens(app.getId());
         return app;
     }
+
+	@Override
+	public A create(A app, String apiVersion, String redirectUri, String scope) {
+		return create(app, apiVersion, redirectUri, scope, null, null);
+	}
+
+	@Override
+	public A create(A app, String apiVersion, String redirectUri, String scope, String clientId, String clientSecret) {
+		app = add(app);
+
+		if (clientId == null) {
+			clientId = uuid();
+		}
+
+		if (clientSecret == null) {
+			clientSecret = uuid();
+		}
+
+		if (scope == null) {
+			List<String> scopes = getDefaultScopeList(app.getId());
+
+			scope = KStringUtil.toCommaList(scopes);
+			logger.debug("scope is null; setting to default: " + scope);
+		}
+
+		// create creds
+		AC creds = getNewAppCredsObject();
+		creds.setAppId(app.getId());
+		creds.setApiVersionId(toApiVersionId(apiVersion));
+		creds.setClientId(clientId);
+		creds.setClientSecret(clientSecret);
+		creds.setRedirectUri(redirectUri);
+		creds.setScope(scope);
+		creds.setEnabled(true);
+		creds.setAccessTokenTimeout(getDefaultAccessTokenTimeout(app.getId()));
+		creds.setRefreshTokenTimeout(getDefaultRefreshTokenTimeout(app.getId()));
+		creds.setCreatedDate(new Date());
+		creds = getAppCredsService().add(creds);
+
+		return app;
+	}
+
+	@Override
+	public A update(A app, String clientId, String apiVersion, String redirectUri, String scope) {
+		app = update(app);
+
+		AC creds = getAppCredsService().fetchByClientId(clientId);
+		if (!creds.getAppId().equals(app.getId())) {
+			throw new IllegalArgumentException("App clientId mismatch: "
+					+ "\nappId: " + app.getId() 
+					+ "clientId: " + clientId);
+		}
+
+		if (apiVersion != null) {
+			creds.setApiVersionId(toApiVersionId(apiVersion));
+		}
+
+		if (redirectUri != null) {
+			creds.setRedirectUri(redirectUri);
+		}
+
+		if (scope != null) {
+			creds.setScope(scope);
+		}
+        
+		creds = getAppCredsService().update(creds);
+
+		return app;
+	}
 }
