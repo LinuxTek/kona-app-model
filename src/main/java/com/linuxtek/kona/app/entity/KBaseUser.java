@@ -8,6 +8,7 @@ import java.util.Date;
 public class KBaseUser implements KUser {
 	private static final long serialVersionUID = 1L;
 	private Long id;
+    private Long parentId;
     private Long typeId;
     private Long roles;
     private Long accountId;
@@ -44,6 +45,14 @@ public class KBaseUser implements KUser {
 
     public void setId(Long id) {
         this.id = id;
+    }
+    
+    public Long getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(Long parentId) {
+        this.parentId = parentId;
     }
 
     public Long getTypeId() {

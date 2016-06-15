@@ -45,6 +45,8 @@ public interface KTokenService<T extends KToken> extends KService, KDataService<
 	public T fetchActiveByClientIdAndUserId(String clientId, Long userId);
 
 	public List<T> fetchActiveByUserId(Long userId);
+	
+	public List<T> fetchByClientId(String clientId);
 
 	public List<T> fetchByFilter(Map<String,Object> filter);
 

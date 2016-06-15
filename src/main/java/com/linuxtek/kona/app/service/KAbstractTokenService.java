@@ -160,6 +160,14 @@ public abstract class KAbstractTokenService<T extends KToken,TEXAMPLE>
 	// ----------------------------------------------------------------------------
 
 	@Override
+	public List<T> fetchByClientId(String clientId) {
+		Map<String,Object> filter = KMyBatisUtil.createFilter("clientId", clientId);
+		return fetchByCriteria(0, 99999, null, filter, false);
+	}
+	
+	// ----------------------------------------------------------------------------
+
+	@Override
 	public T expire(T token) {
 		token.setActive(false);
 		token.setRetiredDate(new Date());
@@ -171,8 +179,7 @@ public abstract class KAbstractTokenService<T extends KToken,TEXAMPLE>
 	
 	@Override
 	public void expireByClientId(String clientId) {
-		Map<String,Object> filter = KMyBatisUtil.createFilter("clientId", clientId);
-		List<T> tokenList = fetchByCriteria(0, 99999, null, filter, false);
+		List<T> tokenList = fetchByClientId(clientId);
 		for (T token : tokenList) {
 			expire(token);
 		}
@@ -185,5 +192,7 @@ public abstract class KAbstractTokenService<T extends KToken,TEXAMPLE>
     	if (token.getCreatedDate() == null) {
 			token.setCreatedDate(new Date());
 		}
+    	
+    	token.setLastUpdated(new Date());
 	}
 }

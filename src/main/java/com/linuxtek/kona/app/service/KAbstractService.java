@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.linuxtek.kona.app.util.KUtil;
 import com.linuxtek.kona.data.dao.KMyBatisDao;
 import com.linuxtek.kona.data.entity.KEntityObject;
 import com.linuxtek.kona.data.service.KDataService;
@@ -98,9 +99,7 @@ public abstract class KAbstractService<T extends KEntityObject,E> implements KDa
 	// ----------------------------------------------------------------------------
 	
 	protected String uuid() {
-		String uuid = UUID.randomUUID().toString();
-		uuid = uuid.replaceAll("-", "");
-		return uuid;
+		return KUtil.uuid();
 	}
 
 }

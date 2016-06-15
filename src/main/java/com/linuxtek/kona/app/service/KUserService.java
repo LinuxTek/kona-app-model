@@ -3,6 +3,8 @@
  */
 package com.linuxtek.kona.app.service;
 
+import java.util.List;
+
 import com.linuxtek.kona.app.entity.KUser;
 import com.linuxtek.kona.data.service.KDataService;
 
@@ -26,6 +28,8 @@ public interface KUserService<U extends KUser> extends KService, KDataService<U>
     public U fetchByAccessToken(String accessToken, boolean validateToken);
     
 	public U retire(U user);
+	
+	public List<U> fetchByAccountId(Long accountId);
 	
 	public boolean isUsernameAvailable(String name);
 }

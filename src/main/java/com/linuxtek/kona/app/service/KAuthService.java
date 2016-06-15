@@ -34,14 +34,7 @@ public interface KAuthService<U extends KUser, T extends KToken> extends KServic
      *  Assumes an external reference to TokenType object that includes references to BASIC, BEARER, etc. */ 
     public Long getLoginTokenTypeId();
     
-    /** Number of seconds before AccessToken expires. */ 
-    public Integer getClientAccessTokenTimeout(String clientId);
-    
-    /** Number of seconds before RefreshToken expires. */
-    public Integer getClientRefreshTokenTimeout(String clientId);
-    
-    /** Default scope assigned to this client */
-    public String getClientDefaultScope(String clientId);
+
     
     /**
      * Create a token without logging the user in.

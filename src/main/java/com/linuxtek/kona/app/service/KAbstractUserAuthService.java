@@ -128,4 +128,15 @@ public abstract class KAbstractUserAuthService<U extends KUser, UA extends KUser
 
 		return user;
 	}
+	
+	// ----------------------------------------------------------------------------
+	
+	@Override
+	public void validate(UA userAuth) {
+    	if (userAuth.getCreatedDate() == null) {
+			userAuth.setCreatedDate(new Date());
+		}
+    	
+    	userAuth.setLastUpdated(new Date());
+	}
 }

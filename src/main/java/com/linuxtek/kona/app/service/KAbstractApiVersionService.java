@@ -3,6 +3,7 @@
  */
 package com.linuxtek.kona.app.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -26,8 +27,8 @@ public abstract class KAbstractApiVersionService<A extends KApiVersion,AEXAMPLE>
         return KMyBatisUtil.fetchOne(fetchByCriteria(0, 99999, null, filter, false));
     }
 
-    // --------------------------------------
-
+    // ----------------------------------------------------------------------------
+    
     @Override
     public A fetchLatest() {
         Map<String,Object> filter = null;
@@ -35,5 +36,15 @@ public abstract class KAbstractApiVersionService<A extends KApiVersion,AEXAMPLE>
         List<A> result = fetchByCriteria(0, 99999, sortOrder, filter, false);
         return result.get(result.size() - 1);
     }
+    
+    // ----------------------------------------------------------------------------
+    
+	@Override
+	public void validate(A apiVersion) {
+	   	 if (apiVersion.getCreatedDate() == null) {
+    		 apiVersion.setCreatedDate(new Date());
+    	 }
+         apiVersion.setLastUpdated(new Date());
+	}
 }
 

@@ -3,6 +3,7 @@
  */
 package com.linuxtek.kona.app.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -48,5 +49,15 @@ public abstract class KAbstractAppCredsService<AC extends KAppCreds,ACEXAMPLE,T 
         	getTokenService().expireByClientId(creds.getClientId());
         }
     }
-
+	
+	// ----------------------------------------------------------------------------
+	
+	@Override
+	public void validate(AC appCreds) {
+    	if (appCreds.getCreatedDate() == null) {
+			appCreds.setCreatedDate(new Date());
+		}
+    	
+    	appCreds.setLastUpdated(new Date());
+	}
 }

@@ -3,6 +3,7 @@
  */
 package com.linuxtek.kona.app.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -24,7 +25,12 @@ implements KEntityNameRuleService<E> {
 
 	// ----------------------------------------------------------------------------
 	
-	public void validate(E data) {
+	public void validate(E rule) {
+		if (rule.getCreatedDate() == null) {
+			rule.setCreatedDate(new Date());
+		}
+    	
+    	rule.setLastUpdated(new Date());
 	}
 	
 	// ----------------------------------------------------------------------------

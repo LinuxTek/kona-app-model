@@ -9,16 +9,21 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.linuxtek.kona.app.entity.KAppCreds;
 import com.linuxtek.kona.app.entity.KToken;
 import com.linuxtek.kona.app.entity.KUser;
 import com.linuxtek.kona.app.entity.KUserAuth;
+import com.linuxtek.kona.app.util.KUtil;
 import com.linuxtek.kona.remote.service.KServiceClient;
 import com.linuxtek.kona.util.KDateUtil;
 
-public abstract class KAbstractAuthService<U extends KUser, UA extends KUserAuth, T extends KToken> 
+public abstract class KAbstractAuthService<U extends KUser, UA extends KUserAuth, 
+											T extends KToken, AC extends KAppCreds> 
 		implements KAuthService<U, T> {
 
     private static Logger logger = LoggerFactory.getLogger(KAbstractAuthService.class);
+    
+    // ----------------------------------------------------------------------------
     
     protected abstract <S extends KTokenService<T>> S getTokenService();
     
@@ -26,7 +31,20 @@ public abstract class KAbstractAuthService<U extends KUser, UA extends KUserAuth
     
     protected abstract <S extends KUserAuthService<U,UA>> S getUserAuthService();
     
+    protected abstract <S extends KAppCredsService<AC>> S getAppCredsService();
+    
+    // ----------------------------------------------------------------------------
 
+    protected abstract T getNewTokenObject();
+    
+    // ----------------------------------------------------------------------------
+
+    protected String generateToken() {
+    	return KUtil.uuid();
+    }
+    
+    // ----------------------------------------------------------------------------
+    
     /**
      * Login the user and return a token.
      *  - If the credentials match, a token is returned; if not, null is returned.
@@ -49,6 +67,7 @@ public abstract class KAbstractAuthService<U extends KUser, UA extends KUserAuth
         return login(clientId, user);
     }
     
+    // ----------------------------------------------------------------------------
     
     @Override 
     public T login(String clientId, U user) {
@@ -83,11 +102,12 @@ public abstract class KAbstractAuthService<U extends KUser, UA extends KUserAuth
     	return token;
     }
     
+    // ----------------------------------------------------------------------------
     
     @Override
     public T createToken(U user, String clientId, String scope) {
-    	String accessToken = generateTokenString();
-    	String refreshToken = generateTokenString();
+    	String accessToken = generateToken();
+    	String refreshToken = generateToken();
         
     	Date now = new Date();
         Date accessExpiration = null;
@@ -122,6 +142,8 @@ public abstract class KAbstractAuthService<U extends KUser, UA extends KUserAuth
 
     	return getTokenService().add(token);
     }
+    
+    // ----------------------------------------------------------------------------
 
     private void loginUser(U user, T token) {
         if (user == null) return;
@@ -137,6 +159,7 @@ public abstract class KAbstractAuthService<U extends KUser, UA extends KUserAuth
         getUserService().update(user);
     }
     
+    // ----------------------------------------------------------------------------
     
     @Override 
     public T login(String accessToken, KServiceClient client) {
@@ -144,6 +167,7 @@ public abstract class KAbstractAuthService<U extends KUser, UA extends KUserAuth
         return login(token, client);
     }
     
+    // ----------------------------------------------------------------------------
     
     @Override 
     public T login(T token, KServiceClient client) {
@@ -177,6 +201,7 @@ public abstract class KAbstractAuthService<U extends KUser, UA extends KUserAuth
         return token;
     }
 
+    // ----------------------------------------------------------------------------
     
     private void logoutUser(T token) {
         if (token == null || token.getUserId() == null) return;
@@ -198,6 +223,7 @@ public abstract class KAbstractAuthService<U extends KUser, UA extends KUserAuth
         getUserService().update(user);
     }
     
+    // ----------------------------------------------------------------------------
 
     @Override 
     public void logout(T token) {
@@ -211,6 +237,7 @@ public abstract class KAbstractAuthService<U extends KUser, UA extends KUserAuth
         logoutUser(token);
     }
     
+    // ----------------------------------------------------------------------------
     
     @Override 
     public void logout(String accessToken) {
@@ -218,6 +245,7 @@ public abstract class KAbstractAuthService<U extends KUser, UA extends KUserAuth
         logout(token);
     }
     
+    // ----------------------------------------------------------------------------
     
     @Override
     public void logout(U user) {
@@ -227,11 +255,38 @@ public abstract class KAbstractAuthService<U extends KUser, UA extends KUserAuth
     		logout(token);
     	}
     }
-
-   
-    protected abstract T getNewTokenObject();
-
-    protected abstract Long getAppId(String clientId);
     
-    protected abstract String generateTokenString();
+    // ----------------------------------------------------------------------------
+    
+    /** Number of seconds before AccessToken expires. */ 
+    protected Integer getClientAccessTokenTimeout(String clientId) {
+    	AC creds = getAppCredsService().fetchByClientId(clientId);
+    	return creds.getAccessTokenTimeout();
+    }
+    
+    // ----------------------------------------------------------------------------
+    
+    /** Number of seconds before RefreshToken expires. */
+    protected Integer getClientRefreshTokenTimeout(String clientId) {
+    	AC creds = getAppCredsService().fetchByClientId(clientId);
+    	return creds.getRefreshTokenTimeout();
+    }
+    
+    // ----------------------------------------------------------------------------
+    
+    /** Default scope assigned to this client */
+    protected String getClientDefaultScope(String clientId) {
+    	AC creds = getAppCredsService().fetchByClientId(clientId);
+    	return creds.getScope();
+    }
+
+    // ----------------------------------------------------------------------------
+    
+    protected Long getAppId(String clientId) {
+    	AC creds = getAppCredsService().fetchByClientId(clientId);
+    	return creds.getAppId();
+    }
+    
+    // ----------------------------------------------------------------------------
+   
 }

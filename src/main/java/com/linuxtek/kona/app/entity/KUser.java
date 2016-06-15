@@ -20,6 +20,9 @@ public interface KUser extends KEntityObject {
      */
     public Long getId(); 
     public void setId(Long id);
+    
+    public Long getParentId(); 
+    public void setParentId(Long parentId);
 
     /**
      * The a reference to the user's type.

@@ -88,11 +88,15 @@ public abstract class KAbstractAppService<A extends KApp,AEXAMPLE,AC extends KAp
         getAppCredsService().expireAppTokens(app.getId());
         return app;
     }
+    
+	// ----------------------------------------------------------------------------
 
 	@Override
 	public A create(A app, String apiVersion, String redirectUri, String scope) {
 		return create(app, apiVersion, redirectUri, scope, null, null);
 	}
+	
+	// ----------------------------------------------------------------------------
 
 	@Override
 	public A create(A app, String apiVersion, String redirectUri, String scope, String clientId, String clientSecret) {
@@ -130,6 +134,8 @@ public abstract class KAbstractAppService<A extends KApp,AEXAMPLE,AC extends KAp
 		return app;
 	}
 
+	// ----------------------------------------------------------------------------
+	
 	@Override
 	public A update(A app, String clientId, String apiVersion, String redirectUri, String scope) {
 		app = update(app);
@@ -156,5 +162,16 @@ public abstract class KAbstractAppService<A extends KApp,AEXAMPLE,AC extends KAp
 		creds = getAppCredsService().update(creds);
 
 		return app;
+	}
+	
+	// ----------------------------------------------------------------------------
+	
+	@Override
+	public void validate(A app) {
+    	if (app.getCreatedDate() == null) {
+			app.setCreatedDate(new Date());
+		}
+    	
+    	app.setLastUpdated(new Date());
 	}
 }
