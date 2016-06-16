@@ -4,15 +4,15 @@ import java.util.Date;
 
 import com.linuxtek.kona.data.entity.KEntityObject;
 
-public interface KAppDevice extends KEntityObject {
+public interface KAppNotificationDevice extends KEntityObject {
 
 	Long getId();
 
 	void setId(Long id);
 
-	Long getAppPlatformId();
+	Long getAppNotificationId();
 
-	void setAppPlatformId(Long appPlatformId);
+	void setAppNotificationId(Long appNotificationId);
 
 	Long getAppId();
 
@@ -21,6 +21,10 @@ public interface KAppDevice extends KEntityObject {
 	String getDeviceUuid();
 
 	void setDeviceUuid(String deviceUuid);
+
+	String getPlatformName();
+
+	void setPlatformName(String platformName);
 
 	Long getUserId();
 
@@ -37,6 +41,10 @@ public interface KAppDevice extends KEntityObject {
 	boolean isEnabled();
 
 	void setEnabled(boolean enabled);
+
+	boolean isSandbox();
+
+	void setSandbox(boolean sandbox);
 
 	Date getCreatedDate();
 

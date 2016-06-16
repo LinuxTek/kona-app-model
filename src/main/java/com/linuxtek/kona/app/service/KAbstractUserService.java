@@ -11,6 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.linuxtek.kona.app.entity.KAccount;
+import com.linuxtek.kona.app.entity.KApp;
+import com.linuxtek.kona.app.entity.KAppUser;
 import com.linuxtek.kona.app.entity.KRegistration;
 import com.linuxtek.kona.app.entity.KToken;
 import com.linuxtek.kona.app.entity.KUser;
@@ -20,9 +22,13 @@ import com.linuxtek.kona.data.mybatis.KMyBatisUtil;
 import com.linuxtek.kona.remote.service.KServiceClient;
 import com.linuxtek.kona.util.KStringUtil;
 
-public abstract class KAbstractUserService<U extends KUser, UEXAMPLE, UA extends KUserAuth, 
-										   A extends KAccount, R extends KRegistration, T extends KToken> 
-		extends KAbstractService<U,UEXAMPLE>
+public abstract class KAbstractUserService<U extends KUser, EXAMPLE, 
+										   UA extends KUserAuth, 
+										   A extends KAccount, 
+										   AU extends KAppUser, 
+										   R extends KRegistration, 
+										   T extends KToken> 
+		extends KAbstractService<U,EXAMPLE>
 		implements KUserService<U> {
 
 	private static Logger logger = LoggerFactory.getLogger(KAbstractUserService.class);
@@ -37,6 +43,7 @@ public abstract class KAbstractUserService<U extends KUser, UEXAMPLE, UA extends
     
 	protected abstract <S extends KAccountService<A>> S getAccountService();
 	protected abstract <S extends KUserAuthService<U,UA>> S getUserAuthService();
+	protected abstract <S extends KAppUserService<AU>> S getAppUserService();
 	protected abstract <S extends KRegistrationService<R,U>> S getRegistrationService();
 	protected abstract <S extends KTokenService<T>> S getTokenService();
     
@@ -143,6 +150,9 @@ public abstract class KAbstractUserService<U extends KUser, UEXAMPLE, UA extends
         // log registration record
         Integer signupTime = null;
         getRegistrationService().createRegistration(user, client, signupTime);
+        
+        // create AppUser record
+        getAppUserService().create(client.getAppId(), user.getId(), null, null);
 
         sendRegisteredUserEmail(client.getAppId(), user);
         return user;

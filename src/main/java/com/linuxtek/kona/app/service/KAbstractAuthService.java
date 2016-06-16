@@ -18,7 +18,7 @@ import com.linuxtek.kona.remote.service.KServiceClient;
 import com.linuxtek.kona.util.KDateUtil;
 
 public abstract class KAbstractAuthService<U extends KUser, UA extends KUserAuth, 
-											T extends KToken, AC extends KAppCreds> 
+											T extends KToken, AC extends KAppCreds>
 		implements KAuthService<U, T> {
 
     private static Logger logger = LoggerFactory.getLogger(KAbstractAuthService.class);
@@ -32,10 +32,14 @@ public abstract class KAbstractAuthService<U extends KUser, UA extends KUserAuth
     protected abstract <S extends KUserAuthService<U,UA>> S getUserAuthService();
     
     protected abstract <S extends KAppCredsService<AC>> S getAppCredsService();
-    
+
     // ----------------------------------------------------------------------------
 
     protected abstract T getNewTokenObject();
+    
+    protected abstract Long getLoggedInPresenceId();
+    
+    protected abstract Long getLoggedOutPresenceId();
     
     // ----------------------------------------------------------------------------
 
@@ -156,7 +160,11 @@ public abstract class KAbstractAuthService<U extends KUser, UA extends KUserAuth
 
         user.setLoginDate(new Date());
         user.setLoggedIn(true);
+        user.setPresenceId(getLoggedInPresenceId());
+
         getUserService().update(user);
+
+
     }
     
     // ----------------------------------------------------------------------------
@@ -219,6 +227,8 @@ public abstract class KAbstractAuthService<U extends KUser, UA extends KUserAuth
         user.setLoginDate(null);
         
         user.setLoggedIn(false);
+        
+        user.setPresenceId(getLoggedOutPresenceId());
 
         getUserService().update(user);
     }

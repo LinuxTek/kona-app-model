@@ -2,7 +2,7 @@ package com.linuxtek.kona.app.entity;
 
 import java.util.Date;
 
-public class KBaseAppPlatform implements KAppPlatform {
+public class KBaseAppNotification implements KAppNotification {
 	private static final long serialVersionUID = 1L;
     
     private Long id;
@@ -11,6 +11,7 @@ public class KBaseAppPlatform implements KAppPlatform {
     private String pushServerKey;
     private String pushServerSecret;
     private String pushEndpoint;
+    private boolean sandbox;
     private Date createdDate;
     private Date lastUpdated;
 
@@ -75,6 +76,16 @@ public class KBaseAppPlatform implements KAppPlatform {
     }
 
     @Override
+	public boolean isSandbox() {
+        return sandbox;
+    }
+
+    @Override
+	public void setSandbox(boolean sandbox) {
+        this.sandbox = sandbox;
+    }
+
+    @Override
 	public Date getCreatedDate() {
         return createdDate;
     }
@@ -106,6 +117,7 @@ public class KBaseAppPlatform implements KAppPlatform {
         sb.append(", pushServerKey=").append(pushServerKey);
         sb.append(", pushServerSecret=").append(pushServerSecret);
         sb.append(", pushEndpoint=").append(pushEndpoint);
+        sb.append(", sandbox=").append(sandbox);
         sb.append(", createdDate=").append(createdDate);
         sb.append(", lastUpdated=").append(lastUpdated);
         sb.append("]");

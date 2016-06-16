@@ -368,4 +368,33 @@ public abstract class KAbstractPushService implements KPushService {
 		return notificationAttributes;
 	}
     
+	
+	
+	// support ios and android only for now
+	public KPushService.Platform getPushPlatform(String platformName, boolean sandbox) {
+
+			if (platformName == null) return null;
+			
+			KPushService.Platform pp = null;
+
+			switch (platformName) {
+			case "ios":
+				pp = KPushService.Platform.APNS;
+				if (sandbox) {
+					pp = KPushService.Platform.APNS_SANDBOX;
+				}
+				break;
+
+			case "android":
+				pp = KPushService.Platform.GCM;
+				break;
+
+			default:
+				logger.error("Unsupported platform: " + platformName);
+				pp = null;
+				break;
+			}
+
+			return pp;
+		}
 }

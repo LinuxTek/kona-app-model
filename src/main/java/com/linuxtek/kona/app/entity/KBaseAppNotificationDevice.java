@@ -2,17 +2,19 @@ package com.linuxtek.kona.app.entity;
 
 import java.util.Date;
 
-public class KBaseAppDevice implements KAppDevice {
+public class KBaseAppNotificationDevice implements KAppNotificationDevice {
 	private static final long serialVersionUID = 1L;
     
     private Long id;
     private Long appId;
-    private Long appPlatformId;
+    private Long appNotificationId;
     private Long userId;
     private String deviceUuid;
-    private String pushToken;
+    private String platformName;
+	private String pushToken;
     private String pushEndpoint;
     private boolean enabled;
+    private boolean sandbox;
     private Date createdDate;
     private Date lastUpdated;
 
@@ -27,13 +29,13 @@ public class KBaseAppDevice implements KAppDevice {
     }
 
     @Override
-	public Long getAppPlatformId() {
-        return appPlatformId;
+	public Long getAppNotificationId() {
+        return appNotificationId;
     }
 
     @Override
-	public void setAppPlatformId(Long appPlatformId) {
-        this.appPlatformId = appPlatformId;
+	public void setAppNotificationId(Long appNotificationId) {
+        this.appNotificationId = appNotificationId;
     }
 
     @Override
@@ -55,6 +57,16 @@ public class KBaseAppDevice implements KAppDevice {
 	public void setDeviceUuid(String deviceUuid) {
         this.deviceUuid = deviceUuid;
     }
+    
+    @Override
+    public String getPlatformName() {
+		return platformName;
+	}
+
+    @Override
+	public void setPlatformName(String platformName) {
+		this.platformName = platformName;
+	}
 
     @Override
 	public Long getUserId() {
@@ -95,6 +107,16 @@ public class KBaseAppDevice implements KAppDevice {
 	public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
+    
+    @Override
+	public boolean isSandbox() {
+		return sandbox;
+	}
+
+    @Override
+	public void setSandbox(boolean sandbox) {
+		this.sandbox = sandbox;
+	}
 
     @Override
 	public Date getCreatedDate() {
@@ -123,7 +145,7 @@ public class KBaseAppDevice implements KAppDevice {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", appPlatformId=").append(appPlatformId);
+        sb.append(", appNotificationId=").append(appNotificationId);
         sb.append(", appId=").append(appId);
         sb.append(", deviceUuid=").append(deviceUuid);
         sb.append(", userId=").append(userId);

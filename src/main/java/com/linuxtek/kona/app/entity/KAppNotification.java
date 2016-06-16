@@ -4,7 +4,7 @@ import java.util.Date;
 
 import com.linuxtek.kona.data.entity.KEntityObject;
 
-public interface KAppPlatform extends KEntityObject {
+public interface KAppNotification extends KEntityObject {
 
 	Long getId();
 
@@ -29,6 +29,10 @@ public interface KAppPlatform extends KEntityObject {
 	String getPushEndpoint();
 
 	void setPushEndpoint(String pushEndpoint);
+
+    boolean isSandbox();
+
+	void setSandbox(boolean sandbox);
 
 	Date getCreatedDate();
 

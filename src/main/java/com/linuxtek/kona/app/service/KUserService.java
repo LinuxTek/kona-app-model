@@ -4,6 +4,7 @@
 package com.linuxtek.kona.app.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.linuxtek.kona.app.entity.KUser;
 import com.linuxtek.kona.data.service.KDataService;
@@ -30,6 +31,10 @@ public interface KUserService<U extends KUser> extends KService, KDataService<U>
 	public U retire(U user);
 	
 	public List<U> fetchByAccountId(Long accountId);
+	
+	public List<U> fetchProximate(Double latitude, Double longitude, Double radius);
+	
+	public List<U> fetchAllRegistered(Map<String,Object> filter); // exclude system, test, etc users
 	
 	public boolean isUsernameAvailable(String name);
 }

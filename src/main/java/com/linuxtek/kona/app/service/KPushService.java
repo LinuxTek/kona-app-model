@@ -65,5 +65,6 @@ public interface KPushService extends KService {
     public String publish(Platform platform, String endpointArn, String message, Map<String, Object> data);
     
     public String publish(Platform platform, String endpointArn, Map<String,Object> rawMessage);
-
+    
+    public KPushService.Platform getPushPlatform(String platformName, boolean sandbox);
 }

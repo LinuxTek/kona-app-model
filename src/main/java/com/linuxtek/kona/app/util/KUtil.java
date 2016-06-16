@@ -7,13 +7,14 @@ import java.util.Locale;
 import java.util.TimeZone;
 import java.util.UUID;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.linuxtek.kona.util.KClassUtil;
 import com.linuxtek.kona.util.KDateUtil;
 
 public class KUtil {
-	private static Logger logger = Logger.getLogger(KUtil.class);
+	private static Logger logger = LoggerFactory.getLogger(KUtil.class);
 	
 	public static String uuid() {
 		String uuid = UUID.randomUUID().toString();
