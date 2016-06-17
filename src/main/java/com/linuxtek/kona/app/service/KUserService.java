@@ -19,6 +19,8 @@ public interface KUserService<U extends KUser> extends KService, KDataService<U>
 	public static final String SERVICE_PATH = "rpc/kona/UserService";
 	
 	public U registerUser(U user, String password, KServiceClient client);
+	
+	public U updatePrimaryPhotoUrl(Long userId, String urlPath);
 
     public U fetchByUid(String uid);
 
@@ -37,4 +39,5 @@ public interface KUserService<U extends KUser> extends KService, KDataService<U>
 	public List<U> fetchAllRegistered(Map<String,Object> filter); // exclude system, test, etc users
 	
 	public boolean isUsernameAvailable(String name);
+	
 }

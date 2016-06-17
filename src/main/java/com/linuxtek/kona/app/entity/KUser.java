@@ -21,6 +21,12 @@ public interface KUser extends KEntityObject {
     public Long getId(); 
     public void setId(Long id);
     
+    /** 
+     * The user's publicly visible identifier.
+     */
+    public String getUid(); 
+    public void setUid(String uid);
+    
     public Long getParentId(); 
     public void setParentId(Long parentId);
 
@@ -50,12 +56,10 @@ public interface KUser extends KEntityObject {
     public void setPresenceId(Long presenceId);
     
     
-    /** 
-     * The user's publicly visible identifier.
-     */
-    public String getUid(); 
-    public void setUid(String uid);
-
+    public String getPhotoUrl();
+    public void setPhotoUrl(String photoUrl);
+    
+    
     /** 
      * The user's username which is used to login to the system. 
      */
@@ -93,6 +97,49 @@ public interface KUser extends KEntityObject {
     public String getMobileNumber();
     public void setMobileNumber(String mobileNumber);
 
+    
+    /**
+     * The user's gender.
+     */
+    public String getGender();
+    public void setGender(String gender);
+
+    /**
+     * The user's date of birth.
+     */
+    public Date getBirthDate();
+    public void setBirthDate(Date birthDate);
+
+
+    /** 
+     * The user's default locale.
+     */
+    public String getLocale();
+    public void setLocale(String locale);
+
+    /**
+     * The users' default time zone.
+     */
+    public String getTimeZone();
+    public void setTimeZone(String timeZone);
+
+    /**
+     * The latitude of the user's current geolocation.
+     */
+    public Double getLatitude();
+    public void setLatitude(Double latitude);
+
+    /**
+     * The longitude of the user's current geolocation.
+     */
+    public Double getLongitude();
+    public void setLongitude(Double longitude);
+    
+    /**
+     * The floor of the user's current geolocation.
+     */
+    public Integer getFloor();
+    public void setFloor(Integer floor);
     
     /**
      * Flag to indicate if this user account is currently enabled.

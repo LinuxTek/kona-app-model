@@ -3,6 +3,7 @@
  */
 package com.linuxtek.kona.app.service;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -11,17 +12,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.linuxtek.kona.app.entity.KFile;
+import com.linuxtek.kona.app.entity.KUser;
 import com.linuxtek.kona.app.entity.KUserMedia;
 import com.linuxtek.kona.data.mybatis.KMyBatisUtil;
 
-public abstract class KAbstractUserMediaService<T extends KUserMedia, EXAMPLE, F extends KFile> 
+public abstract class KAbstractUserMediaService<T extends KUserMedia, EXAMPLE, U extends KUser, F extends KFile> 
 		extends KAbstractService<T,EXAMPLE>
-		implements KUserMediaService<T> {
+		implements KUserMediaService<T,F> {
 
 	private static Logger logger = LoggerFactory.getLogger(KAbstractUserMediaService.class);
 
 	// ----------------------------------------------------------------------------
 	
+	protected abstract T getNewObject();
+	
+	protected abstract <S extends KUserService<U>> S getUserService();
 	protected abstract <S extends KFileService<F>> S getFileService();
 
 	// ----------------------------------------------------------------------------
@@ -89,6 +94,33 @@ public abstract class KAbstractUserMediaService<T extends KUserMedia, EXAMPLE, F
 		getDao().deleteByPrimaryKey(userMedia.getId());
 	}
 
+	// ----------------------------------------------------------------------------
+	
+	@Override 
+    public T add(F file,Double latitude, Double longitude, Integer floor,
+            String description, boolean primaryPhoto) throws IOException {
+        file = getFileService().add(file);
+        T userMedia = getNewObject();
+        userMedia.setUserId(file.getUserId());
+        userMedia.setFileId(file.getId());
+        userMedia.setFileTypeId(file.getTypeId());
+        userMedia.setUrlPath(file.getUrlPath());
+        userMedia.setEnabled(true);
+        userMedia.setPrimaryPhoto(primaryPhoto);
+        userMedia.setLatitude(latitude);
+        userMedia.setLongitude(longitude);
+        userMedia.setFloor(floor);
+        userMedia.setDescription(description);
+        userMedia.setCreatedDate(new Date());
+
+        userMedia = add(userMedia);
+        
+        if (primaryPhoto) {
+        	getUserService().updatePrimaryPhotoUrl(file.getUserId(), file.getUrlPath());
+        }
+        
+        return userMedia;
+    }
 	// ----------------------------------------------------------------------------
 
 	private void unsetPrimaryPhoto(T current) {

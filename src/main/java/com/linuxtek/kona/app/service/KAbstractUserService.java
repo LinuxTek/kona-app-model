@@ -248,6 +248,15 @@ public abstract class KAbstractUserService<U extends KUser, EXAMPLE,
 	// ----------------------------------------------------------------------------
 	
 	@Override
+	public U updatePrimaryPhotoUrl(Long userId, String urlPath) {
+        U user = fetchById(userId);
+        user.setPhotoUrl(urlPath);
+        return update(user);
+	}
+	
+	// ----------------------------------------------------------------------------
+	
+	@Override
 	public void validate(U user) {
     	if (user.getCreatedDate() == null) {
 			user.setCreatedDate(new Date());

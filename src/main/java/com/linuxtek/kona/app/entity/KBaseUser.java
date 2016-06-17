@@ -8,13 +8,14 @@ import java.util.Date;
 public class KBaseUser implements KUser {
 	private static final long serialVersionUID = 1L;
 	private Long id;
+    private String uid;
     private Long parentId;
     private Long typeId;
     private Long roles;
     private Long accountId;
     private Long statusId;
     private Long presenceId;
-    private String uid;
+    private String photoUrl;
     private String username;
     private String firstName;
     private String lastName;
@@ -28,6 +29,7 @@ public class KBaseUser implements KUser {
     private String timeZone;
     private Double latitude;
     private Double longitude;
+    private Integer floor;
     private boolean enabled;
     private boolean active;
     private boolean verified;
@@ -79,15 +81,13 @@ public class KBaseUser implements KUser {
         this.accountId = accountId;
     }
 
-    /*
-    public Long getPhotoId() {
-        return photoId;
+    public String getPhotoUrl() {
+        return photoUrl;
     }
 
-    public void setPhotoId(Long photoId) {
-        this.photoId = photoId;
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
     }
-    */
 
     public Long getStatusId() {
         return statusId;
@@ -215,6 +215,14 @@ public class KBaseUser implements KUser {
 
     public void setLongitude(Double longitude) {
         this.longitude = longitude;
+    }
+    
+    public Integer getFloor() {
+        return floor;
+    }
+
+    public void setFloor(Integer floor) {
+        this.floor = floor;
     }
 
     public boolean isEnabled() {
