@@ -8,8 +8,9 @@ import java.util.Date;
 /**
  * KBaseAccount.
  */
-@SuppressWarnings("serial")
 public class KBaseAccount implements KAccount {
+    private static final long serialVersionUID = 1L;
+
 	private Long id;
 	private String uid;
 	private Long ownerId;
