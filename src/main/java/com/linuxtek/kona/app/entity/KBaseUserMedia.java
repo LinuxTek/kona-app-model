@@ -8,7 +8,7 @@ import java.util.Date;
 /**
  * KBaseUserMedia.
  */
-public class KBaseUserMedia {
+public class KBaseUserMedia implements KUserMedia {
     private static final long serialVersionUID = 1L;
 
     private Long id;
@@ -27,115 +27,143 @@ public class KBaseUserMedia {
     private Date lastUpdated;
 
 
-    public Long getId() {
+    @Override
+	public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    @Override
+	public void setId(Long id) {
         this.id = id;
     }
 
-    public String getUid() {
+    @Override
+	public String getUid() {
         return uid;
     }
 
-    public void setUid(String uid) {
+    @Override
+	public void setUid(String uid) {
         this.uid = uid == null ? null : uid.trim();
     }
 
-    public Long getUserId() {
+    @Override
+	public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    @Override
+	public void setUserId(Long userId) {
         this.userId = userId;
     }
 
-    public Long getFileId() {
+    @Override
+	public Long getFileId() {
         return fileId;
     }
 
-    public void setFileId(Long fileId) {
+    @Override
+	public void setFileId(Long fileId) {
         this.fileId = fileId;
     }
 
-    public Long getFileTypeId() {
+    @Override
+	public Long getFileTypeId() {
         return fileTypeId;
     }
 
-    public void setFileTypeId(Long fileTypeId) {
+    @Override
+	public void setFileTypeId(Long fileTypeId) {
         this.fileTypeId = fileTypeId;
     }
 
-    public String getUrlPath() {
+    @Override
+	public String getUrlPath() {
         return urlPath;
     }
 
-    public void setUrlPath(String urlPath) {
+    @Override
+	public void setUrlPath(String urlPath) {
         this.urlPath = urlPath == null ? null : urlPath.trim();
     }
 
-    public Double getLatitude() {
+    @Override
+	public Double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(Double latitude) {
+    @Override
+	public void setLatitude(Double latitude) {
         this.latitude = latitude;
     }
 
-    public Double getLongitude() {
+    @Override
+	public Double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(Double longitude) {
+    @Override
+	public void setLongitude(Double longitude) {
         this.longitude = longitude;
     }
 
-    public Integer getFloor() {
+    @Override
+	public Integer getFloor() {
         return floor;
     }
 
-    public void setFloor(Integer floor) {
+    @Override
+	public void setFloor(Integer floor) {
         this.floor = floor;
     }
 
-    public String getDescription() {
+    @Override
+	public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
+    @Override
+	public void setDescription(String description) {
         this.description = description == null ? null : description.trim();
     }
 
-    public boolean isEnabled() {
+    @Override
+	public boolean isEnabled() {
         return enabled;
     }
 
-    public void setEnabled(boolean enabled) {
+    @Override
+	public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
 
-    public boolean isPrimaryPhoto() {
+    @Override
+	public boolean isPrimaryPhoto() {
         return primaryPhoto;
     }
 
-    public void setPrimaryPhoto(boolean primaryPhoto) {
+    @Override
+	public void setPrimaryPhoto(boolean primaryPhoto) {
         this.primaryPhoto = primaryPhoto;
     }
 
-    public Date getCreatedDate() {
+    @Override
+	public Date getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(Date createdDate) {
+    @Override
+	public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
     }
 
-    public Date getLastUpdated() {
+    @Override
+	public Date getLastUpdated() {
         return lastUpdated;
     }
 
-    public void setLastUpdated(Date lastUpdated) {
+    @Override
+	public void setLastUpdated(Date lastUpdated) {
         this.lastUpdated = lastUpdated;
     }
 

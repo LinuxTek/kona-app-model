@@ -3,8 +3,6 @@
  */
 package com.linuxtek.kona.app.entity;
 
-import java.util.Date;
-
 import com.linuxtek.kona.data.entity.KEntityObject;
 
 /**
@@ -12,7 +10,6 @@ import com.linuxtek.kona.data.entity.KEntityObject;
  */
     
 public interface KMediaObject extends KEntityObject {
-    private static final long serialVersionUID = 1L;
     
     public String getUid();
     public String getUrlPath();

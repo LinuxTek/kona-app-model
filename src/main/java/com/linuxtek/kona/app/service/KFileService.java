@@ -10,7 +10,6 @@ import java.util.Map;
 import com.linuxtek.kona.app.entity.KFile;
 import com.linuxtek.kona.data.service.KDataService;
 import com.linuxtek.kona.remote.service.KService;
-import com.linuxtek.kona.remote.service.KServiceRelativePath;
 
 /**
  * The client side stub for the RPC service.

@@ -27,6 +27,12 @@ public abstract class KAbstractService<T extends KEntityObject,E> implements KDa
     
 	// ----------------------------------------------------------------------------
     
+    protected String[] getDefaultSortOrder() {
+    	return null;
+    }
+    
+	// ----------------------------------------------------------------------------
+    
 	@Override @Transactional
 	public T add(T t) {
 		validate(t);
@@ -70,6 +76,10 @@ public abstract class KAbstractService<T extends KEntityObject,E> implements KDa
 	public List<T> fetchByCriteria(Integer startRow, Integer resultSize,
 			String[] sortOrder, Map<String, Object> filter, boolean distinct) {
 		logger.debug("AccountServiceImpl fetch(): called");
+		
+		if (sortOrder == null) {
+			sortOrder = getDefaultSortOrder();
+		}
 
 		E example = getExampleObjectInstance(startRow, resultSize, sortOrder, filter, distinct);
 
