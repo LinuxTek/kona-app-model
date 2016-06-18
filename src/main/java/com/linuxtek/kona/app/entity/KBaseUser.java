@@ -5,7 +5,7 @@ package com.linuxtek.kona.app.entity;
 
 import java.util.Date;
 
-public class KBaseUser implements KUser {
+public abstract class KBaseUser implements KUser {
 	private static final long serialVersionUID = 1L;
 	private Long id;
     private String uid;
@@ -30,11 +30,7 @@ public class KBaseUser implements KUser {
     private Double latitude;
     private Double longitude;
     private Integer floor;
-    private boolean enabled;
     private boolean active;
-    private boolean verified;
-    private boolean loggedIn;
-    private boolean online;
     private Date createdDate;
     private Date retiredDate;
     private Date loginDate;
@@ -225,44 +221,12 @@ public class KBaseUser implements KUser {
         this.floor = floor;
     }
 
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
     public boolean isActive() {
         return active;
     }
 
     public void setActive(boolean active) {
         this.active = active;
-    }
-
-    public boolean isVerified() {
-        return verified;
-    }
-
-    public void setVerified(boolean verified) {
-        this.verified = verified;
-    }
-
-    public boolean isLoggedIn() {
-        return loggedIn;
-    }
-
-    public void setLoggedIn(boolean loggedIn) {
-        this.loggedIn = loggedIn;
-    }
-
-    public boolean isOnline() {
-        return online;
-    }
-
-    public void setOnline(boolean online) {
-        this.online = online;
     }
 
     public Date getCreatedDate() {
