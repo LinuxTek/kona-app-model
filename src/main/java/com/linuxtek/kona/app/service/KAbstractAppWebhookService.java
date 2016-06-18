@@ -15,8 +15,8 @@ import com.linuxtek.kona.app.util.KUtil;
 import com.linuxtek.kona.data.mybatis.KMyBatisUtil;
 import com.linuxtek.kona.util.KInflector;
 
-public abstract class KAbstractAppWebhookService<A extends KAppWebhook,AEXAMPLE> 
-extends KAbstractService<A,AEXAMPLE>
+public abstract class KAbstractAppWebhookService<A extends KAppWebhook,EXAMPLE> 
+extends KAbstractService<A,EXAMPLE>
 implements KAppWebhookService<A> {
 
 	private static Logger logger = LoggerFactory.getLogger(KAbstractAppWebhookService.class);

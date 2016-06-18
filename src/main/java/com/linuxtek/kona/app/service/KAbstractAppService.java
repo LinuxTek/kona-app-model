@@ -15,17 +15,15 @@ import com.linuxtek.kona.app.entity.KAppCreds;
 import com.linuxtek.kona.data.mybatis.KMyBatisUtil;
 import com.linuxtek.kona.util.KStringUtil;
 
-public abstract class KAbstractAppService<A extends KApp,AEXAMPLE,AC extends KAppCreds> 
-		extends KAbstractService<A,AEXAMPLE>
+public abstract class KAbstractAppService<A extends KApp,EXAMPLE,AC extends KAppCreds> 
+		extends KAbstractService<A,EXAMPLE>
 		implements KAppService<A> {
 
 	private static Logger logger = LoggerFactory.getLogger(KAbstractAppService.class);
 
 	// ----------------------------------------------------------------------------
 	
-	protected abstract A getNewAppObject();
-    
-	protected abstract AC getNewAppCredsObject();
+	protected abstract AC getNewObject();
     
     protected abstract Long toApiVersionId(String version);
     
@@ -118,7 +116,7 @@ public abstract class KAbstractAppService<A extends KApp,AEXAMPLE,AC extends KAp
 		}
 
 		// create creds
-		AC creds = getNewAppCredsObject();
+		AC creds = getNewObject();
 		creds.setAppId(app.getId());
 		creds.setApiVersionId(toApiVersionId(apiVersion));
 		creds.setClientId(clientId);

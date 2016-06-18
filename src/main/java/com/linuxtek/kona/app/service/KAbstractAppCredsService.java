@@ -14,8 +14,8 @@ import com.linuxtek.kona.app.entity.KAppCreds;
 import com.linuxtek.kona.app.entity.KToken;
 import com.linuxtek.kona.data.mybatis.KMyBatisUtil;
 
-public abstract class KAbstractAppCredsService<AC extends KAppCreds,ACEXAMPLE,T extends KToken> 
-		extends KAbstractService<AC,ACEXAMPLE>
+public abstract class KAbstractAppCredsService<AC extends KAppCreds,EXAMPLE,T extends KToken> 
+		extends KAbstractService<AC,EXAMPLE>
 		implements KAppCredsService<AC> {
 
 	private static Logger logger = LoggerFactory.getLogger(KAbstractAppCredsService.class);

@@ -16,15 +16,15 @@ import com.linuxtek.kona.app.util.KUtil;
 import com.linuxtek.kona.data.mybatis.KMyBatisUtil;
 import com.linuxtek.kona.util.KInflector;
 
-public abstract class KAbstractAccountService<A extends KAccount,AEXAMPLE,U extends KUser> 
-extends KAbstractService<A,AEXAMPLE>
+public abstract class KAbstractAccountService<A extends KAccount,EXAMPLE,U extends KUser> 
+extends KAbstractService<A,EXAMPLE>
 implements KAccountService<A> {
 
 	private static Logger logger = LoggerFactory.getLogger(KAbstractAccountService.class);
 
 	// ----------------------------------------------------------------------------
 
-	protected abstract A getNewAccountObject();
+	protected abstract A getNewObject();
 
 	protected abstract <S extends KUserService<U>> S getUserService();
 	
@@ -76,7 +76,7 @@ implements KAccountService<A> {
 
 		String name = KInflector.getInstance().slug(displayName);
 
-		A account = getNewAccountObject();
+		A account = getNewObject();
 		account.setUid(uid);
 		account.setOwnerId(null);
 		account.setDisplayName(displayName);

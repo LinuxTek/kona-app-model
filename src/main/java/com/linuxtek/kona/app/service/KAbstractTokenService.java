@@ -13,8 +13,8 @@ import org.slf4j.LoggerFactory;
 import com.linuxtek.kona.app.entity.KToken;
 import com.linuxtek.kona.data.mybatis.KMyBatisUtil;
 
-public abstract class KAbstractTokenService<T extends KToken,TEXAMPLE> 
-		extends KAbstractService<T,TEXAMPLE>
+public abstract class KAbstractTokenService<T extends KToken,EXAMPLE> 
+		extends KAbstractService<T,EXAMPLE>
 		implements KTokenService<T> {
 
     private static Logger logger = LoggerFactory.getLogger(KAbstractTokenService.class);

@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.linuxtek.kona.app.entity.KAccount;
-import com.linuxtek.kona.app.entity.KApp;
 import com.linuxtek.kona.app.entity.KAppUser;
 import com.linuxtek.kona.app.entity.KRegistration;
 import com.linuxtek.kona.app.entity.KToken;
@@ -35,14 +34,13 @@ public abstract class KAbstractUserService<U extends KUser, EXAMPLE,
 
 	// ----------------------------------------------------------------------------
 	
-	protected abstract U getNewUserObject();
 	protected abstract Long getDefaultTypeId();
 	protected abstract Long getDefaultRoles();
 	protected abstract Long getDefaultStatusId();
 	protected abstract Long getDefaultPresenceId();
     
 	protected abstract <S extends KAccountService<A>> S getAccountService();
-	protected abstract <S extends KUserAuthService<U,UA>> S getUserAuthService();
+	protected abstract <S extends KUserAuthService<UA,U>> S getUserAuthService();
 	protected abstract <S extends KAppUserService<AU>> S getAppUserService();
 	protected abstract <S extends KRegistrationService<R,U>> S getRegistrationService();
 	protected abstract <S extends KTokenService<T>> S getTokenService();

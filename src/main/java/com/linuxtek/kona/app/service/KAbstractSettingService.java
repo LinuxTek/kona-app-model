@@ -23,7 +23,7 @@ public abstract class KAbstractSettingService<S extends KSetting,EXAMPLE>
     
 	// ----------------------------------------------------------------------------
     
-    protected abstract S getNewSettingObject();
+    protected abstract S getNewObject();
     
 	// ----------------------------------------------------------------------------
     
@@ -107,7 +107,7 @@ public abstract class KAbstractSettingService<S extends KSetting,EXAMPLE>
     	for (String key : config.keySet()) {
     		S setting = fetchByUserIdAndName(userId, key);
     		if (setting == null) {
-    			setting = getNewSettingObject();
+    			setting = getNewObject();
     			setting.setUserId(userId);
     			setting.setName(key);
     			setting.setValue(config.get(key).toString());

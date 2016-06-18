@@ -11,7 +11,7 @@ import com.linuxtek.kona.remote.service.KService;
 /**
  * The client side stub for the RPC service.
  */
-public interface KUserAuthService<U extends KUser, UA extends KUserAuth> extends KService, KDataService<UA> {
+public interface KUserAuthService<UA extends KUserAuth,U extends KUser> extends KService, KDataService<UA> {
 	public static final String SERVICE_PATH = "rpc/kona/UserAuthService";
 	
     public UA fetchByUserId(Long userId);

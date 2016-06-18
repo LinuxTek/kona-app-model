@@ -24,8 +24,6 @@ public abstract class KAbstractAppNotificationService<T extends KAppNotification
 
 	// ----------------------------------------------------------------------------
 
-	protected abstract T getNewAppNotificationObject();
-
 	protected abstract <S extends KAppService<A>> S getAppService();
     
 	protected abstract <S extends KPushService> S getPushService();

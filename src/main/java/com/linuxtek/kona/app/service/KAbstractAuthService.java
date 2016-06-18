@@ -29,13 +29,13 @@ public abstract class KAbstractAuthService<U extends KUser, UA extends KUserAuth
     
     protected abstract <S extends KUserService<U>> S getUserService();
     
-    protected abstract <S extends KUserAuthService<U,UA>> S getUserAuthService();
+    protected abstract <S extends KUserAuthService<UA,U>> S getUserAuthService();
     
     protected abstract <S extends KAppCredsService<AC>> S getAppCredsService();
 
     // ----------------------------------------------------------------------------
 
-    protected abstract T getNewTokenObject();
+    protected abstract T getNewObject();
     
     protected abstract Long getLoggedInPresenceId();
     
@@ -127,7 +127,7 @@ public abstract class KAbstractAuthService<U extends KUser, UA extends KUserAuth
             refreshExpiration = KDateUtil.addSecs(new Date(), timeout);
         }
 
-        T token = getNewTokenObject();
+        T token = getNewObject();
         token.setAccessCount(1L);
         token.setCreatedDate(now);
         token.setClientId(clientId);

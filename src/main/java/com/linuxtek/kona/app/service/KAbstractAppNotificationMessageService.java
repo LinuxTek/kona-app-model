@@ -37,7 +37,7 @@ public abstract class KAbstractAppNotificationMessageService<T extends KAppNotif
 
 	// ----------------------------------------------------------------------------
 
-	protected abstract T getNewAppNotificationMessageObject();
+	protected abstract T getNewObject();
 	
 	protected abstract <S extends KAppService<A>> S getAppService();
 	
@@ -103,7 +103,7 @@ public abstract class KAbstractAppNotificationMessageService<T extends KAppNotif
 	public T broadcast(Long appId, String title, String messageBody, 
 			String imageUrl, String actionUrl, Map<String, Object> filter, boolean sandbox) {
 		
-		T message = getNewAppNotificationMessageObject();
+		T message = getNewObject();
 		message.setAppId(appId);
 		message.setSandbox(sandbox);
 		message.setTitle(title);

@@ -17,16 +17,16 @@ import com.linuxtek.kona.data.mybatis.KMyBatisUtil;
 import com.linuxtek.kona.encryption.KEncryptUtil;
 import com.linuxtek.kona.util.KPassGen;
 
-public abstract class KAbstractUserAuthService<U extends KUser, UA extends KUserAuth, UAEXAMPLE> 
-		extends KAbstractService<UA,UAEXAMPLE>
-		implements KUserAuthService<U, UA> {
+public abstract class KAbstractUserAuthService<UA extends KUserAuth,EXAMPLE,U extends KUser> 
+		extends KAbstractService<UA,EXAMPLE>
+		implements KUserAuthService<UA,U> {
 
 	private static Logger logger = LoggerFactory.getLogger(KAbstractUserAuthService.class);
 
 	// ----------------------------------------------------------------------------
 	protected abstract <S extends KUserService<U>> S getUserService();
 
-	protected abstract UA getNewUserAuthObject();
+	protected abstract UA getNewObject();
 
 	protected abstract void sendPasswordResetEmail(U user, String password);
 	
@@ -55,7 +55,7 @@ public abstract class KAbstractUserAuthService<U extends KUser, UA extends KUser
 	public UA setEncryptedPassword(Long userId, String encryptedPassword) {
 		UA userAuth = fetchByUserId(userId);
 		if (userAuth == null) {
-			userAuth = getNewUserAuthObject();
+			userAuth = getNewObject();
 			userAuth.setUserId(userId);
 			userAuth.setPassword(encryptedPassword);
 			userAuth.setCreatedDate(new Date());

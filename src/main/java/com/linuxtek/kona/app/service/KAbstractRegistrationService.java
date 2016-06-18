@@ -14,22 +14,22 @@ import com.linuxtek.kona.app.entity.KUser;
 import com.linuxtek.kona.data.mybatis.KMyBatisUtil;
 import com.linuxtek.kona.remote.service.KServiceClient;
 
-public abstract class KAbstractRegistrationService<R extends KRegistration, REXAMPLE, U extends KUser> 
-		extends KAbstractService<R,REXAMPLE>
+public abstract class KAbstractRegistrationService<R extends KRegistration, EXAMPLE, U extends KUser> 
+		extends KAbstractService<R,EXAMPLE>
 		implements KRegistrationService<R,U> {
 
 	private static Logger logger = LoggerFactory.getLogger(KAbstractRegistrationService.class);
 	
 	// ----------------------------------------------------------------------------
 
-	protected abstract R getNewRegistrationObject();
+	protected abstract R getNewObject();
 	
 	// ----------------------------------------------------------------------------
 
     @Override
 	public R createRegistration(U user, KServiceClient client, Integer signupTime) {
 
-		R reg = getNewRegistrationObject();
+		R reg = getNewObject();
 		reg.setAppId(client.getAppId());
 		reg.setUserId(user.getId());
 		reg.setUsername(user.getUsername());

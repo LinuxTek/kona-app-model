@@ -13,8 +13,8 @@ import org.slf4j.LoggerFactory;
 import com.linuxtek.kona.app.entity.KApiVersion;
 import com.linuxtek.kona.data.mybatis.KMyBatisUtil;
 
-public abstract class KAbstractApiVersionService<A extends KApiVersion,AEXAMPLE> 
-		extends KAbstractService<A,AEXAMPLE>
+public abstract class KAbstractApiVersionService<A extends KApiVersion,EXAMPLE> 
+		extends KAbstractService<A,EXAMPLE>
 		implements KApiVersionService<A> {
 
     private static Logger logger = LoggerFactory.getLogger(KAbstractApiVersionService.class);

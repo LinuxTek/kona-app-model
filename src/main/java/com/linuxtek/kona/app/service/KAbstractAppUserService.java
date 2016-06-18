@@ -13,15 +13,15 @@ import org.slf4j.LoggerFactory;
 import com.linuxtek.kona.app.entity.KAppUser;
 import com.linuxtek.kona.data.mybatis.KMyBatisUtil;
 
-public abstract class KAbstractAppUserService<T extends KAppUser,TEXAMPLE> 
-extends KAbstractService<T,TEXAMPLE>
+public abstract class KAbstractAppUserService<T extends KAppUser,EXAMPLE> 
+extends KAbstractService<T,EXAMPLE>
 implements KAppUserService<T> {
 
 	private static Logger logger = LoggerFactory.getLogger(KAbstractAppUserService.class);
 
 	// ----------------------------------------------------------------------------
 	
-	protected abstract T getNewAppUserObject();
+	protected abstract T getNewObject();
 	
 	// ----------------------------------------------------------------------------
 
@@ -63,7 +63,7 @@ implements KAppUserService<T> {
 
 	@Override
 	public T create(Long appId, Long userId, Long tokenId, String appUserId) {
-		T appUser = getNewAppUserObject();
+		T appUser = getNewObject();
 		appUser.setAppId(appId);
 		appUser.setUserId(userId);
 		appUser.setTokenId(tokenId);

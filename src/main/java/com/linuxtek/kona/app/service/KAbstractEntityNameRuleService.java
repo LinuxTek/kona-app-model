@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 LINUXTEK, Inc.  All Rights Reserved.
+ * Copyright (C) 2011 LinuxTek, Inc.  All Rights Reserved.
  */
 package com.linuxtek.kona.app.service;
 
@@ -15,17 +15,17 @@ import org.slf4j.LoggerFactory;
 import com.linuxtek.kona.app.entity.KEntityNameRule;
 import com.linuxtek.kona.data.mybatis.KMyBatisUtil;
 
-public abstract class KAbstractEntityNameRuleService<E extends KEntityNameRule,EEXAMPLE> 
-extends KAbstractService<E,EEXAMPLE>
-implements KEntityNameRuleService<E> {
+public abstract class KAbstractEntityNameRuleService<T extends KEntityNameRule,EXAMPLE> 
+extends KAbstractService<T,EXAMPLE>
+implements KEntityNameRuleService<T> {
 
 	private static Logger logger = LoggerFactory.getLogger(KAbstractEntityNameRuleService.class);
 	
-	private List<E> rules = null;
+	private List<T> rules = null;
 
 	// ----------------------------------------------------------------------------
 	
-	public void validate(E rule) {
+	public void validate(T rule) {
 		if (rule.getCreatedDate() == null) {
 			rule.setCreatedDate(new Date());
 		}
@@ -36,10 +36,10 @@ implements KEntityNameRuleService<E> {
 	// ----------------------------------------------------------------------------
 
 	@Override
-	public E fetchByPattern(String pattern) {
-		E rule = null;
+	public T fetchByPattern(String pattern) {
+		T rule = null;
 		Map<String,Object> filter = KMyBatisUtil.createFilter("pattern", pattern);
-		List<E> list = fetchByCriteria(0,9999, null, filter,  false);
+		List<T> list = fetchByCriteria(0,9999, null, filter,  false);
 		if (list != null && list.size() == 1) {
 			rule = list.get(0);
 		}
@@ -49,13 +49,13 @@ implements KEntityNameRuleService<E> {
 	// ----------------------------------------------------------------------------
 
 	@Override
-	public E fetchForName(String name) {
+	public T fetchForName(String name) {
 		if (rules == null) {
 			rules = fetchAll();
 		}
 
 		logger.debug("EntityNameRuleService: checking rule match for name: " + name);
-		for (E rule : rules) {
+		for (T rule : rules) {
 			String pattern = rule.getPattern();
 			//logger.debug("UsernameRuleService: checking rule pattern: " + pattern);
 
@@ -74,7 +74,7 @@ implements KEntityNameRuleService<E> {
 	// ----------------------------------------------------------------------------
 	
 	@Override
-	public List<E> fetchAll() {
+	public List<T> fetchAll() {
 		return fetchByCriteria(0, 999999, null, null,  false);
 	}
 	
@@ -82,7 +82,7 @@ implements KEntityNameRuleService<E> {
 
 	@Override
 	public boolean isReserved(String name) {
-		E rule = fetchForName(name);
+		T rule = fetchForName(name);
 		if (rule != null) {
 			return rule.isReserved();
 		}
@@ -93,7 +93,7 @@ implements KEntityNameRuleService<E> {
 
 	@Override
 	public boolean isBlackListed(String name) {
-		E rule = fetchForName(name);
+		T rule = fetchForName(name);
 		if (rule != null) {
 			return rule.isBlackListed();
 		}
@@ -104,7 +104,7 @@ implements KEntityNameRuleService<E> {
 
 	@Override
 	public boolean isAcceptable(String name) {
-		E rule = fetchForName(name);
+		T rule = fetchForName(name);
 		if (rule != null) {
 			return !rule.isBlackListed() && !rule.isReserved();
 		}

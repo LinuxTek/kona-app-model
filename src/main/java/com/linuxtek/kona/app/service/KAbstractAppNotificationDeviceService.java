@@ -18,8 +18,7 @@ import com.linuxtek.kona.app.entity.KAppNotificationDevice;
 import com.linuxtek.kona.data.mybatis.KMyBatisUtil;
 
 
-public abstract class KAbstractAppNotificationDeviceService<T extends KAppNotificationDevice,
-															EXAMPLE,
+public abstract class KAbstractAppNotificationDeviceService<T extends KAppNotificationDevice,EXAMPLE,
 															N extends KAppNotification> 
 		extends KAbstractService<T,EXAMPLE>
 		implements KAppNotificationDeviceService<T> {
