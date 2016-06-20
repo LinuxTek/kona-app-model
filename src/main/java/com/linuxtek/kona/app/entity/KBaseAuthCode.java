@@ -12,6 +12,7 @@ public class KBaseAuthCode implements KAuthCode {
     private static final long serialVersionUID = 1L;
     
     private Long id;
+    private Long typeId;
     private Long appId;
     private Long userId;
     private String code;
@@ -31,6 +32,16 @@ public class KBaseAuthCode implements KAuthCode {
     @Override
 	public void setId(Long id) {
         this.id = id;
+    }
+
+    @Override
+	public Long getTypeId() {
+        return typeId;
+    }
+
+    @Override
+	public void setTypeId(Long typeId) {
+        this.typeId = typeId;
     }
 
     @Override

@@ -22,7 +22,9 @@ public interface KAuthCodeService<T extends KAuthCode> extends KService, KDataSe
 	// indicate code has been accessed
 	public T accessCode(String code, KServiceClient client);
     
-    public void requestPasswordReset(Long userId, Long appId, boolean resend);
+    //public void requestPasswordReset(Long userId, Long appId, boolean resend);
+    
+	public void requestAuthCode(Long typeId, Long appId, Long userId, boolean resend);
 
 	public List<T> expireByUserId(Long userId);
     

@@ -8,10 +8,11 @@ import java.util.Date;
 import com.linuxtek.kona.data.entity.KEntityObject;
 
 public interface KFile extends KEntityObject {
-	public static final Integer MAX_DATA_SIZE = 500*1024*1024; // 500MB
-
     public Long getId();
     public void setId(Long id);
+    
+    public String getUid();
+    public void setUid(String uid);
 
     public Long getTypeId();
     public void setTypeId(Long typeId);
@@ -25,12 +26,6 @@ public interface KFile extends KEntityObject {
     public Long getUserId();
     public void setUserId(Long userId);
 
-    public Long getTokenId();
-    public void setTokenId(Long tokenId);
-
-    public Long getThumbId();
-    public void setThumbId(Long thumbId);
-
 	public String getName();
 	public void setName(String name);
 
@@ -43,20 +38,6 @@ public interface KFile extends KEntityObject {
 	public byte[] getData();
 	public void setData(byte[] data);
 
-    public boolean isFolder();
-    public void setFolder(boolean folder);
-
-    public boolean isShared();
-    public void setShared(boolean shared);
-
-    public boolean isArchive();
-    public void setArchive(boolean archive);
-
-    public boolean isCompressed();
-    public void setCompressed(boolean compressed);
-    
-    public boolean isResizeable();
-    public void setResizeable(boolean resizeable);
 
     /**
      * Flag to indicate if this file should be hidden from the user's
@@ -64,13 +45,6 @@ public interface KFile extends KEntityObject {
      */
     public boolean isHidden();
     public void setHidden(boolean hidden);
-
-    /*
-     * Flag to ensure that the file is never presented to anyone 
-     * other than the user.
-     */
-    //public boolean isPrivate();
-    //public void setPrivate(boolean private);
 
     /**
      * Flag to indicate if this file is currently enabled.
@@ -90,18 +64,6 @@ public interface KFile extends KEntityObject {
     public boolean isActive();
     public void setActive(boolean active);
 
-    public Integer getWidth();
-    public void setWidth(Integer width);
-
-    public Integer getHeight();
-    public void setHeight(Integer width);
-
-    public Integer getBitsPerPixel();
-    public void setBitsPerPixel(Integer bitPerPixel);
-
-    public Integer getFramesPerSecond();
-    public void setFramesPerSecond(Integer framesPerSecond);
-
 	public String getSrcHostname();
 	public void setSrcHostname(String srcHostName);
 
@@ -120,27 +82,6 @@ public interface KFile extends KEntityObject {
      */
     public String getUrlPath();
     public void setUrlPath(String publicPath);
-
-    /**
-     * Absolute URL for this file.
-     * This value is generated at runtime based on config parameters.
-     */
-    public String getAbsoluteUrl();
-    public void setAbsoluteUrl(String absoluteUrl);
-
-    /**
-     * Relative URL path for the thumbnail.
-     * This value is stored in the database.
-     */
-    public String getThumbUrlPath();
-    public void setThumbUrlPath(String thumbUrlPath);
-
-    /**
-     * Absolute URL for the thumbnail.
-     * This value is generated at runtime based on config parameters.
-     */
-    public String getThumbAbsoluteUrl();
-    public void setThumbAbsoluteUrl(String thumbAbsoluteUrl);
 
     public Long getUploadTime();
     public void setUploadTime(Long uploadTime);

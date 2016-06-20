@@ -11,16 +11,23 @@ import com.linuxtek.kona.app.entity.KFile;
 import com.linuxtek.kona.data.service.KDataService;
 import com.linuxtek.kona.remote.service.KService;
 
+
 /**
  * The client side stub for the RPC service.
  */
-public interface KFileService<F extends KFile> extends KService, KDataService<F> {
+public interface KFileService<F extends KFile> extends KService, KDataService<F>, KFileManager<F> {
     public static final String SERVICE_PATH = "rpc/kona/FileService";
-    
+
+    public F fetchByUid(String uid, boolean withData) throws IOException;
+
     public F fetchById(Long id, boolean withData) throws IOException;
+    
+    public List<F> fetchByUserId(Long userId, boolean withData) throws IOException;
     
     public List<F> fetchByCriteria(Integer startRow,  Integer resultSize, 
     		String[] sortOrder, Map<String, Object> filterCriteria, 
             boolean distinct, boolean withData) throws IOException;
+
+    public String toAbsoluteUrl(String publicPath);
     
 }

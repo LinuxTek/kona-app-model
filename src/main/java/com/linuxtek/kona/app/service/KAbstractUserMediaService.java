@@ -10,11 +10,13 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.linuxtek.kona.app.entity.KFile;
 import com.linuxtek.kona.app.entity.KUser;
 import com.linuxtek.kona.app.entity.KUserMedia;
 import com.linuxtek.kona.data.mybatis.KMyBatisUtil;
+import com.linuxtek.kona.media.util.KImageUtil;
 
 public abstract class KAbstractUserMediaService<T extends KUserMedia, EXAMPLE, U extends KUser, F extends KFile> 
 		extends KAbstractService<T,EXAMPLE>
@@ -121,6 +123,7 @@ public abstract class KAbstractUserMediaService<T extends KUserMedia, EXAMPLE, U
         
         return userMedia;
     }
+    
 	// ----------------------------------------------------------------------------
 
 	private void unsetPrimaryPhoto(T current) {
@@ -131,5 +134,129 @@ public abstract class KAbstractUserMediaService<T extends KUserMedia, EXAMPLE, U
 				getDao().updateByPrimaryKey(media);
 			}
 		}
+	}
+    
+	// ----------------------------------------------------------------------------
+    
+    protected Integer getImageMaxWidth() {
+    	return -1;
+    }
+    protected Integer getImageMaxHeight() {
+    	return -1;
+    }
+    
+	// ----------------------------------------------------------------------------
+    
+	private void resizeImage(F file) throws IOException {
+        if (!isResizeable()) return;
+		Integer maxWidth = getImageMaxWidth();
+		Integer maxHeight = getImageMaxHeight();
+        byte[] src = file.getData();
+        KImageUtil.Image image = KImageUtil.resizeToMaxWidthAndHeight(src, maxWidth, maxHeight);
+		file.setData(image.data);
+        file.setWidth(image.width);
+        file.setHeight(image.height);
+        file.setSize(image.size);
+	}
+	// ----------------------------------------------------------------------------
+    
+    protected void updateImageInfo(F file) throws IOException {
+        byte[] data = file.getData();
+        if (data == null) {
+            logger.info("file data is null");
+            return;
+        }
+
+        KImageInfo info = new KImageInfo(data);
+        file.setWidth(info.getWidth());
+        file.setHeight(info.getHeight());
+        file.setBitsPerPixel(info.getBitsPerPixel());
+
+        long dataSize = Long.valueOf(data.length);
+        if (file.getSize() == null || !file.getSize().equals(dataSize)) {
+            logger.warn("setting file size to: "
+                    + dataSize + "  old value: " + file.getSize());
+            file.setSize(dataSize);
+        }
+
+        String contentType = info.getMimeType();
+        if (file.getContentType() == null) {
+            file.setContentType(contentType);
+        }
+
+        //sanity check
+        if (!contentType.equalsIgnoreCase(file.getContentType())) {
+            logger.info("Content-type mismatch:"
+                + "\n\tfile id: " + file.getId()
+                + "\n\tfile name: " + file.getName()
+                + "\n\tfile content-type: " + file.getContentType()
+                + "\n\tKImageInfo content-type: " + contentType);
+        }
+
+        logger.debug("Image info: " + file.getName()
+                + "\n\twidth: " + file.getWidth()
+                + "\n\theight: " + file.getHeight()
+                + "\n\tbitsPerPixel: " + file.getBitsPerPixel());
+    }
+    
+	// ----------------------------------------------------------------------------
+
+    
+	@Transactional
+	private void createThumbnail(F original) throws IOException {
+		Boolean createThumbnail =
+				config.getBoolean("fileService.createThumbail", false);
+
+		if (!createThumbnail) return;
+
+		Integer thumbnailWidth =
+				config.getInteger("fileService.thumbnailWidth", 100);
+
+		Integer thumbnailHeight =
+				config.getInteger("fileService.thumbnailHeight", 100);
+
+		F thumbnail = fetchThumbnail(original.getId());
+		if (thumbnail == null) {
+			thumbnail = getNewObject();
+			thumbnail.setUid(uuid());
+			thumbnail.setTypeId(original.getTypeId());
+			thumbnail.setParentId(original.getId());
+			thumbnail.setUserId(original.getUserId());
+			thumbnail.setName(original.getName());
+			thumbnail.setContentType(original.getContentType());
+
+			thumbnail.setArchive(false);
+			thumbnail.setCompressed(false);
+			thumbnail.setHidden(original.isHidden());
+			//thumbnail.setPrivate(original.isPrivate());
+			thumbnail.setEnabled(original.isEnabled());
+			thumbnail.setActive(original.isActive());
+			thumbnail.setCreatedDate(new Date());
+
+			String localPath = original.getLocalPath() + "-thumbnail";
+			thumbnail.setLocalPath(localPath);
+			thumbnail.setUrlPath(toPublicPath(localPath));
+		}
+        
+		byte[] thumbnailBytes = KImageUtil.resize(original.getData(),
+				thumbnailWidth, thumbnailHeight);
+        
+		thumbnail.setData(thumbnailBytes);
+		thumbnail.setSize(Long.valueOf(thumbnailBytes.length));
+
+		KImageUtil.updateImageInfo(thumbnail);
+
+		// first write the bytes to disk 
+		saveFile(thumbnail);
+
+		// if we get here, we can safely write the meta data to the db
+        if (thumbnail.getId() == null) {
+        	getDao().insert(thumbnail);
+        	original.setThumbId(thumbnail.getId());
+        	original.setThumbUrlPath(thumbnail.getUrlPath());
+        	getDao().updateByPrimaryKey(original);
+        } else {
+        	getDao().updateByPrimaryKey(thumbnail);
+        }
 	}
 }

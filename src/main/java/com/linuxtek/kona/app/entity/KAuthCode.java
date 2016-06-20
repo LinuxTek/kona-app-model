@@ -10,6 +10,10 @@ public interface KAuthCode extends KEntityObject {
 
 	void setId(Long id);
 
+	Long getTypeId();
+
+	void setTypeId(Long typeId);
+
 	Long getAppId();
 
 	void setAppId(Long appId);

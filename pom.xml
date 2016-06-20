@@ -29,6 +29,12 @@
 
         <dependency>
             <groupId>com.linuxtek.kona</groupId>
+            <artifactId>kona-media</artifactId>
+            <version>0.1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.linuxtek.kona</groupId>
             <artifactId>kona-sequence-flake</artifactId>
             <version>0.1.0</version>
         </dependency>

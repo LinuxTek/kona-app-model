@@ -8,38 +8,22 @@ import java.util.Date;
 @SuppressWarnings("serial")
 public class KBaseFile implements KFile {
 	private Long id;
+    private String uid;
 	private Long parentId;
 	private Long typeId;
 	private Long accessId;
 	private Long userId;
-	private Long tokenId;
-	private Long thumbId;
 	private String name;
 	private String contentType;
 	private Long size;
 	private byte[] data;
-    private boolean folder;
-    private boolean shared;
-    private boolean archive;
-    private boolean compressed;
     private boolean hidden;
-    //private boolean _private;
     private boolean enabled;
     private boolean active;
-    private boolean resizeable;
-	
-
-	private Integer width;
-	private Integer height;
-	private Integer bitsPerPixel;
-	private Integer framesPerSecond;
 	private String srcHostname;
 	private String srcFilename;
     private String localPath;
     private String urlPath;
-    private String absoluteUrl;
-    private String thumbUrlPath;
-    private String thumbAbsoluteUrl;
     private Long uploadTime;
 	private Date createdDate;
 	private Date retiredDate;
@@ -47,352 +31,252 @@ public class KBaseFile implements KFile {
 
     // --------------------------------------------------
     
+    @Override
     public Long getId() {
         return id;
     }
 
+    @Override
     public void setId(Long id) {
         this.id = id;
     }
     
     // --------------------------------------------------
 
+    @Override
+    public String getUid() {
+        return (uid);
+    }
+
+    @Override
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+    
+    // --------------------------------------------------
+
+    @Override
     public Long getParentId() {
         return (parentId);
     }
 
+    @Override
     public void setParentId(Long parentId) {
         this.parentId = parentId;
     }
 
     // --------------------------------------------------
 
+    @Override
     public Long getTypeId() {
         return (typeId);
     }
 
+    @Override
     public void setTypeId(Long typeId) {
         this.typeId = typeId;
     }
 
     // --------------------------------------------------
     
+    @Override
     public Long getAccessId() {
         return (accessId);
     }
 
+    @Override
     public void setAccessId(Long accessId) {
         this.accessId = accessId;
     }
 
     // --------------------------------------------------
 
+    @Override
     public Long getUserId() {
         return (userId);
     }
 
+    @Override
     public void setUserId(Long userId) {
         this.userId = userId;
     }
 
     // --------------------------------------------------
 
-    public Long getTokenId() {
-        return (tokenId);
-    }
-
-    public void setTokenId(Long tokenId) {
-        this.tokenId = tokenId;
-    }
-
-    // --------------------------------------------------
-
-    public Long getThumbId() {
-        return (thumbId);
-    }
-
-    public void setThumbId(Long thumbId) {
-        this.thumbId = thumbId;
-    }
-
-
-    // --------------------------------------------------
-
+    @Override
     public String getName() {
         return (name);
     }
 
+    @Override
     public void setName(String name) {
         this.name = name;
     }
 
     // --------------------------------------------------
 
+    @Override
     public String getContentType() {
         return (contentType);
     }
 
+    @Override
     public void setContentType(String contentType) {
         this.contentType = contentType;
     }
 
     // --------------------------------------------------
 
+    @Override
     public Long getSize() {
         return (size);
     }
 
+    @Override
     public void setSize(Long size) {
         this.size = size;
     }
 
     // --------------------------------------------------
 
+    @Override
     public byte[] getData() {
         return (data);
     }
 
+    @Override
     public void setData(byte[] data) {
         this.data = data;
     }
 
     // --------------------------------------------------
 
-    public boolean isFolder() {
-        return (folder);
-    }
-
-    public void setFolder(boolean folder) {
-        this.folder = folder;
-    }
-
-    // --------------------------------------------------
-
-    public boolean isShared() {
-        return (shared);
-    }
-
-    public void setShared(boolean shared) {
-        this.shared = shared;
-    }
-
-    // --------------------------------------------------
-
-    public boolean isArchive() {
-        return (archive);
-    }
-
-    public void setArchive(boolean archive) {
-        this.archive = archive;
-    }
-
-    // --------------------------------------------------
-
-    public boolean isCompressed() {
-        return (compressed);
-    }
-
-    public void setCompressed(boolean compressed) {
-        this.compressed = compressed;
-    }
-
-    // --------------------------------------------------
-
+    @Override
     public boolean isHidden() {
         return (hidden);
     }
 
+    @Override
     public void setHidden(boolean hidden) {
         this.hidden = hidden;
     }
 
     // --------------------------------------------------
 
-    /*
-    public boolean isPrivate() {
-        return (_private);
-    }
-
-    public void setPrivate(boolean _private) {
-        this._private = _private;
-    }
-    */
-
-    // --------------------------------------------------
-
+    @Override
     public boolean isEnabled() {
         return (enabled);
     }
 
+    @Override
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
 
     // --------------------------------------------------
 
+    @Override
     public boolean isActive() {
         return (active);
     }
 
+    @Override
     public void setActive(boolean active) {
         this.active = active;
     }
     
     // --------------------------------------------------
-    public boolean isResizeable() {
-		return resizeable;
-	}
-
-	public void setResizeable(boolean resizeable) {
-		this.resizeable = resizeable;
-	}
     
-    // --------------------------------------------------
-
-    public Integer getWidth() {
-        return (width);
-    }
-
-    public void setWidth(Integer width) {
-        this.width = width;
-    }
-
-    // --------------------------------------------------
-
-    public Integer getHeight() {
-        return (height);
-    }
-
-    public void setHeight(Integer height) {
-        this.height = height;
-    }
-
-    // --------------------------------------------------
-
-    public Integer getBitsPerPixel() {
-        return (bitsPerPixel);
-    }
-
-    public void setBitsPerPixel(Integer bitsPerPixel) {
-        this.bitsPerPixel = bitsPerPixel;
-    }
-
-    // --------------------------------------------------
-
-    public Integer getFramesPerSecond() {
-        return (framesPerSecond);
-    }
-
-    public void setFramesPerSecond(Integer framesPerSecond) {
-        this.framesPerSecond = framesPerSecond;
-    }
-
-    // --------------------------------------------------
-
+    @Override
     public String getSrcHostname() {
         return (srcHostname);
     }
 
+    @Override
     public void setSrcHostname(String srcHostname) {
         this.srcHostname = srcHostname;
     }
 
     // --------------------------------------------------
 
+    @Override
     public String getSrcFilename() {
         return (srcFilename);
     }
 
+    @Override
     public void setSrcFilename(String srcFilename) {
         this.srcFilename = srcFilename;
     }
 
     // --------------------------------------------------
 
+    @Override
     public String getLocalPath() {
         return (localPath);
     }
 
+    @Override
     public void setLocalPath(String localPath) {
         this.localPath = localPath;
     }
 
     // --------------------------------------------------
 
+    @Override
     public String getUrlPath() {
         return (urlPath);
     }
 
+    @Override
     public void setUrlPath(String urlPath) {
         this.urlPath = urlPath;
     }
 
     // --------------------------------------------------
-
-    public String getAbsoluteUrl() {
-        return (absoluteUrl);
-    }
-
-    public void setAbsoluteUrl(String absoluteUrl) {
-        this.absoluteUrl = absoluteUrl;
-    }
-
-    // --------------------------------------------------
-
-    public String getThumbUrlPath() {
-        return (thumbUrlPath);
-    }
-
-    public void setThumbUrlPath(String thumbUrlPath) {
-        this.thumbUrlPath = thumbUrlPath;
-    }
-
-    // --------------------------------------------------
-
-    public String getThumbAbsoluteUrl() {
-        return (thumbAbsoluteUrl);
-    }
-
-    public void setThumbAbsoluteUrl(String thumbAbsoluteUrl) {
-        this.thumbAbsoluteUrl = thumbAbsoluteUrl;
-    }
-
-    // --------------------------------------------------
-
+    
+    @Override
     public Long getUploadTime() {
         return (uploadTime);
     }
 
+    @Override
     public void setUploadTime(Long uploadTime) {
         this.uploadTime = uploadTime;
     }
 
     // --------------------------------------------------
 
+    @Override
     public Date getCreatedDate() {
         return (createdDate);
     }
 
+    @Override
     public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
     }
 
     // --------------------------------------------------
 
+    @Override
     public Date getRetiredDate() {
         return (retiredDate);
     }
 
+    @Override
     public void setRetiredDate(Date retiredDate) {
         this.retiredDate = retiredDate;
     }
 
     // --------------------------------------------------
 
+    @Override
     public Date getLastUpdated() {
         return (lastUpdated);
     }
 
+    @Override
     public void setLastUpdated(Date lastUpdated) {
         this.lastUpdated = lastUpdated;
     }
