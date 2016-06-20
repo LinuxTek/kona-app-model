@@ -22,6 +22,8 @@ public interface KFileService<F extends KFile> extends KService, KDataService<F>
 
     public F fetchById(Long id, boolean withData) throws IOException;
     
+    public List<F> fetchByParentId(Long parentId, boolean withData) throws IOException;
+   
     public List<F> fetchByUserId(Long userId, boolean withData) throws IOException;
     
     public List<F> fetchByCriteria(Integer startRow,  Integer resultSize, 

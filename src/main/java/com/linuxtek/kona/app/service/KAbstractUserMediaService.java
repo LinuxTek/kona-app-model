@@ -16,6 +16,7 @@ import com.linuxtek.kona.app.entity.KFile;
 import com.linuxtek.kona.app.entity.KUser;
 import com.linuxtek.kona.app.entity.KUserMedia;
 import com.linuxtek.kona.data.mybatis.KMyBatisUtil;
+import com.linuxtek.kona.media.util.KImageInfo;
 import com.linuxtek.kona.media.util.KImageUtil;
 
 public abstract class KAbstractUserMediaService<T extends KUserMedia, EXAMPLE, U extends KUser, F extends KFile> 
@@ -27,6 +28,8 @@ public abstract class KAbstractUserMediaService<T extends KUserMedia, EXAMPLE, U
 	// ----------------------------------------------------------------------------
 	
 	protected abstract T getNewObject();
+	
+	protected abstract F getNewFileObject();
 	
 	protected abstract <S extends KUserService<U>> S getUserService();
 	protected abstract <S extends KFileService<F>> S getFileService();
@@ -138,41 +141,47 @@ public abstract class KAbstractUserMediaService<T extends KUserMedia, EXAMPLE, U
     
 	// ----------------------------------------------------------------------------
     
-    protected Integer getImageMaxWidth() {
-    	return -1;
-    }
-    protected Integer getImageMaxHeight() {
-    	return -1;
-    }
-    
-	// ----------------------------------------------------------------------------
-    
-	private void resizeImage(F file) throws IOException {
-        if (!isResizeable()) return;
-		Integer maxWidth = getImageMaxWidth();
-		Integer maxHeight = getImageMaxHeight();
+	protected void resizeImage(T media, Integer maxWidth, Integer maxHeight) throws IOException {
+        if (!media.isResizeable()) {
+        	return;
+        }
+        
+		F file = getFileService().fetchById(media.getFileId(), true);
+		
         byte[] src = file.getData();
+        
         KImageUtil.Image image = KImageUtil.resizeToMaxWidthAndHeight(src, maxWidth, maxHeight);
+        
 		file.setData(image.data);
-        file.setWidth(image.width);
-        file.setHeight(image.height);
         file.setSize(image.size);
+        
+        getFileService().update(file);
+        
+        media.setWidth(image.width);
+        media.setHeight(image.height);
+        update(media);
 	}
+	
 	// ----------------------------------------------------------------------------
     
-    protected void updateImageInfo(F file) throws IOException {
+    protected void updateImageInfo(T media) throws IOException {
+		F file = getFileService().fetchById(media.getFileId(), true);
+		
         byte[] data = file.getData();
+        
         if (data == null) {
             logger.info("file data is null");
             return;
         }
 
         KImageInfo info = new KImageInfo(data);
-        file.setWidth(info.getWidth());
-        file.setHeight(info.getHeight());
-        file.setBitsPerPixel(info.getBitsPerPixel());
+        
+        media.setWidth(info.getWidth());
+        media.setHeight(info.getHeight());
+        media.setBitsPerPixel(info.getBitsPerPixel());
 
         long dataSize = Long.valueOf(data.length);
+        
         if (file.getSize() == null || !file.getSize().equals(dataSize)) {
             logger.warn("setting file size to: "
                     + dataSize + "  old value: " + file.getSize());
@@ -194,69 +203,76 @@ public abstract class KAbstractUserMediaService<T extends KUserMedia, EXAMPLE, U
         }
 
         logger.debug("Image info: " + file.getName()
-                + "\n\twidth: " + file.getWidth()
-                + "\n\theight: " + file.getHeight()
-                + "\n\tbitsPerPixel: " + file.getBitsPerPixel());
+                + "\n\twidth: " + media.getWidth()
+                + "\n\theight: " + media.getHeight()
+                + "\n\tbitsPerPixel: " + media.getBitsPerPixel());
+        
+        
+        getFileService().update(file);
+        update(media);
     }
+    
+    
     
 	// ----------------------------------------------------------------------------
 
-    
-	@Transactional
-	private void createThumbnail(F original) throws IOException {
-		Boolean createThumbnail =
-				config.getBoolean("fileService.createThumbail", false);
+	protected T createThumbnail(T original, Integer width, Integer height) throws IOException {
+		
+		F file = getFileService().fetchById(original.getFileId(), true);
+		
+		T thumbnail = null;
+		
+		F thumbnailFile = null;
+		
+		if (original.getThumbnailId() != null) {
+			thumbnail = fetchById(original.getThumbnailId());
+			thumbnailFile = getFileService().fetchById(thumbnail.getFileId());
+		}
+	
+		if (thumbnailFile == null) {
+			thumbnailFile = getNewFileObject();
+			thumbnailFile.setUid(uuid());
+			thumbnailFile.setTypeId(file.getTypeId());
+			thumbnailFile.setParentId(file.getId());
+			thumbnailFile.setUserId(file.getUserId());
+			thumbnailFile.setName(file.getName());
+			thumbnailFile.setContentType(file.getContentType());
+			thumbnailFile.setHidden(file.isHidden());
+			thumbnailFile.setEnabled(file.isEnabled());
+			thumbnailFile.setActive(file.isActive());
+			thumbnailFile.setCreatedDate(new Date());
 
-		if (!createThumbnail) return;
-
-		Integer thumbnailWidth =
-				config.getInteger("fileService.thumbnailWidth", 100);
-
-		Integer thumbnailHeight =
-				config.getInteger("fileService.thumbnailHeight", 100);
-
-		F thumbnail = fetchThumbnail(original.getId());
-		if (thumbnail == null) {
-			thumbnail = getNewObject();
-			thumbnail.setUid(uuid());
-			thumbnail.setTypeId(original.getTypeId());
-			thumbnail.setParentId(original.getId());
-			thumbnail.setUserId(original.getUserId());
-			thumbnail.setName(original.getName());
-			thumbnail.setContentType(original.getContentType());
-
-			thumbnail.setArchive(false);
-			thumbnail.setCompressed(false);
-			thumbnail.setHidden(original.isHidden());
-			//thumbnail.setPrivate(original.isPrivate());
-			thumbnail.setEnabled(original.isEnabled());
-			thumbnail.setActive(original.isActive());
-			thumbnail.setCreatedDate(new Date());
-
-			String localPath = original.getLocalPath() + "-thumbnail";
-			thumbnail.setLocalPath(localPath);
-			thumbnail.setUrlPath(toPublicPath(localPath));
+			String localPath = file.getLocalPath() + "-thumbnail";
+			thumbnailFile.setLocalPath(localPath);
 		}
         
-		byte[] thumbnailBytes = KImageUtil.resize(original.getData(),
-				thumbnailWidth, thumbnailHeight);
+		byte[] thumbnailBytes = KImageUtil.resize(file.getData(), width, height);
         
-		thumbnail.setData(thumbnailBytes);
-		thumbnail.setSize(Long.valueOf(thumbnailBytes.length));
+		thumbnailFile.setData(thumbnailBytes);
+		thumbnailFile.setSize(Long.valueOf(thumbnailBytes.length));
 
-		KImageUtil.updateImageInfo(thumbnail);
-
-		// first write the bytes to disk 
-		saveFile(thumbnail);
-
-		// if we get here, we can safely write the meta data to the db
-        if (thumbnail.getId() == null) {
-        	getDao().insert(thumbnail);
-        	original.setThumbId(thumbnail.getId());
-        	original.setThumbUrlPath(thumbnail.getUrlPath());
-        	getDao().updateByPrimaryKey(original);
+        if (thumbnailFile.getId() == null) {
+        	thumbnailFile = getFileService().add(thumbnailFile);
         } else {
-        	getDao().updateByPrimaryKey(thumbnail);
+        	thumbnailFile = getFileService().update(thumbnailFile);
         }
+        
+        if (thumbnail == null) {
+        	   thumbnail = getNewObject();
+               thumbnail.setUserId(thumbnailFile.getUserId());
+               thumbnail.setFileId(thumbnailFile.getId());
+               thumbnail.setFileTypeId(thumbnailFile.getTypeId());
+               thumbnail.setUrlPath(thumbnailFile.getUrlPath());
+               thumbnail.setEnabled(true);
+               thumbnail.setPrimaryPhoto(false);
+               thumbnail.setCreatedDate(new Date());
+               
+               thumbnail = add(thumbnail);
+        } else {
+        	thumbnail.setFileId(thumbnailFile.getId());
+        	thumbnail = update(thumbnail);
+        }
+        
+        return thumbnail;
 	}
 }

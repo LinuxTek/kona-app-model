@@ -10,9 +10,19 @@ import com.linuxtek.kona.data.entity.KEntityObject;
  */
     
 public interface KMediaObject extends KEntityObject {
+	
+	@Override
+    public Long getId();
+    public void setId(Long id);
     
     public String getUid();
     public void setUid(String uid);
+    
+    public Long getParentId();
+    public void setParentId(Long parentId);
+    
+    public Long getThumbnailId();
+    public void setThumbnailId(Long id);
     
     public String getUrlPath();
     public void setUrlPath(String urlPath);

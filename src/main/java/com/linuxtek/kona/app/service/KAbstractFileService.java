@@ -22,7 +22,6 @@ import com.linuxtek.kona.encryption.KEncryptUtil;
 import com.linuxtek.kona.http.KMimeTypes;
 import com.linuxtek.kona.util.KClassUtil;
 import com.linuxtek.kona.util.KFileUtil;
-import com.linuxtek.kona.util.KResultList;
 
 
 public abstract class KAbstractFileService<F extends KFile,EXAMPLE,U extends KUser> 
@@ -36,15 +35,24 @@ public abstract class KAbstractFileService<F extends KFile,EXAMPLE,U extends KUs
 	protected abstract F getNewObject();
 
 	protected abstract <S extends KUserService<U>> S getUserService();
-	
+
 	// ----------------------------------------------------------------------------
-    
+
+	protected abstract Long toFileTypeId(String contentType);
+
 	protected abstract String getFileType(Long typeId);
-    
+
 	protected abstract String getPublicBaseUrl();
-	
+
+	protected abstract String getLocalBasePath();
+
+
 	protected String generateUid() {
 		return KUtil.uuid();
+	}
+	
+	protected String toPublicPath(String localPath) {
+		return localPath;
 	}
 
 	// ----------------------------------------------------------------------------
@@ -61,39 +69,25 @@ public abstract class KAbstractFileService<F extends KFile,EXAMPLE,U extends KUs
 
 		file.setLastUpdated(new Date());
 	}
-    
+
 	// ----------------------------------------------------------------------------
-    
+
 	@Override
 	public List<F> fetchByCriteria(Integer startRow, Integer resultSize,
 			String[] sortOrder, Map<String, Object> filter, boolean distinct, 
 			boolean withData) throws IOException {
-		logger.debug("AccountServiceImpl fetch(): called");
-		
-		if (sortOrder == null) {
-			sortOrder = getDefaultSortOrder();
+
+		List<F> list = fetchByCriteria(startRow, resultSize, sortOrder, filter, distinct); 
+
+		if (!withData) {
+			return list;
 		}
 
-		EXAMPLE example = getExampleObjectInstance(startRow, resultSize, sortOrder, filter, distinct);
-
-		List<F> list = getDao().selectByExample(example);
-
-		KResultList<F> resultList = new KResultList<F>();
-		resultList.setStartIndex(startRow);
-		resultList.setTotalSize(list.size());
-		resultList.setEndIndex(startRow + list.size());
-
-		logger.debug("fetch(): record count: " + list.size());
-
 		for (F file : list) {
-    		if (withData) {
-    			file = fetchFile(file);
-    		}
-            
-    		resultList.add(file);
-    	}
+			fetchFile(file);
+		}
 
-		return resultList;
+		return list;
 	}
 
 	// ----------------------------------------------------------------------------
@@ -103,7 +97,15 @@ public abstract class KAbstractFileService<F extends KFile,EXAMPLE,U extends KUs
 		Map<String,Object> filter = KMyBatisUtil.createFilter("uid", uid);
 		return KMyBatisUtil.fetchOne(fetchByCriteria(0, 99999, null, filter, false, withData));
 	}
-    
+	
+	// ----------------------------------------------------------------------------
+
+	@Override
+	public List<F> fetchByParentId(Long parentId, boolean withData) throws IOException {
+		Map<String,Object> filter = KMyBatisUtil.createFilter("parentId", parentId);
+		return fetchByCriteria(0, 99999, null, filter, false, withData);
+	}
+
 	// ----------------------------------------------------------------------------
 
 	@Override
@@ -113,334 +115,298 @@ public abstract class KAbstractFileService<F extends KFile,EXAMPLE,U extends KUs
 	}
 
 	// ----------------------------------------------------------------------------
-    
+
+	@Override
+	public F add(F file) {
+		validate(file);
+
+		if (file.getData() == null) {
+			throw new IllegalArgumentException("data is null");
+		}
+
+		Integer size = file.getData().length;
+		
+		file.setSize(size.longValue());
+
+		String localPath = createFilePath(file);
+		
+		file.setLocalPath(localPath);
+
+		if (file.getUrlPath() == null) {
+			file.setUrlPath(toPublicPath(localPath));
+		}
+
+
+		logger.debug("server add(File) called:"
+				+ "\n\tdata size: " + size
+				+ "\n\tfile: " + file);
+
+		try {
+			saveFile(file);
+			getDao().insert(file);
+
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+
+		return file;
+	}
 	
+	// ----------------------------------------------------------------------------
+
+	@Override
+	public void remove(F file) {
+		try {
+			if (file == null) return;
+			deleteFile(file);
+			getDao().deleteByPrimaryKey(file.getId());
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
 	
+	// ----------------------------------------------------------------------------
+
+	@Override 
+	public void removeById(Long fileId) {
+		F file = fetchById(fileId);
+		remove(file);
+	}
 	
+	// ----------------------------------------------------------------------------
+
+	@Override 
+	public F update(F file) {
+		validate(file);
+
+		boolean updateData = false;
+		
+		if (file.getData() != null) {
+			Integer size = file.getData().length;
+			file.setSize(size.longValue());
+			updateData = true;
+		}
+
+		// just for debugging purposes
+		F old = fetchById(file.getId());
+		logger.debug("server update:\n\t" + KClassUtil.toString(old));
+
+
+		try {
+			if (updateData)  {
+				saveFile(file);
+			}
+
+			getDao().updateByPrimaryKey(file);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+
+		return file;
+	}
 	
-	   @Override
-	    public F add(F file) {
-	        validate(file);
+	// ----------------------------------------------------------------------------
 
-	        if (file.getData() == null) {
-	            throw new IllegalArgumentException("data is null");
-	        }
-	        
-	        Integer size = file.getData().length;
-	        file.setSize(size.longValue());
-
-	        String localPath = createFilePath(file);
-	        file.setLocalPath(localPath);
-	        
-	        if (file.getUrlPath() == null) {
-	        	file.setUrlPath(toPublicPath(localPath));
-	        }
-	        
-	        
-	        logger.debug("server add(File) called:"
-	                + "\n\tdata size: " + size
-	                + "\n\tfile: " + file);
-
-	        try {
-	        	saveFile(file);
-	        	
-	            // if we get here, we can safely write the meta data to the db
-	            getDao().insert(file);
-	          
-	        } catch (IOException e) {
-	            throw new RuntimeException(e);
-	        }
-
-	        return file;
-	    }
-	    
-	    @Override
-	    public void remove(F file) {
-	    	try {
-	            if (file == null) return;
-	    		deleteFile(file);
-	    		getDao().deleteByPrimaryKey(file.getId());
-	    	} catch (IOException e) {
-	            throw new RuntimeException(e);
-	    	}
-	    }
-
-	    @Override 
-	    public void removeById(Long fileId) {
-	        F file = fetchById(fileId);
-	        remove(file);
-	    }
-
-
-	    @Override 
-	    public F update(F file) {
-	        validate(file);
-
-	        if (file.getId() == null) {
-	            throw new IllegalArgumentException("File object has null id");
-	        }
-
-	        boolean updateData = false;
-	        if (file.getData() != null) {
-	        	Integer size = file.getData().length;
-	            file.setSize(size.longValue());
-	            updateData = true;
-	        }
-            
-	        // just for debugging purposes
-	        F old = fetchById(file.getId());
-	        logger.debug("server update:\n\t" + KClassUtil.toString(old));
-	        
-
-	        try {
-	        	if (updateData)  {
-	        		saveFile(file);
-	        	}
-
-	        	// if we get here, we can safely write the meta data to the db
-	            file.setLastUpdated(new Date());
-	        	getDao().updateByPrimaryKey(file);
-                
-	        } catch (IOException e) {
-	        	throw new RuntimeException(e);
-	        }
-
-	        return file;
-	    }
-
-
-	    @Override
-	    public F fetchById(Long fileId) {
-	    	try {
-	    		return fetchById(fileId, false);
-	    	} catch (IOException e) {
-	    		throw new RuntimeException(e);
-	    	}
-	    }
-
-	    @Override
-	    public F fetchById(Long fileId, boolean withData) throws IOException {
-	    	F file = getDao().selectByPrimaryKey(fileId);
-            
-	        if (file == null) return null;
-            
-	    	if (withData) {
-	    		file = fetchFile(file);
-	    	}
-            
-	    	return file;
-	    }
-
-
-	    @Override
-	    public List<F> fetchByCriteria( 
-	    		Integer startRow, Integer resultSize, String[] sortOrder, 
-	    		Map<String, Object> filterCriteria, boolean distinct) {
-	    	try {
-	    		return fetchByCriteria(startRow, resultSize, sortOrder, 
-	    				filterCriteria, distinct, false);
-	    	} catch (IOException e) {
-	    		throw new RuntimeException(e);
-	    	}
-	    }
-
-	    
+	@Override
+	public F fetchById(Long fileId) {
+		try {
+			return fetchById(fileId, false);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
 	
-        
-	   
+	// ----------------------------------------------------------------------------
 
-	    @Override
-	    public String toAbsoluteUrl(String publicPath) {
-	    	if (publicPath == null) return null;
-	    	
-	        String publicUrl = null;
-	        String publicBaseUrl = getPublicBaseUrl();
-	        if (publicBaseUrl != null) {
-	            if (publicPath.startsWith("/")) {
-	            	publicPath = publicPath.substring(1, publicPath.length());
-	            }
-	            if (!publicBaseUrl.endsWith("/")) {
-	            	publicBaseUrl += "/";
-	            }
-	        	publicUrl = publicBaseUrl + publicPath;
-	        }
-	        return publicUrl;
-	    }   
+	@Override
+	public F fetchById(Long fileId, boolean withData) throws IOException {
+		F file = getDao().selectByPrimaryKey(fileId);
 
-        protected abstract String getLocalBasePath();
+		if (file == null) return null;
 
-	    @Override
-	    public F fetchFileByUrlPath(String publicPath) throws IOException {
-            
-	    	Map<String,Object> filter = KMyBatisUtil.createFilter("urlPath", publicPath);
-			F file = KMyBatisUtil.fetchOne(fetchByCriteria(0, 99999, null, filter, false, false));
-            
-	        if (file == null) {
-	            throw new IOException("File not found for path: " + publicPath);
-	        }
+		if (withData) {
+			file = fetchFile(file);
+		}
 
-	    	String localBasePath = getLocalBasePath();
-	        String fullPath = localBasePath + file.getLocalPath();
-//	    	String fullPath = localBasePath + publicPath;
+		return file;
+	}
+	
+	// ----------------------------------------------------------------------------
 
-	    	logger.debug("fullPath: " + fullPath);
+	@Override
+	public String toAbsoluteUrl(String publicPath) {
+		if (publicPath == null) return null;
 
-	    	byte[] fileData = KFileUtil.toByteArray(fullPath);
-	    	String fileContentType = null;
-	    	try {
-	    		fileContentType = KMimeTypes.getContentType(fileData);
-	    	} catch (Exception e) {
-	    		logger.debug("Unable to determine content-type for fileId: " + file.getId(), e);
-	    	}
-	        
-	        String contentType = file.getContentType();
-	        if (contentType == null) {
-	        	contentType = fileContentType;
-	        }
-	        
-	        if (contentType == null) {
-	        	throw new IOException("Cannot determine file content type: " + fullPath);
-	        }
-	        
-	        if (fileContentType != null && !contentType.equals(fileContentType)) {
-	        	logger.warn("Content type mismatch for file: " + fullPath
-	        			+ "\nfile contentType: " + fileContentType
-	        			+ "\ndatabase contentType: " + contentType);
-	        }
-	        
-	    	Path path = Paths.get(fullPath);
-	    	String filename = path.getFileName().toString();
+		String publicUrl = null;
+		String publicBaseUrl = getPublicBaseUrl();
+		if (publicBaseUrl != null) {
+			if (publicPath.startsWith("/")) {
+				publicPath = publicPath.substring(1, publicPath.length());
+			}
+			if (!publicBaseUrl.endsWith("/")) {
+				publicBaseUrl += "/";
+			}
+			publicUrl = publicBaseUrl + publicPath;
+		}
+		return publicUrl;
+	}   
+	
+	// ----------------------------------------------------------------------------
 
-	    	if (file.getName() == null && filename != null) {
-	    		file.setName(filename);
-	    	}
-	        
-	    	logger.debug("fetchFileByUrlPath: filename: " + file.getName());
-	        
-	    	file.setData(fileData);
-	    	file.setContentType(contentType);
+	@Override
+	public F fetchFileByUrlPath(String publicPath) throws IOException {
 
-	    	return file;
-	    }
+		Map<String,Object> filter = KMyBatisUtil.createFilter("urlPath", publicPath);
+		F file = KMyBatisUtil.fetchOne(fetchByCriteria(0, 99999, null, filter, false, false));
 
-	    @Override
-	    public F fetchFile(F file) throws IOException {
-	        String urlPath = file.getUrlPath();
-	        if (urlPath == null) {
-	        	file = fetchById(file.getId(), false);
-	            urlPath = file.getUrlPath();
-	        }
-	        
-	        F f = fetchFileByUrlPath(urlPath);
-	        
-	        file.setData(f.getData());
-	        
-	        if (file.getSize() == null) {
-	        	file.setSize(f.getSize());
-	        }
-	        
-	        if (file.getName() == null) {
-	        	file.setName(f.getName());
-	        }
-	        
-	        if (file.getContentType() == null) {
-	        	file.setContentType(f.getContentType());
-	        }
-	        return file;
-	    }
+		if (file == null) {
+			throw new IOException("File not found for path: " + publicPath);
+		}
 
-        protected abstract Long toFileTypeId(String contentType);
-        
-	    @Override
-	    public void saveFile(F file) throws IOException {
-	        String localBasePath = getLocalBasePath();
-	        
-	        String fullPath = localBasePath + file.getLocalPath();
-	        java.io.File f = new java.io.File(fullPath);
-	        if (f.exists()) f.delete();
-	        KFileUtil.writeFile(fullPath, file.getData());
-	        
-	        if (file.getContentType() == null || file.getContentType().equalsIgnoreCase("application/octet-stream")) { 
-                
-	        	logger.debug("Probing contentType for file: " + fullPath);
-	        	String contentType = KMimeTypes.getContentType(file.getData());
-	        	logger.debug("Probed contentType: " + contentType);
-                
-	        	if (contentType != null) {
-	        		file.setContentType(contentType);
-                    
-	        		if (file.getTypeId() == null ) {
-	        			file.setTypeId(toFileTypeId(contentType));
-	        		}
-	        	}
-	        }
-	    }
-	    
+		String localBasePath = getLocalBasePath();
+		String fullPath = localBasePath + file.getLocalPath();
 
-	    @Override
-	    public void deleteFile(F file) throws IOException {
-	        String localBasePath = getLocalBasePath();
-	        String fullPath = localBasePath + file.getLocalPath();
-	        java.io.File f = new java.io.File(fullPath);
-	        if (f.exists()) {
-	            f.delete();
-	        } else {
-	            logger.warn("File does not exist: " + fullPath);
-	        }
-	    }
-	    
-        
+		logger.debug("fullPath: " + fullPath);
+
+		byte[] fileData = KFileUtil.toByteArray(fullPath);
 	
 
-	    
-	    private String createFilePath(F file) {
+		String contentType = file.getContentType();
+		
+		if (contentType == null) {
+			try {
+				contentType = KMimeTypes.getContentType(fileData);
+			} catch (Exception e) {
+				logger.debug("Unable to determine contentType for fileId: " + file.getId(), e);
+			}
+		}
 
-	        String fileKey = UUID.randomUUID().toString();
+		if (contentType == null) {
+			throw new IOException("Cannot determine file content type: " + fullPath);
+		}
 
-	        try {
-	            fileKey = KEncryptUtil.MD5(fileKey).toUpperCase();
-	        } catch (Exception e) { 
-	            throw new RuntimeException(e);
-	        }
-	        
-	        int hashcode = fileKey.hashCode();
-	        int mask = 255;
+		Path path = Paths.get(fullPath);
+		String filename = path.getFileName().toString();
 
-	        /*
-	        Long userId = file.getUserId();
-	        if (userId == null) {
-	            userId = 0L;
-	        }
+		if (file.getName() == null && filename != null) {
+			file.setName(filename);
+		}
 
-	        int dir1 = userId.intValue();
-	        */
-	        
-	        int dir1 = hashcode & mask;
-	        int dir2 = (hashcode >> 8) & mask;
-	        int dir3 = ((hashcode >> 8) >> 8) & mask;
-	        int dir4 = (((hashcode >> 8) >> 8)>>8) & mask;
+		logger.debug("fetchFileByUrlPath: filename: " + file.getName());
 
-	        StringBuilder path = new StringBuilder();
-	        path.append(String.format("%04d", dir1));
-	        path.append(java.io.File.separator);
-	        path.append(String.format("%04d", dir2));
-	        path.append(java.io.File.separator);
-	        path.append(String.format("%04d", dir3));
-	        path.append(java.io.File.separator);
-	        path.append(String.format("%04d", dir4));
-	        path.append(fileKey);
+		file.setData(fileData);
+		file.setContentType(contentType);
 
-	        logger.debug("Created path string: " + path);
+		return file;
+	}
+	
+	// ----------------------------------------------------------------------------
 
-	        return path.toString();
-	    }
+	@Override
+	public F fetchFile(F file) throws IOException {
+		String urlPath = file.getUrlPath();
+		
+		if (urlPath == null) {
+			file = fetchById(file.getId(), false);
+			urlPath = file.getUrlPath();
+		}
 
-	    protected String toPublicPath(String localPath) {
-	        return localPath;
-	    }
-	    
-	  
-        
+		F f = fetchFileByUrlPath(urlPath);
 
+		file.setData(f.getData());
+
+		if (file.getSize() == null) {
+			file.setSize(f.getSize());
+		}
+
+		if (file.getName() == null) {
+			file.setName(f.getName());
+		}
+
+		if (file.getContentType() == null) {
+			file.setContentType(f.getContentType());
+		}
+		
+		return file;
+	}
+	
+	// ----------------------------------------------------------------------------
+	
+	@Override
+	public void saveFile(F file) throws IOException {
+		String localBasePath = getLocalBasePath();
+		String fullPath = localBasePath + file.getLocalPath();
+		
+		deleteFile(file);
+		
+		KFileUtil.writeFile(fullPath, file.getData());
+
+		if (file.getContentType() == null || file.getContentType().equalsIgnoreCase("application/octet-stream")) { 
+			logger.debug("Probing contentType for file: " + fullPath);
+			String contentType = KMimeTypes.getContentType(file.getData());
+			logger.debug("Probed contentType: " + contentType);
+
+			if (contentType != null) {
+				file.setContentType(contentType);
+
+				if (file.getTypeId() == null ) {
+					file.setTypeId(toFileTypeId(contentType));
+				}
+			}
+		}
+	}
+	
+	// ----------------------------------------------------------------------------
+	
+	@Override
+	public void deleteFile(F file) throws IOException {
+		String localBasePath = getLocalBasePath();
+		String fullPath = localBasePath + file.getLocalPath();
+		
+		java.io.File f = new java.io.File(fullPath);
+		
+		if (f.exists()) {
+			f.delete();
+		} else {
+			logger.warn("File does not exist: " + fullPath);
+		}
+	}
+	
+	// ----------------------------------------------------------------------------
+
+	private String createFilePath(F file) {
+
+		String fileKey = UUID.randomUUID().toString();
+
+		try {
+			fileKey = KEncryptUtil.MD5(fileKey).toUpperCase();
+		} catch (Exception e) { 
+			throw new RuntimeException(e);
+		}
+
+		int hashcode = fileKey.hashCode();
+		int mask = 255;
+
+		int dir1 = hashcode & mask;
+		int dir2 = (hashcode >> 8) & mask;
+		int dir3 = ((hashcode >> 8) >> 8) & mask;
+		int dir4 = (((hashcode >> 8) >> 8)>>8) & mask;
+
+		StringBuilder path = new StringBuilder();
+		path.append(String.format("%04d", dir1));
+		path.append(java.io.File.separator);
+		path.append(String.format("%04d", dir2));
+		path.append(java.io.File.separator);
+		path.append(String.format("%04d", dir3));
+		path.append(java.io.File.separator);
+		path.append(String.format("%04d", dir4));
+		path.append(fileKey);
+
+		logger.debug("Created path string: " + path);
+
+		return path.toString();
+	}
+	
+	// ----------------------------------------------------------------------------
 
 }
