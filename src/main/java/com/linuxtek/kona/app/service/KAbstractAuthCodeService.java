@@ -51,9 +51,7 @@ public abstract class KAbstractAuthCodeService<T extends KAuthCode,EXAMPLE,
     
 	protected abstract String getAuthCodeUrl(Long typeId, Long appId, Long userId, String code);
     
-    protected abstract void sendAuthCodeEmail(Long typeId, Long appId, Long userId, String authCodeUrl); 
-    
-    protected abstract void sendAuthCodeSms(Long typeId, Long appId, Long userId, String authCodeUrl); 
+    protected abstract void sendAuthCode(Long typeId, Long appId, Long userId, String authCodeUrl); 
     
 	// ----------------------------------------------------------------------------
     
@@ -236,17 +234,15 @@ public abstract class KAbstractAuthCodeService<T extends KAuthCode,EXAMPLE,
 			registration.setEmailPending(true);
 			registration.setEmailVerified(false);
 			getRegistrationService().update(registration);
-			sendAuthCodeEmail(typeId, appId, userId, authCodeUrl);
 		} else if (type.equalsIgnoreCase("MOBILE_CONFIRMATION")) {
 			registration = getRegistrationService().fetchByUserId(userId);
 			registration.setMobilePending(true);
 			registration.setMobileVerified(false);
 			getRegistrationService().update(registration);
-			sendAuthCodeSms(typeId, appId, userId, authCodeUrl);
 		} else if (type.equalsIgnoreCase("PASSWORD_RESET")) {
-			sendAuthCodeEmail(typeId, appId, userId, authCodeUrl);
 		}
 
+		sendAuthCode(typeId, appId, userId, authCodeUrl);
 	}
     
 	// ----------------------------------------------------------------------------
