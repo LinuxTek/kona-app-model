@@ -3,6 +3,8 @@
  */
 package com.linuxtek.kona.app.entity;
 
+import java.util.Date;
+
 /**
  * KBaseMediaObject.
  */
@@ -11,8 +13,11 @@ public class KBaseMediaObject implements KMediaObject {
 
 	private Long id;
 	private String uid;
+	private Long userId;
 	private Long parentId;
 	private Long thumbnailId;
+	private Long fileId;
+	private Long fileTypeId;
 	private String urlPath;
 	private Double latitude;
 	private Double longitude;
@@ -24,6 +29,11 @@ public class KBaseMediaObject implements KMediaObject {
 	private Integer bitsPerPixel;
 	private Integer height;
 	private Integer width;
+	private Long size;
+
+	private Date lastUpdated;
+
+	private Date createdDate;
 
 
 	@Override
@@ -45,6 +55,16 @@ public class KBaseMediaObject implements KMediaObject {
 	public void setUid(String uid) {
 		this.uid = uid == null ? null : uid.trim();
 	}
+    
+	@Override
+	public Long getUserId() {
+		return userId;
+	}
+
+	@Override
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
 
 	@Override
 	public Long getParentId() {
@@ -55,6 +75,27 @@ public class KBaseMediaObject implements KMediaObject {
 	public void setParentId(Long parentId) {
 		this.parentId = parentId;
 	}
+
+	@Override
+	public Long getFileId() {
+		return fileId;
+	}
+
+	@Override
+	public void setFileId(Long fileId) {
+		this.fileId = fileId;
+	}
+
+	@Override
+	public Long getFileTypeId() {
+		return fileTypeId;
+	}
+
+	@Override
+	public void setFileTypeId(Long fileTypeId) {
+		this.fileTypeId = fileTypeId;
+	}
+
 
 	@Override
 	public Long getThumbnailId() {
@@ -137,6 +178,16 @@ public class KBaseMediaObject implements KMediaObject {
 	}
 
 	@Override
+	public Long getSize() {
+		return size;
+	}
+
+	@Override
+	public void setSize(Long size) {
+		this.size = size;
+	}
+
+	@Override
 	public Integer getBitsPerPixel() {
 		return bitsPerPixel;
 	}
@@ -164,6 +215,37 @@ public class KBaseMediaObject implements KMediaObject {
 	@Override
 	public void setResizeable(boolean resizeable) {
 		this.resizeable = resizeable;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	@Override
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+
+	@Override
+	public Date getCreatedDate() {
+		return createdDate;
+	}
+
+	@Override
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
+	}
+
+	@Override
+	public Date getLastUpdated() {
+		return lastUpdated;
+	}
+
+
+	@Override
+	public void setLastUpdated(Date lastUpdated) {
+		this.lastUpdated = lastUpdated;
 	}
 
 
