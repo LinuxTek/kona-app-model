@@ -8,12 +8,11 @@ import java.io.Serializable;
 /**
  * KSmsException.
  */
+public class KSmsException extends RuntimeException implements Serializable {
 
-@SuppressWarnings("serial")
-public class KSmsException extends RuntimeException 
-        implements Serializable {
+	private static final long serialVersionUID = 1L;
 
-    public KSmsException(String message) {
+	public KSmsException(String message) {
         super(message);
     }
 

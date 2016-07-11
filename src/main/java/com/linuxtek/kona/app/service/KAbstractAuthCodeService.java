@@ -47,6 +47,10 @@ public abstract class KAbstractAuthCodeService<T extends KAuthCode,EXAMPLE,
 	}
     */
     
+    /**
+     * @param typeId
+     * @return EMAIL_CONFIRMATION, MOBILE_CONFIRMATION, PASSWORD_RESET
+     */
     protected abstract String getAuthCodeType(Long typeId);
     
 	protected abstract String getAuthCodeUrl(Long typeId, Long appId, Long userId, String code);
@@ -99,6 +103,7 @@ public abstract class KAbstractAuthCodeService<T extends KAuthCode,EXAMPLE,
         
 		for (T authCode : result) {
 			authCode.setValid(false);
+			
 			authCode.setExpirationDate(new Date());
             
 			authCode = update(authCode);
@@ -113,9 +118,11 @@ public abstract class KAbstractAuthCodeService<T extends KAuthCode,EXAMPLE,
     
 	private List<T> fetchByUserIdAndTypeId(Long userId, Long typeId) {
 		Map<String,Object> filter = KMyBatisUtil.createFilter("userId", userId);
+		
         if (typeId != null) {
         	filter.put("typeId", typeId);
         }
+        
 		return fetchByCriteria(0, 99999, null, filter, false);
 	}
     

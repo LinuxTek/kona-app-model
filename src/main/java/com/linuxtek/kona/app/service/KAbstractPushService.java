@@ -36,8 +36,6 @@ public abstract class KAbstractPushService implements KPushService {
     
 	// ----------------------------------------------------------------------------
 	
-    
-    
 	static {
 		attributesMap.put(Platform.ADM, null);
 		attributesMap.put(Platform.GCM, null);

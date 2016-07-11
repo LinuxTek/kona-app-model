@@ -5,7 +5,6 @@ package com.linuxtek.kona.app.service;
 
 import com.linuxtek.kona.app.entity.KToken;
 import com.linuxtek.kona.app.entity.KUser;
-import com.linuxtek.kona.app.entity.KUserAuth;
 import com.linuxtek.kona.remote.service.KService;
 import com.linuxtek.kona.remote.service.KServiceClient;
 

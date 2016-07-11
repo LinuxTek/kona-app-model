@@ -7,10 +7,6 @@ import java.util.Map;
 
 import com.linuxtek.kona.remote.service.KService;
 
-
-/**
- * The client side stub for the RPC service.
- */
 public interface KPushService extends KService {
     public static final String SERVICE_PATH = "rpc/kona/PushService";
     
