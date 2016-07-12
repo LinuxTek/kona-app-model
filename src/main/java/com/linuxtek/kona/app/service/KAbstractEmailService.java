@@ -98,9 +98,9 @@ public abstract class KAbstractEmailService<EMAIL extends KEmail,
 	
 	protected abstract String getEmailFooterHtmlSelector();
 	
-	protected abstract String getEmailTextFooterTemplateName();
+	protected abstract String getEmailTextFooterTemplatePath();
 	
-	protected abstract String getEmailHtmlFooterTemplateName();
+	protected abstract String getEmailHtmlFooterTemplatePath();
 	
 	protected abstract <S extends KEmailAddressService<EMAIL_ADDRESS>> S getEmailAddressService();
 	
@@ -175,13 +175,14 @@ public abstract class KAbstractEmailService<EMAIL extends KEmail,
 		mailer.setCc(cc);
 		mailer.setBcc(bcc);
 		mailer.setSubject(subject);
+		
 		if (html) {
 			mailer.setHtmlBody(body);
 		} else {
 			mailer.setTextBody(body);
 		}
+		
 		mailer.setHTML(html);
-
 
 		String email = "\n"
 				+ "\nmailhost: " + mailhost
@@ -214,7 +215,11 @@ public abstract class KAbstractEmailService<EMAIL extends KEmail,
 
 			// otherwise, we had some issue where the message couldn't be delivered, so queue
 			// it and try again.
-			localMailQueue.add(message);
+			
+			// FIXME: setup a thread to resend messages in queue. until then throw exception
+			//localMailQueue.add(message);
+			
+			throw new KEmailException(e);
 		}
 	}
 
@@ -719,10 +724,10 @@ public abstract class KAbstractEmailService<EMAIL extends KEmail,
 		Map<String,Object> map = new HashMap<String,Object>();
 		map.put("footer", footer);
 
-		String footerTmpl = getEmailTextFooterTemplateName();  
+		String footerTmpl = getEmailTextFooterTemplatePath();  
 		
 		if (html) {
-			footerTmpl = getEmailHtmlFooterTemplateName(); 
+			footerTmpl = getEmailHtmlFooterTemplatePath(); 
 		}
 
 		try {

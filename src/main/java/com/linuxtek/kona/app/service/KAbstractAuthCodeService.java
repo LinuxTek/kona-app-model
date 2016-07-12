@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.linuxtek.kona.app.entity.KAuthCode;
+import com.linuxtek.kona.app.entity.KAuthCodeType;
 import com.linuxtek.kona.app.entity.KRegistration;
 import com.linuxtek.kona.app.entity.KUser;
 import com.linuxtek.kona.data.mybatis.KMyBatisUtil;
@@ -35,23 +36,6 @@ public abstract class KAbstractAuthCodeService<T extends KAuthCode,EXAMPLE,
     protected abstract <S extends KRegistrationService<R,U>> S getRegistrationService();
     
 	// ----------------------------------------------------------------------------
-    
-
-    /*
-	protected abstract String getPasswordResetUrl(Long appId, Long userId, String code);
-	protected abstract String getPasswordResetUrl(Long appId, Long userId, String code) {
-		//urlTemplate.passwordReset = http://example.com/account/passsword/{code}
-        String url = getPasswordResetUrl(code);
-		url = shortUrlService.shorten(appId, userId, null, null, url, null, null, false, true);
-		return url;
-	}
-    */
-    
-    /**
-     * @param typeId
-     * @return EMAIL_CONFIRMATION, MOBILE_CONFIRMATION, PASSWORD_RESET
-     */
-    protected abstract String getAuthCodeType(Long typeId);
     
 	protected abstract String getAuthCodeUrl(Long typeId, Long appId, Long userId, String code);
     
@@ -143,21 +127,23 @@ public abstract class KAbstractAuthCodeService<T extends KAuthCode,EXAMPLE,
 		authCode.setLastAccessedDate(new Date());
 
         // check type 
-        String type = getAuthCodeType(authCode.getTypeId());
+        //String type = getAuthCodeType(authCode.getTypeId());
+        
+        KAuthCodeType type = KAuthCodeType.getInstance(authCode.getTypeId());
         
         R registration = null;
         
-        if (type.equalsIgnoreCase("EMAIL_CONFIRMATION")) {
+        if (type == KAuthCodeType.EMAIL_CONFIRMATION) {
             registration = getRegistrationService().fetchByUserId(authCode.getUserId());
             registration.setEmailPending(false);
             registration.setEmailVerified(true);
             getRegistrationService().update(registration);
-        } else if (type.equalsIgnoreCase("MOBILE_CONFIRMATION")) {
+        } else if (type == KAuthCodeType.MOBILE_CONFIRMATION) {
             registration = getRegistrationService().fetchByUserId(authCode.getUserId());
             registration.setMobilePending(false);
             registration.setMobileVerified(true);
             getRegistrationService().update(registration);
-        } else if (type.equalsIgnoreCase("PASSWORD_RESET")) {
+        } else if (type == KAuthCodeType.PASSWORD_RESET) {
 
         }
             
@@ -232,21 +218,21 @@ public abstract class KAbstractAuthCodeService<T extends KAuthCode,EXAMPLE,
         
 		String authCodeUrl = getAuthCodeUrl(typeId, appId, userId, code);
 
-		String type = getAuthCodeType(typeId);
+		KAuthCodeType type = KAuthCodeType.getInstance(typeId);
 
 		R registration = null;
 
-		if (type.equalsIgnoreCase("EMAIL_CONFIRMATION")) {
+		if (type == KAuthCodeType.EMAIL_CONFIRMATION) {
 			registration = getRegistrationService().fetchByUserId(userId);
 			registration.setEmailPending(true);
 			registration.setEmailVerified(false);
 			getRegistrationService().update(registration);
-		} else if (type.equalsIgnoreCase("MOBILE_CONFIRMATION")) {
+		} else if (type == KAuthCodeType.MOBILE_CONFIRMATION) {
 			registration = getRegistrationService().fetchByUserId(userId);
 			registration.setMobilePending(true);
 			registration.setMobileVerified(false);
 			getRegistrationService().update(registration);
-		} else if (type.equalsIgnoreCase("PASSWORD_RESET")) {
+		} else if (type == KAuthCodeType.PASSWORD_RESET) {
 		}
 
 		sendAuthCode(typeId, appId, userId, authCodeUrl);

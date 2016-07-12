@@ -15,7 +15,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.linuxtek.kona.app.entity.KFile;
+import com.linuxtek.kona.app.entity.KFileAccess;
+import com.linuxtek.kona.app.entity.KFileType;
 import com.linuxtek.kona.app.entity.KUser;
+import com.linuxtek.kona.app.entity.KUserRole;
+import com.linuxtek.kona.app.entity.KUserType;
 import com.linuxtek.kona.app.util.KUtil;
 import com.linuxtek.kona.data.mybatis.KMyBatisUtil;
 import com.linuxtek.kona.encryption.KEncryptUtil;
@@ -38,14 +42,9 @@ public abstract class KAbstractFileService<F extends KFile,EXAMPLE,U extends KUs
 
 	// ----------------------------------------------------------------------------
 
-	protected abstract Long toFileTypeId(String contentType);
-
-	protected abstract String getFileType(Long typeId);
-
 	protected abstract String getPublicBaseUrl();
 
 	protected abstract String getLocalBasePath();
-
 
 	protected String generateUid() {
 		return KUtil.uuid();
@@ -350,7 +349,7 @@ public abstract class KAbstractFileService<F extends KFile,EXAMPLE,U extends KUs
 				file.setContentType(contentType);
 
 				if (file.getTypeId() == null ) {
-					file.setTypeId(toFileTypeId(contentType));
+					file.setTypeId(KFileType.getInstance(contentType).getId());
 				}
 			}
 		}
@@ -406,7 +405,58 @@ public abstract class KAbstractFileService<F extends KFile,EXAMPLE,U extends KUs
 
 		return path.toString();
 	}
-	
-	// ----------------------------------------------------------------------------
 
+	// ----------------------------------------------------------------------------
+	
+	@Override
+	public boolean isAuthorized(F file, String clientId, String accessToken) {
+		logger.debug("FileService: isAuthorized: checking file: " + KClassUtil.toString(file));
+
+		KFileAccess access = KFileAccess.getInstance(file.getAccessId());
+		if (access == null) {
+			throw new IllegalStateException("Invalid file access level: " + file.getAccessId());
+		}
+
+		if (access == KFileAccess.PUBLIC) return true;
+		if (access == KFileAccess.NONE) return false;
+
+		// FIXME: any valid app can access
+		if (access == KFileAccess.APP) {
+			// access level is app and we have a valid user
+			return true;
+		}
+
+
+		// SYSTEM, OWNER, CONTACT and FRIENDS can access
+		if (access == KFileAccess.FRIEND) {
+			return true;
+		}
+
+		U user = getUserService().fetchByAccessToken(accessToken, false);
+		
+		if (user == null || !user.isActive() || !user.isEnabled()) return false;
+
+		// FIXME: only SYSTEM users can access
+		if (access == KFileAccess.SYSTEM) {
+			KUserType userType = KUserType.getInstance(user.getTypeId());
+			if (userType == KUserType.SYSTEM) return true;
+			if (KUserRole.haveRole(user.getRoles(), KUserRole.ADMIN)) return true;
+			if (KUserRole.haveRole(user.getRoles(), KUserRole.SYSTEM)) return true;
+			return false;
+		}
+
+
+		// FIXME: SYSTEM, OWNER can access
+		if (access == KFileAccess.OWNER){
+			if (file.getUserId() == null) {
+				logger.warn("File has USER access but userId is null");
+				return false;
+			}
+
+			if (file.getUserId().equals(user.getId())) return true;
+			return false;
+		}
+
+		return false;
+	}
 }

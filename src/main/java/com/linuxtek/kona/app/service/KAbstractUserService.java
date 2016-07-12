@@ -16,6 +16,10 @@ import com.linuxtek.kona.app.entity.KRegistration;
 import com.linuxtek.kona.app.entity.KToken;
 import com.linuxtek.kona.app.entity.KUser;
 import com.linuxtek.kona.app.entity.KUserAuth;
+import com.linuxtek.kona.app.entity.KUserPresence;
+import com.linuxtek.kona.app.entity.KUserRole;
+import com.linuxtek.kona.app.entity.KUserStatus;
+import com.linuxtek.kona.app.entity.KUserType;
 import com.linuxtek.kona.app.util.KUtil;
 import com.linuxtek.kona.data.mybatis.KMyBatisUtil;
 import com.linuxtek.kona.remote.service.KServiceClient;
@@ -34,15 +38,14 @@ public abstract class KAbstractUserService<U extends KUser, EXAMPLE,
 
 	// ----------------------------------------------------------------------------
 	
-	protected abstract Long getDefaultTypeId();
-	protected abstract Long getDefaultRoles();
-	protected abstract Long getDefaultStatusId();
-	protected abstract Long getDefaultPresenceId();
-    
 	protected abstract <S extends KAccountService<A>> S getAccountService();
+	
 	protected abstract <S extends KUserAuthService<UA,U>> S getUserAuthService();
+	
 	protected abstract <S extends KAppUserService<AU>> S getAppUserService();
+	
 	protected abstract <S extends KRegistrationService<R,U>> S getRegistrationService();
+	
 	protected abstract <S extends KTokenService<T>> S getTokenService();
     
 	protected abstract void sendRegisteredUserEmail(Long appId, U user);
@@ -51,6 +54,22 @@ public abstract class KAbstractUserService<U extends KUser, EXAMPLE,
 	
 	protected String generateUid() {
 		return KUtil.uuid();
+	}
+	
+	protected Long getDefaultTypeId() {
+		return KUserType.USER.getId();
+	}
+	
+	protected Long getDefaultPresenceId() {
+		return KUserPresence.OFFLINE.getId();
+	}
+	
+	protected Long getDefaultStatusId() {
+		return KUserStatus.ENABLED.getId();
+	}
+	
+	protected Long getDefaultRoles() {
+		return KUserRole.USER.getId();
 	}
 	
 	// ----------------------------------------------------------------------------

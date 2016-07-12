@@ -36,27 +36,13 @@ public abstract class KAbstractTwilioService {
     
 	// ----------------------------------------------------------------------------
     
-    protected abstract String getAccountSid();
-    
-    protected abstract String getAuthToken();
+    protected abstract TwilioRestClient getTwilioClient();
     
     protected abstract String getFromPhoneNumber();
     
     protected abstract String getMessageStatusCallbackUrl();
     
     protected abstract List<String> getTestPhoneNumberPrefixList();
-    
-	// ----------------------------------------------------------------------------
-    
-    protected TwilioRestClient getTwilioClient() {
-        if (client == null) {
-        	String accountSid = getAccountSid();
-        	String authToken = getAuthToken();
-        	client = new TwilioRestClient(accountSid, authToken);
-        }
-        
-        return client;
-    }
     
 	// ----------------------------------------------------------------------------
     
