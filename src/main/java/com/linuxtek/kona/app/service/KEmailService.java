@@ -12,8 +12,9 @@ import com.linuxtek.kona.app.entity.KEmailStats;
 import com.linuxtek.kona.data.service.KDataService;
 import com.linuxtek.kona.remote.service.KService;
 
-public interface KEmailService<T extends KEmail,
-                               TEVENT extends KEmailEvent> extends KService, KDataService<T> {
+public interface KEmailService<EMAIL extends KEmail,
+                               EMAIL_EVENT extends KEmailEvent> 
+		extends KService, KDataService<EMAIL> {
 
 	public static final String SERVICE_PATH = "rpc/kona/EmailService";
 
@@ -30,21 +31,21 @@ public interface KEmailService<T extends KEmail,
 
 	public void processLocalQueue();
 	
-	public T fetchByUid(String uid);
+	public EMAIL fetchByUid(String uid);
 	
-	public T fetchBySesId(String sesId);
+	public EMAIL fetchBySesId(String sesId);
 	
-	public T fetchByCampaignIdAndChannelIdAndToId(Long campaignId, Long campaignChannelId, Long toAddressId);
+	public EMAIL fetchByCampaignIdAndChannelIdAndToId(Long campaignId, Long campaignChannelId, Long toAddressId);
 	
-	public List<T> fetchByGroupId(Long groupId);
+	public List<EMAIL> fetchByGroupId(Long groupId);
 	
-	public List<T> fetchByCampaignId(Long campaignId);
+	public List<EMAIL> fetchByCampaignId(Long campaignId);
 	
-	public List<T> fetchByGroupName(String groupName);
+	public List<EMAIL> fetchByGroupName(String groupName);
 	
-	public List<T> fetchByCampaignIdAndChannelId(Long campaignId, Long campaignChannelId);
+	public List<EMAIL> fetchByCampaignIdAndChannelId(Long campaignId, Long campaignChannelId);
     
-	public KEmailStats calcStats(List<T> emailList);
+	public KEmailStats calcStats(List<EMAIL> emailList);
 	
 	public KEmailStats calcStatsByGroupName(String groupName);
 	
@@ -52,7 +53,7 @@ public interface KEmailService<T extends KEmail,
 	
 	public KEmailStats calcStatsByCampaignIdAndChannelId(Long campaignId, Long channelId);
     
-    public TEVENT addEvent(TEVENT event);
+    public EMAIL_EVENT addEvent(EMAIL_EVENT event);
     
 	public void deliver(Long campaignId, Long campaignChannelId, Long groupId, 
 			String fromAddress, String subject, String text, 

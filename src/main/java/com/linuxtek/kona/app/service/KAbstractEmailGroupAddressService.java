@@ -10,114 +10,39 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.linuxtek.kona.app.entity.KEmailGroupAddress;
+import com.linuxtek.kona.data.mybatis.KMyBatisUtil;
 
-public class KAbstractEmailGroupAddressService<T extends KEmailGroupAddress,EXAMPLE> 
-		extends KAbstractService<T,EXAMPLE>
-		implements KEmailGroupAddressService<T> {
+public abstract class KAbstractEmailGroupAddressService<EMAIL_GROUP_ADDRESS extends KEmailGroupAddress,
+													    EMAIL_GROUP_ADDRESS_EXAMPLE>
+		extends KAbstractService<EMAIL_GROUP_ADDRESS,EMAIL_GROUP_ADDRESS_EXAMPLE>
+		implements KEmailGroupAddressService<EMAIL_GROUP_ADDRESS> {
 
 	private static Logger logger = LoggerFactory.getLogger(KAbstractEmailGroupAddressService.class);
-
-	@Autowired
-	private EmailAddressService emailAddressService;
-
-	@Autowired
-	private EmailGroupAddressMapper emailGroupAddressDao;
-
-
-	@Override @Transactional
-	public EmailGroupAddress add(EmailGroupAddress emailGroupAddress) {
-		validate(emailGroupAddress);
-		emailGroupAddressDao.insert(emailGroupAddress);
-		return emailGroupAddress;
-	}
-
-	@Override @Transactional
-	public void remove(EmailGroupAddress emailGroupAddress) {
-		emailGroupAddressDao.deleteByPrimaryKey(emailGroupAddress.getId());
-	}
-
-	@Override @Transactional
-	public void removeById(Long emailGroupAddressId) {
-		emailGroupAddressDao.deleteByPrimaryKey(emailGroupAddressId);
-	}
-
+	
+	// ----------------------------------------------------------------------------
+	
 	@Override
-	public void validate(EmailGroupAddress emailGroupAddress) {
+	public void validate(EMAIL_GROUP_ADDRESS emailGroupAddress) {
 		if (emailGroupAddress.getCreatedDate() == null) {
 			emailGroupAddress.setCreatedDate(new Date());
 		}
-	}
-
-	@Override @Transactional
-	public EmailGroupAddress update(EmailGroupAddress emailGroupAddress) {
-		validate(emailGroupAddress);
-		emailGroupAddressDao.updateByPrimaryKey(emailGroupAddress);
-		return emailGroupAddress;
+		emailGroupAddress.setLastUpdated(new Date());
 	}
 
 	// ----------------------------------------------------------------------
 
 	@Override
-	public EmailGroupAddress fetchById(Long emailGroupAddressId) {
-		EmailGroupAddress emailGroupAddress = emailGroupAddressDao.selectByPrimaryKey(emailGroupAddressId);
-		return emailGroupAddress;
-	}
-
-	// ----------------------------------------------------------------------
-
-	public List<EmailGroupAddress> fetchByCriteria(
-			Integer startRow, Integer resultSize, String[] sortOrder,
-			Map<String, Object> filterCriteria, boolean distinct) {
-		logger.debug("EmailGroupAddressServiceImpl fetch(): called");
-		EmailGroupAddressExample example = new EmailGroupAddressExample();
-
-		if (sortOrder != null) {
-			example.setOrderByClause(KMyBatisUtil.getOrderByString(sortOrder));
-		}
-
-		if (startRow == null) startRow = 0;
-		if (resultSize == null) resultSize = 99999999;
-
-        example.setOffset(startRow);
-        example.setLimit(resultSize);
-        example.setDistinct(distinct);
-
-		KMyBatisUtil.buildExample(example.or().getClass(), example.or(), filterCriteria);
-		List<EmailGroupAddress> emailGroupAddressList  = emailGroupAddressDao.selectJoinByExample(example);
-
-		KResultList<EmailGroupAddress> resultList = new KResultList<EmailGroupAddress>();
-		resultList.setStartIndex(startRow);
-		resultList.setTotalSize(emailGroupAddressList.size());
-		resultList.setEndIndex(startRow + emailGroupAddressList.size());
-
-		logger.debug("fetch(): record count: " + emailGroupAddressList.size());
-
-		for (EmailGroupAddress emailGroupAddress : emailGroupAddressList) {
-			resultList.add(emailGroupAddress);
-		}
-
-		return resultList;
-	}
-
-	// ----------------------------------------------------------------------
-
-	@Override
-	public EmailGroupAddress fetchByGroupIdAndAddressId(Long groupId, Long addressId) {
+	public EMAIL_GROUP_ADDRESS fetchByGroupIdAndAddressId(Long groupId, Long addressId) {
 		Map<String,Object> filter = KMyBatisUtil.createFilter("groupId", groupId);
 		filter.put("addressId", addressId);
-		List<EmailGroupAddress> result = fetchByCriteria(0, 99999, null, filter, false);
-		return KMyBatisUtil.fetchOne(result);
+		return KMyBatisUtil.fetchOne(fetchByCriteria(0, 99999, null, filter, false));
 	}
 
 	// ----------------------------------------------------------------------
 
 	@Override
-	public List<EmailGroupAddress> fetchByGroupId(Long groupId) {
+	public List<EMAIL_GROUP_ADDRESS> fetchByGroupId(Long groupId) {
 		Map<String,Object> filter = KMyBatisUtil.createFilter("groupId", groupId);
 		return fetchByCriteria(0, 99999, null, filter, false);
 	}
@@ -125,7 +50,7 @@ public class KAbstractEmailGroupAddressService<T extends KEmailGroupAddress,EXAM
 	// ----------------------------------------------------------------------
 
 	@Override
-	public List<EmailGroupAddress> fetchByAddressId(Long addressId) {
+	public List<EMAIL_GROUP_ADDRESS> fetchByAddressId(Long addressId) {
 		Map<String,Object> filter = KMyBatisUtil.createFilter("addressId", addressId);
 		return fetchByCriteria(0, 99999, null, filter, false);
 	}

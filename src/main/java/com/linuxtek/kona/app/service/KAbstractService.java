@@ -5,7 +5,6 @@ package com.linuxtek.kona.app.service;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +20,10 @@ public abstract class KAbstractService<T extends KEntityObject,E> implements KDa
 
     private static Logger logger = LoggerFactory.getLogger(KAbstractService.class);
     
+	// ----------------------------------------------------------------------------
+    
     protected abstract <D extends KMyBatisDao<T,E>> D getDao();
+    
     protected abstract E getExampleObjectInstance(Integer startRow, Integer resultSize,
 			String[] sortOrder, Map<String, Object> filter, boolean distinct);
     

@@ -35,6 +35,12 @@
 
         <dependency>
             <groupId>com.linuxtek.kona</groupId>
+            <artifactId>kona-locale</artifactId>
+            <version>0.1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.linuxtek.kona</groupId>
             <artifactId>kona-sequence-flake</artifactId>
             <version>0.1.0</version>
         </dependency>
@@ -95,6 +101,14 @@
             -->
         </dependency>
         <!-- Twilio -->
+
+        <!-- OpenCSV -->
+        <dependency>
+            <groupId>com.opencsv</groupId>
+            <artifactId>opencsv</artifactId>
+            <version>3.7</version>
+        </dependency>
+        <!-- OpenCSV -->
 
 	</dependencies>
 

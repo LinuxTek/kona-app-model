@@ -10,11 +10,22 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.linuxtek.kona.app.entity.KEmailAddress;
 import com.linuxtek.kona.util.KClassUtil;
 import com.linuxtek.kona.util.KDateUtil;
+import com.linuxtek.kona.util.KStringUtil;
 
 public class KUtil {
 	private static Logger logger = LoggerFactory.getLogger(KUtil.class);
+	
+	private static KUtil instance = null;
+	
+	public static KUtil getInstance() {
+		if (instance == null) {
+			instance = new KUtil();
+		}
+		return instance;
+	}
 	
 	public static String uuid() {
 		String uuid = UUID.randomUUID().toString();
@@ -32,6 +43,34 @@ public class KUtil {
             return "[null]";
         }
         return KClassUtil.toString(obj);
+    }
+    
+    public static <EMAIL_ADDRESS extends KEmailAddress> String formatFirstName(EMAIL_ADDRESS email) {
+        if (email == null) return "";
+        if (email.getFirstName() != null) {
+            return email.getFirstName();
+        }
+
+        return "";
+    }
+    
+    public String createLink(String baseUrl, String url) {
+        if (baseUrl == null) baseUrl = "";
+        if (url == null) url = "/";
+
+        if (baseUrl.endsWith("/")) {
+            baseUrl = KStringUtil.chop(baseUrl);
+        }
+
+        if (!url.startsWith("/")) {
+            url = "/" + url;
+        }
+
+        String link = baseUrl + url;
+
+        logger.debug("LINK: " + link);
+
+        return link;
     }
     
     public static String formatDate(Date date) {

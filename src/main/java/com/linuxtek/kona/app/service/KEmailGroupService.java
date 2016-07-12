@@ -11,25 +11,26 @@ import com.linuxtek.kona.app.entity.KEmailGroupAddress;
 import com.linuxtek.kona.data.service.KDataService;
 import com.linuxtek.kona.remote.service.KService;
 
-public interface KEmailGroupService<T extends KEmailGroup,
-								    U extends KEmailAddress,
-								    V extends KEmailGroupAddress> extends KService, KDataService<T> {
+public interface KEmailGroupService<EMAIL_GROUP extends KEmailGroup,
+								    EMAIL_ADDRESS extends KEmailAddress,
+								    EMAIL_GROUP_ADDRESS extends KEmailGroupAddress> 
+		extends KService, KDataService<EMAIL_GROUP> {
 	
     public static final String SERVICE_PATH = "rpc/kona/EmailGroupService";
 
-    public T create(String groupName);
+    public EMAIL_GROUP create(String groupName);
     
-    public T create(String groupName, List<String> emailList);
+    public EMAIL_GROUP create(String groupName, List<String> emailList);
     
-    public T create(String groupName, Long maxCount, List<String> sourceList, List<String> excludeGroupList);
+    public EMAIL_GROUP create(String groupName, Long maxCount, List<String> sourceList, List<String> excludeGroupList);
     
-	public T fetchByName(String name);
+	public EMAIL_GROUP fetchByName(String name);
 	
-	public V addGroupAddress(String groupName, String email);
+	public EMAIL_GROUP_ADDRESS addGroupAddress(String groupName, String email);
 	
-	public void addGroupAddressList(String groupName, List<U> address);
+	public void addGroupAddressList(String groupName, List<EMAIL_ADDRESS> address);
 	
-	public V removeGroupAddress(String groupName, String email);
+	public EMAIL_GROUP_ADDRESS removeGroupAddress(String groupName, String email);
 	
-    public List<V> fetchGroupAddressList(String name);
+    public List<EMAIL_GROUP_ADDRESS> fetchGroupAddressList(String name);
 }
