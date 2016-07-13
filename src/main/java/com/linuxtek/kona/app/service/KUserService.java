@@ -27,6 +27,8 @@ public interface KUserService<U extends KUser> extends KService, KDataService<U>
     public U fetchByUsername(String username);
     
     public U fetchByEmail(String email);
+    
+    public U fetchByMobileNumber(String mobileNumber);
 
     public U fetchByAccessToken(String accessToken, boolean validateToken);
     

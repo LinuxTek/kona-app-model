@@ -172,6 +172,7 @@ public abstract class KAbstractUserService<U extends KUser, EXAMPLE,
         getAppUserService().create(client.getAppId(), user.getId(), null, null);
 
         sendRegisteredUserEmail(client.getAppId(), user);
+        
         return user;
 	}
 	
@@ -239,6 +240,14 @@ public abstract class KAbstractUserService<U extends KUser, EXAMPLE,
         return KMyBatisUtil.fetchOne(fetchByCriteria(0, 99999, null, filter, false));
 	}
 	
+	// ----------------------------------------------------------------------------
+
+	@Override
+	public U fetchByMobileNumber(String mobileNumber) {
+		Map<String,Object> filter = KMyBatisUtil.createFilter("mobileNumber", mobileNumber);
+		return KMyBatisUtil.fetchOne(fetchByCriteria(0, 99999, null, filter, false));
+	}
+
 	// ----------------------------------------------------------------------------
 	
 	@Override
