@@ -237,7 +237,28 @@ public abstract class KAbstractAuthCodeService<T extends KAuthCode,EXAMPLE,
 
 		sendAuthCode(typeId, appId, userId, authCodeUrl);
 	}
-    
+	
+	// ----------------------------------------------------------------------------
+
+	@Override 
+	public void requestAuthCodes(Long[] typeIds, Long appId, Long userId, boolean resend) {
+		Thread t = new Thread() {
+			@Override
+			public void run() {
+				try {
+					for (Long typeId : typeIds) {
+						logger.debug("calling requestAuthCode for typeId: " + typeId);
+						requestAuthCode(typeId, appId, userId, resend);
+					}
+				} catch (Exception e) {
+					logger.error("Error processing verification requests for userId: " + userId, e);
+				}
+			}
+		};
+		t.start();
+
+	}
+		
 	// ----------------------------------------------------------------------------
 	
 	protected String generateAuthCode(Long appId, Long userId) {

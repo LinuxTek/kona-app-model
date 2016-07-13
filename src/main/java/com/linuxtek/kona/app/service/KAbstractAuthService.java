@@ -109,6 +109,13 @@ public abstract class KAbstractAuthService<U extends KUser, UA extends KUserAuth
     // ----------------------------------------------------------------------------
     
     @Override
+    public T createToken(U user, String clientId) {
+    	return createToken(user, clientId, null);
+    }
+    
+    // ----------------------------------------------------------------------------
+    
+    @Override
     public T createToken(U user, String clientId, String scope) {
     	String accessToken = generateToken();
     	String refreshToken = generateToken();
@@ -116,6 +123,10 @@ public abstract class KAbstractAuthService<U extends KUser, UA extends KUserAuth
     	Date now = new Date();
         Date accessExpiration = null;
         Date refreshExpiration = null;
+        
+        if (scope == null) {
+        	scope = getClientDefaultScope(clientId);
+        }
         
         Integer timeout = getClientAccessTokenTimeout(clientId);
         if (timeout != null && timeout>0) {

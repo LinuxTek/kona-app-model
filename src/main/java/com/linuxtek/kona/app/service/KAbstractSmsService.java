@@ -4,24 +4,17 @@
 package com.linuxtek.kona.app.service;
 
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.linuxtek.kona.util.KClassUtil;
-import com.twilio.sdk.TwilioRestClient;
 import com.twilio.sdk.TwilioRestException;
-import com.twilio.sdk.resource.factory.MessageFactory;
-import com.twilio.sdk.resource.instance.Message;
 
 
-public abstract class KAbstractSmsService extends KAbstractTwilioService {
+public abstract class KAbstractSmsService extends KAbstractTwilioService implements KSmsService {
 
     private static Logger logger = LoggerFactory.getLogger(KAbstractSmsService.class);
 
@@ -44,4 +37,22 @@ public abstract class KAbstractSmsService extends KAbstractTwilioService {
     public void processMessageStatus(Map<String,Object> map) {
         logger.debug("processMessageStatus: got result: " + KClassUtil.toJson(map));
     }
+    
+	// ----------------------------------------------------------------------------
+    
+    @Override
+    public boolean isTestPhoneNumber(String phoneNumber) {
+    	List<String> prefixList = getTestPhoneNumberPrefixList();
+    	
+    	if (prefixList == null) return false;
+    	
+    	for (String prefix : prefixList) {
+    		if (phoneNumber.startsWith(prefix)) {
+    			return true;
+    		}
+    	}
+    	
+    	return false;
+    }
 }
+

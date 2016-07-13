@@ -42,4 +42,5 @@ public interface KAuthService<U extends KUser, T extends KToken> extends KServic
      */
 	public T createToken(U user, String clientId, String scope);
 
+	public T createToken(U user, String clientId);
 }
