@@ -16,6 +16,7 @@ public class KBaseAccount implements KAccount {
 	private Long ownerId;
 	private String name;
 	private String displayName;
+	private String stripeUid;
     private boolean enabled;
     private boolean active;
     private boolean verified;
@@ -46,6 +47,13 @@ public class KBaseAccount implements KAccount {
 	}
 	public void setDisplayName(String displayName) {
 		this.displayName = displayName;
+	}
+	
+	public String getStripeUid() {
+		return stripeUid;
+	}
+	public void setStripeUid(String stripeUid) {
+		this.stripeUid = stripeUid;
 	}
 	public String getUid() {
 		return uid;

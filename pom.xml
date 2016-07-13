@@ -20,6 +20,12 @@
 			<artifactId>kona-data</artifactId>
 			<version>0.1.0</version>
 		</dependency>
+
+        <dependency>
+            <groupId>com.linuxtek.kona</groupId>
+            <artifactId>kona-stripe</artifactId>
+            <version>0.1.0</version>
+        </dependency>
         
         <dependency>
             <groupId>com.linuxtek.kona</groupId>

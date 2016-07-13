@@ -24,7 +24,6 @@ public interface KAccount extends KEntityObject {
      */
     public String getUid(); 
     public void setUid(String uid);
-
     
     public Long getOwnerId(); 
     public void setOwnerId(Long ownerId);
@@ -34,6 +33,13 @@ public interface KAccount extends KEntityObject {
     
     public String getDisplayName(); 
     public void setDisplayName(String displayName);
+    
+    
+    /**
+     * Stripe ID for payment processing.
+     */
+    public String getStripeUid(); 
+    public void setStripeUid(String stripeUid);
 
   
 

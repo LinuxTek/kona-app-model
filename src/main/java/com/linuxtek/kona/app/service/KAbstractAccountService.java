@@ -17,8 +17,8 @@ import com.linuxtek.kona.data.mybatis.KMyBatisUtil;
 import com.linuxtek.kona.util.KInflector;
 
 public abstract class KAbstractAccountService<A extends KAccount,EXAMPLE,U extends KUser> 
-extends KAbstractService<A,EXAMPLE>
-implements KAccountService<A> {
+		extends KAbstractService<A,EXAMPLE>
+		implements KAccountService<A> {
 
 	private static Logger logger = LoggerFactory.getLogger(KAbstractAccountService.class);
 
