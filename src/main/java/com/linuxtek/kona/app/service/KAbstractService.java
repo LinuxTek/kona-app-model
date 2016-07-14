@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.linuxtek.kona.app.util.KUtil;
 import com.linuxtek.kona.data.dao.KMyBatisDao;
-import com.linuxtek.kona.data.dao.KMyBatisDaoWithBlobs;
 import com.linuxtek.kona.data.entity.KEntityObject;
 import com.linuxtek.kona.data.service.KDataService;
 import com.linuxtek.kona.util.KResultList;
