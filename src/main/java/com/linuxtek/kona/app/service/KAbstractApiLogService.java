@@ -63,11 +63,16 @@ public abstract class KAbstractApiLogService<A extends KApiLog,EXAMPLE>
     // ----------------------------------------------------------------------------
     
 	@Override
-	public void validate(A apiVersion) {
-	   	 if (apiVersion.getCreatedDate() == null) {
-    		 apiVersion.setCreatedDate(new Date());
+	public void validate(A apiLog) {
+	   	 if (apiLog.getCreatedDate() == null) {
+    		 apiLog.setCreatedDate(new Date());
     	 }
-         apiVersion.setLastUpdated(new Date());
+	   	 
+         apiLog.setLastUpdated(new Date());
+         
+         if (apiLog.getUid() == null) {
+        	 apiLog.setUid(uuid());
+         }
 	}
 }
 

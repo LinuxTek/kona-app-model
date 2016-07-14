@@ -116,6 +116,14 @@
         </dependency>
         <!-- OpenCSV -->
 
+        <!-- com.sun.mail: full package for javax mail -->
+        <dependency>
+            <groupId>com.sun.mail</groupId>
+            <artifactId>javax.mail</artifactId>
+            <version>1.5.5</version>
+        </dependency>
+        <!-- javax mail -->
+
 	</dependencies>
 
 	<build>

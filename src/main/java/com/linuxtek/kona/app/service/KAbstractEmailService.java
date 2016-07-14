@@ -98,6 +98,8 @@ public abstract class KAbstractEmailService<EMAIL extends KEmail,
 	
 	protected abstract String getEmailFooterHtmlSelector();
 	
+	protected abstract String getEmailTestDomain();
+	
 	protected abstract String getEmailTextFooterTemplatePath();
 	
 	protected abstract String getEmailHtmlFooterTemplatePath();
@@ -203,6 +205,14 @@ public abstract class KAbstractEmailService<EMAIL extends KEmail,
 				+ mailer.toString() + "\n\n" 
 				+ "--- EMAIL MESSAGE END ---\n\n");
 
+		
+		String testDomain = getEmailTestDomain().toLowerCase();
+		
+		if (to.toLowerCase().endsWith(testDomain)) {
+			logger.warn("Email address [{}] ends in test domain [{}]: skipping ...", to, testDomain);
+			return;
+		}
+		
 		try {
 			mailer.send();
 		} catch (KMailerException e) {
@@ -565,6 +575,13 @@ public abstract class KAbstractEmailService<EMAIL extends KEmail,
 		EMAIL_EVENT event = getNewEmailEventObject();
 		event.setEventDate(now);
 		event.setCreatedDate(now);
+		
+		String testDomain = getEmailTestDomain().toLowerCase();
+		
+		if (toAddress.toLowerCase().endsWith(testDomain)) {
+			logger.warn("Email address [{}] ends in test domain [{}]: skipping ...", toAddress, testDomain);
+			return;
+		}
 		
 		try {
 			String sesId = sendAWS(fromAddress, toAddress, subject, text1, html1);

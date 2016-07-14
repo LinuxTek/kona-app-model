@@ -41,6 +41,8 @@ public abstract class KAbstractAuthCodeService<T extends KAuthCode,EXAMPLE,
     
     protected abstract void sendAuthCode(Long typeId, Long appId, Long userId, String authCodeUrl); 
     
+    protected abstract Date getAuthCodeExpirationDate(Long typeId, Long appId, Long userId);
+    
 	// ----------------------------------------------------------------------------
     
 	protected String generateAccessCode() {
@@ -117,6 +119,10 @@ public abstract class KAbstractAuthCodeService<T extends KAuthCode,EXAMPLE,
 		if (code == null) return null;
         
 		T authCode = fetchByCode(code);
+		
+		boolean isActive = isActive(authCode);
+		
+		logger.debug("authCode: {}  isActive: {}", authCode, isActive);
         
 		if (authCode == null || !isActive(authCode)) return null;
 
@@ -180,41 +186,15 @@ public abstract class KAbstractAuthCodeService<T extends KAuthCode,EXAMPLE,
     
 	// ----------------------------------------------------------------------------
 
-    /*
-	@Override 
-	public void requestPasswordReset(Long userId, Long appId, boolean resend) {
-		U user = getUserService().fetchById(userId);
-		
-		logger.debug("requestUserEmailAuthCode: user:\n" + user);
-
-		if (user.getEmail() == null) {
-			throw new NullPointerException("requestPasswordReset: User email is null");
-		}
-
-		if (!canSendAuthCode(userId, resend)) return;
-        
-        String code = generateAuthCode(appId, userId);
-		String passwordResetUrl = getPasswordResetUrl(appId, userId, code);
-        
-		sendRequestPasswordEmail(appId, user, passwordResetUrl);
-	}
-    */
-    
-	// ----------------------------------------------------------------------------
-
 	@Override 
 	public void requestAuthCode(Long typeId, Long appId, Long userId, boolean resend) {
 		U user = getUserService().fetchById(userId);
 
-		logger.debug("requestEmailConfirmation: user:\n" + user);
-
-		if (user.getEmail() == null) {
-			throw new NullPointerException("requestEmailConfirmation: User email is null");
-		}
+		logger.debug("requestAuthCode: user:\n" + user);
 
 		if (!canSendAuthCode(userId, typeId, resend)) return;
 
-		String code = generateAuthCode(appId, userId);
+		String code = generateAuthCode(typeId, appId, userId);
         
 		String authCodeUrl = getAuthCodeUrl(typeId, appId, userId, code);
 
@@ -261,12 +241,13 @@ public abstract class KAbstractAuthCodeService<T extends KAuthCode,EXAMPLE,
 		
 	// ----------------------------------------------------------------------------
 	
-	protected String generateAuthCode(Long appId, Long userId) {
+	protected String generateAuthCode(Long typeId, Long appId, Long userId) {
 		String code = generateAccessCode();
 
 		Date now = new Date();
 		
 		T authCode = getNewObject();
+		authCode.setTypeId(typeId);
 		authCode.setAppId(appId);
 		authCode.setUserId(userId);
 		authCode.setCode(code);
@@ -274,7 +255,11 @@ public abstract class KAbstractAuthCodeService<T extends KAuthCode,EXAMPLE,
 		authCode.setMaxUseCount(1);
 		authCode.setCreatedDate(now);
 		authCode.setValid(true);
-		authCode.setExpirationDate(KDateUtil.addMins(now, 30)); // expire in 30 mins
+		
+		Date expirationDate = getAuthCodeExpirationDate(typeId, appId, userId);
+		//authCode.setExpirationDate(KDateUtil.addMins(now, 30)); // expire in 30 mins
+		
+		authCode.setExpirationDate(expirationDate);
 
 		add(authCode);
 		return code;
@@ -291,6 +276,7 @@ public abstract class KAbstractAuthCodeService<T extends KAuthCode,EXAMPLE,
 		Integer useCount = authCode.getUseCount();
         
 		if (useCount >= authCode.getMaxUseCount()) {
+			logger.debug("authCode useCount exceeds maxUseCount: " + useCount);
 			return false;
 		}
 		
@@ -298,6 +284,7 @@ public abstract class KAbstractAuthCodeService<T extends KAuthCode,EXAMPLE,
         
 		Date now = new Date();
 		if (expirationDate != null && now.getTime() > expirationDate.getTime()) {
+			logger.debug("authCode expired: " + expirationDate);
 			return false;
 		}
         

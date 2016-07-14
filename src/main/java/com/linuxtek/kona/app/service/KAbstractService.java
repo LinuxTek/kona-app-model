@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.linuxtek.kona.app.util.KUtil;
 import com.linuxtek.kona.data.dao.KMyBatisDao;
+import com.linuxtek.kona.data.dao.KMyBatisDaoWithBlobs;
 import com.linuxtek.kona.data.entity.KEntityObject;
 import com.linuxtek.kona.data.service.KDataService;
 import com.linuxtek.kona.util.KResultList;
@@ -26,6 +27,16 @@ public abstract class KAbstractService<T extends KEntityObject,E> implements KDa
     
     protected abstract E getExampleObjectInstance(Integer startRow, Integer resultSize,
 			String[] sortOrder, Map<String, Object> filter, boolean distinct);
+    
+	// ----------------------------------------------------------------------------
+    
+    protected boolean entityHasBlobs() {
+    	return false;
+    }
+    
+    protected <D extends KMyBatisDaoWithBlobs<T,E>> D getDaoWithBlobs() {
+    	return null;
+    }
     
 	// ----------------------------------------------------------------------------
     
@@ -47,7 +58,11 @@ public abstract class KAbstractService<T extends KEntityObject,E> implements KDa
 	@Override @Transactional
 	public T update(T t) {
 		validate(t);
-		getDao().updateByPrimaryKey(t);
+		if (entityHasBlobs()) {
+			getDaoWithBlobs().updateByPrimaryKeyWithBLOBs(t);
+		} else {
+			getDao().updateByPrimaryKey(t);
+		}
 		return t;
 	}
 	
@@ -85,7 +100,13 @@ public abstract class KAbstractService<T extends KEntityObject,E> implements KDa
 
 		E example = getExampleObjectInstance(startRow, resultSize, sortOrder, filter, distinct);
 
-		List<T> list = getDao().selectByExample(example);
+		List<T> list = null;
+		
+		if (entityHasBlobs()) {
+			list = getDaoWithBlobs().selectByExampleWithBLOBs(example);
+		} else {
+			list = getDao().selectByExample(example);
+		}
 
 		KResultList<T> resultList = new KResultList<T>();
 		resultList.setStartIndex(startRow);
