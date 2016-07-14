@@ -34,10 +34,6 @@ public abstract class KAbstractService<T extends KEntityObject,E> implements KDa
     	return false;
     }
     
-    protected <D extends KMyBatisDaoWithBlobs<T,E>> D getDaoWithBlobs() {
-    	return null;
-    }
-    
 	// ----------------------------------------------------------------------------
     
     protected String[] getDefaultSortOrder() {
@@ -59,7 +55,7 @@ public abstract class KAbstractService<T extends KEntityObject,E> implements KDa
 	public T update(T t) {
 		validate(t);
 		if (entityHasBlobs()) {
-			getDaoWithBlobs().updateByPrimaryKeyWithBLOBs(t);
+			getDao().updateByPrimaryKeyWithBLOBs(t);
 		} else {
 			getDao().updateByPrimaryKey(t);
 		}
@@ -103,7 +99,7 @@ public abstract class KAbstractService<T extends KEntityObject,E> implements KDa
 		List<T> list = null;
 		
 		if (entityHasBlobs()) {
-			list = getDaoWithBlobs().selectByExampleWithBLOBs(example);
+			list = getDao().selectByExampleWithBLOBs(example);
 		} else {
 			list = getDao().selectByExample(example);
 		}
