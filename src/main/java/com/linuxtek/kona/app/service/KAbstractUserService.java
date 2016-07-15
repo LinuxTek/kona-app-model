@@ -5,7 +5,9 @@ package com.linuxtek.kona.app.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,6 +58,10 @@ public abstract class KAbstractUserService<U extends KUser, EXAMPLE,
 		return KUtil.uuid();
 	}
 	
+	protected boolean autoUpdateDisplayName() {
+		return true;
+	}
+	
 	protected Long getDefaultTypeId() {
 		return KUserType.USER.getId();
 	}
@@ -70,6 +76,14 @@ public abstract class KAbstractUserService<U extends KUser, EXAMPLE,
 	
 	protected Long getDefaultRoles() {
 		return KUserRole.USER.getId();
+	}
+	
+	protected String getDefaultLocale() {
+		return Locale.US.toLanguageTag();
+	}
+	
+	protected String getDefaultTimeZone() {
+		return TimeZone.getTimeZone("America/New_York").getID();
 	}
 	
 	// ----------------------------------------------------------------------------
@@ -95,6 +109,8 @@ public abstract class KAbstractUserService<U extends KUser, EXAMPLE,
 	
 	@Override
 	public U registerUser(U user, String password, KServiceClient client) {
+        checkUserExists(user.getUsername(), user.getEmail());
+        
         if (user.getUid() == null) {
             user.setUid(generateUid());
         }
@@ -103,7 +119,6 @@ public abstract class KAbstractUserService<U extends KUser, EXAMPLE,
             user.setUsername(user.getUid());
         }
 
-        checkUserExists(user.getUsername(), user.getEmail());
 
         if (user.getTypeId() == null) {
             user.setTypeId(getDefaultTypeId());
@@ -121,29 +136,35 @@ public abstract class KAbstractUserService<U extends KUser, EXAMPLE,
             user.setPresenceId(getDefaultPresenceId());
         }
         
+		if (user.getTimeZone() == null) {
+			user.setTimeZone(getDefaultTimeZone());
+		}
+		
+		if (user.getLocale() == null) {
+			user.setLocale(getDefaultLocale());
+		}
         
         String displayName = KStringUtil.createFullName(user.getFirstName(), user.getLastName());
         if (displayName == null || displayName.length() == 0) {
             displayName = user.getUsername();
         }
+        
+        user.setDisplayName(displayName);
+        
+        user.setCreatedDate(new Date());
+        
+        user.setActive(true);
 
         
         A account = null;
         if (user.getAccountId() == null) {
             account = getAccountService().createAccount(null);
             user.setAccountId(account.getId());
-        } 
-        
-        user.setDisplayName(displayName);
-        user.setActive(true);
-        user.setCreatedDate(new Date());
+        } else {
+        	account = getAccountService().fetchById(user.getAccountId());
+        }
 
         user = add(user);
-
-        // update account record
-        if (account == null) {
-            account = getAccountService().createAccount(null);
-        }
 
         if (account.getOwnerId() == null) {
             account.setOwnerId(user.getId());
@@ -284,11 +305,52 @@ public abstract class KAbstractUserService<U extends KUser, EXAMPLE,
 	
 	@Override
 	public void validate(U user) {
-    	if (user.getCreatedDate() == null) {
+		if (user.getUid() == null) {
+			user.setUid(generateUid());
+		}
+
+		if (user.getUsername() == null) {
+			user.setUsername(user.getUid());
+		}
+
+		if (user.getTypeId() == null) {
+			user.setTypeId(getDefaultTypeId());
+		}
+
+		if (user.getRoles() == null) {
+			user.setRoles(getDefaultRoles());
+		}
+
+		if (user.getStatusId() == null) {
+			user.setStatusId(getDefaultStatusId());
+		}
+
+		if (user.getPresenceId() == null) {
+			user.setPresenceId(getDefaultPresenceId());
+		}
+
+		if (autoUpdateDisplayName()) {
+			String displayName = KStringUtil.createFullName(user.getFirstName(), user.getLastName());
+			if (displayName == null || displayName.length() == 0) {
+				displayName = user.getUsername();
+			}
+			
+			user.setDisplayName(displayName);
+		}
+		
+		if (user.getTimeZone() == null) {
+			user.setTimeZone(getDefaultTimeZone());
+		}
+		
+		if (user.getLocale() == null) {
+			user.setLocale(getDefaultLocale());
+		}
+		
+		if (user.getCreatedDate() == null) {
 			user.setCreatedDate(new Date());
 		}
-    	
-    	user.setLastUpdated(new Date());
+
+		user.setLastUpdated(new Date());
 	}
 	
 }

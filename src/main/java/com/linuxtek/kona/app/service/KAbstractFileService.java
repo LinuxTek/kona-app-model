@@ -263,6 +263,11 @@ public abstract class KAbstractFileService<F extends KFile,EXAMPLE,U extends KUs
 		}
 
 		String localBasePath = getLocalBasePath();
+		
+		if (!localBasePath.endsWith(("/"))) {
+			localBasePath += "/";
+		}
+		
 		String fullPath = localBasePath + file.getLocalPath();
 
 		logger.debug("fullPath: " + fullPath);
@@ -334,6 +339,11 @@ public abstract class KAbstractFileService<F extends KFile,EXAMPLE,U extends KUs
 	@Override
 	public void saveFile(F file) throws IOException {
 		String localBasePath = getLocalBasePath();
+		
+		if (!localBasePath.endsWith(("/"))) {
+			localBasePath += "/";
+		}
+		
 		String fullPath = localBasePath + file.getLocalPath();
 		
 		deleteFile(file);
@@ -360,6 +370,11 @@ public abstract class KAbstractFileService<F extends KFile,EXAMPLE,U extends KUs
 	@Override
 	public void deleteFile(F file) throws IOException {
 		String localBasePath = getLocalBasePath();
+		
+		if (!localBasePath.endsWith(("/"))) {
+			localBasePath += "/";
+		}
+		
 		String fullPath = localBasePath + file.getLocalPath();
 		
 		java.io.File f = new java.io.File(fullPath);
