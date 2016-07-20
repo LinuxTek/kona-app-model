@@ -2,7 +2,7 @@ package com.linuxtek.kona.app.entity;
 
 import java.util.Date;
 
-public class KBaseAppNotification implements KAppNotification {
+public class KBaseAppNotification implements KPushNotification {
 	private static final long serialVersionUID = 1L;
     
     private Long id;

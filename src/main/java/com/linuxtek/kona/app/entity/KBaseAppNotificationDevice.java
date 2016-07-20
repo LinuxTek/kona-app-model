@@ -2,12 +2,12 @@ package com.linuxtek.kona.app.entity;
 
 import java.util.Date;
 
-public class KBaseAppNotificationDevice implements KAppNotificationDevice {
+public class KBaseAppNotificationDevice implements KPushNotificationDevice {
 	private static final long serialVersionUID = 1L;
     
     private Long id;
     private Long appId;
-    private Long appNotificationId;
+    private Long pushNotificationId;
     private Long userId;
     private String deviceUuid;
     private String platformName;
@@ -29,13 +29,13 @@ public class KBaseAppNotificationDevice implements KAppNotificationDevice {
     }
 
     @Override
-	public Long getAppNotificationId() {
-        return appNotificationId;
+	public Long getPushNotificationId() {
+        return pushNotificationId;
     }
 
     @Override
-	public void setAppNotificationId(Long appNotificationId) {
-        this.appNotificationId = appNotificationId;
+	public void setPushNotificationId(Long pushNotificationId) {
+        this.pushNotificationId = pushNotificationId;
     }
 
     @Override
@@ -145,7 +145,7 @@ public class KBaseAppNotificationDevice implements KAppNotificationDevice {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", appNotificationId=").append(appNotificationId);
+        sb.append(", pushNotificationId=").append(pushNotificationId);
         sb.append(", appId=").append(appId);
         sb.append(", deviceUuid=").append(deviceUuid);
         sb.append(", userId=").append(userId);

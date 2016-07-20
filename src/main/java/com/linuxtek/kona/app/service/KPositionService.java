@@ -10,9 +10,7 @@ import com.linuxtek.kona.app.entity.KPosition;
 import com.linuxtek.kona.data.service.KDataService;
 import com.linuxtek.kona.remote.service.KService;
 
-/**
- * The client side stub for the RPC service.
- */
+
 public interface KPositionService<T extends KPosition> extends KService, KDataService<T> {
 	public static final String SERVICE_PATH = "rpc/kona/PositionService";
 	

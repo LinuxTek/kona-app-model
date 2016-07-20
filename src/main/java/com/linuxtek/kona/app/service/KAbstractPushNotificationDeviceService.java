@@ -13,35 +13,35 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.linuxtek.kona.app.entity.KAppNotification;
-import com.linuxtek.kona.app.entity.KAppNotificationDevice;
+import com.linuxtek.kona.app.entity.KPushNotification;
+import com.linuxtek.kona.app.entity.KPushNotificationDevice;
 import com.linuxtek.kona.data.mybatis.KMyBatisUtil;
 
 
-public abstract class KAbstractAppNotificationDeviceService<T extends KAppNotificationDevice,EXAMPLE,
-															N extends KAppNotification> 
+public abstract class KAbstractPushNotificationDeviceService<T extends KPushNotificationDevice,EXAMPLE,
+															N extends KPushNotification> 
 		extends KAbstractService<T,EXAMPLE>
-		implements KAppNotificationDeviceService<T> {
+		implements KPushNotificationDeviceService<T> {
 
-	private static Logger logger = LoggerFactory.getLogger(KAbstractAppNotificationDeviceService.class);
+	private static Logger logger = LoggerFactory.getLogger(KAbstractPushNotificationDeviceService.class);
 
 	// ----------------------------------------------------------------------------
     
 	protected abstract <S extends KPushService> S getPushService();
 	
-	protected abstract <S extends KAppNotificationService<N>> S getAppNotificationService();
+	protected abstract <S extends KPushNotificationService<N>> S getPushNotificationService();
     
 	protected abstract List<T> fetchByUserIds(List<Long> userIdList, boolean sandbox);
     
 	// ----------------------------------------------------------------------------
 	
 	@Override
-	public void validate(T appDevice) {
-    	if (appDevice.getCreatedDate() == null) {
-			appDevice.setCreatedDate(new Date());
+	public void validate(T pushDevice) {
+    	if (pushDevice.getCreatedDate() == null) {
+			pushDevice.setCreatedDate(new Date());
 		}
     	
-    	appDevice.setLastUpdated(new Date());
+    	pushDevice.setLastUpdated(new Date());
 	}
     
 	// ----------------------------------------------------------------------------
@@ -75,7 +75,7 @@ public abstract class KAbstractAppNotificationDeviceService<T extends KAppNotifi
     
     @Override
     public T fetchByPushToken(String pushToken) {
-    	// without this check, it would look for app_device where push_token is null
+    	// without this check, it would look for push_device where push_token is null
     	if (pushToken == null) return null;
 		Map<String,Object> filter = KMyBatisUtil.createFilter("pushToken", pushToken);
 		return KMyBatisUtil.fetchOne(fetchByCriteria(0, 99999, null, filter, false));
@@ -84,21 +84,21 @@ public abstract class KAbstractAppNotificationDeviceService<T extends KAppNotifi
 	// ----------------------------------------------------------------------------
     
     @Override @Transactional
-    public T save(T appDevice) {
-    	Long userId = appDevice.getUserId();
-    	Long appId = appDevice.getAppId();
-    	String deviceUuid = appDevice.getDeviceUuid();
-    	String pushToken = appDevice.getPushToken();
+    public T save(T pushDevice) {
+    	Long userId = pushDevice.getUserId();
+    	Long appId = pushDevice.getAppId();
+    	String deviceUuid = pushDevice.getDeviceUuid();
+    	String pushToken = pushDevice.getPushToken();
     	String oldPushToken = null;
     	
     	T current = fetchByAppIdAndUserIdAndDeviceUuid(appId, userId, deviceUuid);
         
     	if (current != null) {
-    		if (appDevice.getId() == null) {
-        		appDevice.setId(current.getId());
+    		if (pushDevice.getId() == null) {
+        		pushDevice.setId(current.getId());
     		} else {
-    			if (!current.getId().equals(appDevice.getId())) {
-    				throw new IllegalStateException("Existing AppNotificationDevice exists: ${appDevice}");
+    			if (!current.getId().equals(pushDevice.getId())) {
+    				throw new IllegalStateException("Existing PushNotificationDevice exists: ${pushDevice}");
     			}
     		}
     		
@@ -106,12 +106,12 @@ public abstract class KAbstractAppNotificationDeviceService<T extends KAppNotifi
     		
     		if (oldPushToken != null) {
     			if (pushToken == null) {
-    				appDevice.setPushToken(oldPushToken);
+    				pushDevice.setPushToken(oldPushToken);
     			} else {
     				if (oldPushToken.equals(pushToken)) {
-    					appDevice.setPushEndpoint(current.getPushEndpoint());
+    					pushDevice.setPushEndpoint(current.getPushEndpoint());
     				} else {
-    					appDevice.setPushEndpoint(null);
+    					pushDevice.setPushEndpoint(null);
     				}
     			}
     		}
@@ -122,22 +122,22 @@ public abstract class KAbstractAppNotificationDeviceService<T extends KAppNotifi
         T device = fetchByPushToken(pushToken);
         
         // if pushToken exists and doesn't already belong to us then throw an exception
-        if (device != null && (appDevice.getId() == null || !appDevice.getId().equals(device.getId()))) {
+        if (device != null && (pushDevice.getId() == null || !pushDevice.getId().equals(device.getId()))) {
         	throw new IllegalStateException("PushToken already assigned to another device: " + device);
         }
         
-        if (appDevice.getId() == null) {
-        	appDevice = add(appDevice);
+        if (pushDevice.getId() == null) {
+        	pushDevice = add(pushDevice);
         } else {
-        	appDevice = update(appDevice);
+        	pushDevice = update(pushDevice);
         }
         
-        if (appDevice.getPushEndpoint() == null) {
-        	appDevice = updateEndpoint(appDevice, oldPushToken);
+        if (pushDevice.getPushEndpoint() == null) {
+        	pushDevice = updateEndpoint(pushDevice, oldPushToken);
         }
         
         
-        return appDevice;
+        return pushDevice;
     }
     
 	// ----------------------------------------------------------------------------
@@ -149,11 +149,11 @@ public abstract class KAbstractAppNotificationDeviceService<T extends KAppNotifi
         	throw new IllegalArgumentException("AppId and PushToken must be set");
         }
         
-        N notification = getAppNotificationService().fetchById(device.getAppNotificationId());
+        N notification = getPushNotificationService().fetchById(device.getPushNotificationId());
         
-        String appEndpoint = notification.getPushEndpoint();
+        String pushEndpoint = notification.getPushEndpoint();
         
-        if (appEndpoint == null) {
+        if (pushEndpoint == null) {
         	throw new IllegalStateException("AppEndPoint is null");
         }
         
@@ -172,7 +172,7 @@ public abstract class KAbstractAppNotificationDeviceService<T extends KAppNotifi
         	getPushService().deleteDeviceEndpoint(endpoint);
         }
         
-        endpoint = getPushService().createDeviceEndpoint(pushPlatform, appEndpoint, pushToken, null);
+        endpoint = getPushService().createDeviceEndpoint(pushPlatform, pushEndpoint, pushToken, null);
         
         if (endpoint == null) {
         	throw new IllegalStateException("Unable to create endpoint for device: " + device);

@@ -13,9 +13,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.linuxtek.kona.app.entity.KApp;
-import com.linuxtek.kona.app.entity.KAppNotification;
-import com.linuxtek.kona.app.entity.KAppNotificationDevice;
-import com.linuxtek.kona.app.entity.KAppNotificationMessage;
+import com.linuxtek.kona.app.entity.KPushNotification;
+import com.linuxtek.kona.app.entity.KPushNotificationDevice;
+import com.linuxtek.kona.app.entity.KPushNotificationMessage;
 import com.linuxtek.kona.app.entity.KAppUser;
 import com.linuxtek.kona.app.entity.KUser;
 import com.linuxtek.kona.app.util.KPositionUtil;
@@ -24,16 +24,16 @@ import com.linuxtek.kona.util.KStringUtil;
 
 
 
-public abstract class KAbstractAppNotificationMessageService<T extends KAppNotificationMessage,EXAMPLE,
+public abstract class KAbstractPushNotificationMessageService<T extends KPushNotificationMessage,EXAMPLE,
 															 A extends KApp,
 															 U extends KUser,
 															 AU extends KAppUser,
-															 N extends KAppNotification,
-															 D extends KAppNotificationDevice> 
+															 N extends KPushNotification,
+															 D extends KPushNotificationDevice> 
 		extends KAbstractService<T,EXAMPLE>
-		implements KAppNotificationMessageService<T> {
+		implements KPushNotificationMessageService<T> {
 
-	private static Logger logger = LoggerFactory.getLogger(KAbstractAppNotificationMessageService.class);
+	private static Logger logger = LoggerFactory.getLogger(KAbstractPushNotificationMessageService.class);
 
 	// ----------------------------------------------------------------------------
 
@@ -45,7 +45,7 @@ public abstract class KAbstractAppNotificationMessageService<T extends KAppNotif
 	
 	protected abstract <S extends KAppUserService<AU>> S getAppUserService();
 	
-	protected abstract <S extends KAppNotificationDeviceService<D>> S getAppNotificationDeviceService();
+	protected abstract <S extends KPushNotificationDeviceService<D>> S getPushNotificationDeviceService();
     
 	protected abstract <S extends KPushService> S getPushService();
 
@@ -53,12 +53,12 @@ public abstract class KAbstractAppNotificationMessageService<T extends KAppNotif
 	// ----------------------------------------------------------------------------
 
 	@Override
-	public void validate(T appNotificationMessage) {
-		if (appNotificationMessage.getCreatedDate() == null) {
-			appNotificationMessage.setCreatedDate(new Date());
+	public void validate(T pushNotificationMessage) {
+		if (pushNotificationMessage.getCreatedDate() == null) {
+			pushNotificationMessage.setCreatedDate(new Date());
 		}
 
-		appNotificationMessage.setLastUpdated(new Date());
+		pushNotificationMessage.setLastUpdated(new Date());
 	}
 
 	// ----------------------------------------------------------------------------
@@ -241,7 +241,7 @@ public abstract class KAbstractAppNotificationMessageService<T extends KAppNotif
 			return null;
 		}
 		
-		List<D> result = getAppNotificationDeviceService().fetchByUserIds(userIdList, true, sandbox, affinityAppId);
+		List<D> result = getPushNotificationDeviceService().fetchByUserIds(userIdList, true, sandbox, affinityAppId);
 		
 		logger.debug("getDeviceList: fetchByUserIds: result size: " + result.size());
 		

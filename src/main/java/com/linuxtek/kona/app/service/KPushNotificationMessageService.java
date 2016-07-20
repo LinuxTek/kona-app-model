@@ -6,15 +6,15 @@ package com.linuxtek.kona.app.service;
 import java.util.List;
 import java.util.Map;
 
-import com.linuxtek.kona.app.entity.KAppNotificationMessage;
+import com.linuxtek.kona.app.entity.KPushNotificationMessage;
 import com.linuxtek.kona.data.service.KDataService;
 import com.linuxtek.kona.remote.service.KService;
 
 /**
  * The client side stub for the RPC service.
  */
-public interface KAppNotificationMessageService<T extends KAppNotificationMessage> extends KService, KDataService<T> {
-	public static final String SERVICE_PATH = "rpc/kona/AppNotificationMessageService";
+public interface KPushNotificationMessageService<T extends KPushNotificationMessage> extends KService, KDataService<T> {
+	public static final String SERVICE_PATH = "rpc/kona/PushNotificationMessageService";
 	
 	public T fetchByUid(String uid);
 	

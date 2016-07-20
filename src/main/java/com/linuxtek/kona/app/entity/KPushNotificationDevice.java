@@ -4,15 +4,15 @@ import java.util.Date;
 
 import com.linuxtek.kona.data.entity.KEntityObject;
 
-public interface KAppNotificationDevice extends KEntityObject {
+public interface KPushNotificationDevice extends KEntityObject {
 
 	Long getId();
 
 	void setId(Long id);
 
-	Long getAppNotificationId();
+	Long getPushNotificationId();
 
-	void setAppNotificationId(Long appNotificationId);
+	void setPushNotificationId(Long pushNotificationId);
 
 	Long getAppId();
 

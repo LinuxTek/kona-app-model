@@ -12,15 +12,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.linuxtek.kona.app.entity.KApp;
-import com.linuxtek.kona.app.entity.KAppNotification;
+import com.linuxtek.kona.app.entity.KPushNotification;
 import com.linuxtek.kona.data.mybatis.KMyBatisUtil;
 
 
-public abstract class KAbstractAppNotificationService<T extends KAppNotification,EXAMPLE,A extends KApp> 
+public abstract class KAbstractPushNotificationService<T extends KPushNotification,EXAMPLE,A extends KApp> 
 		extends KAbstractService<T,EXAMPLE>
-		implements KAppNotificationService<T> {
+		implements KPushNotificationService<T> {
 
-	private static Logger logger = LoggerFactory.getLogger(KAbstractAppNotificationService.class);
+	private static Logger logger = LoggerFactory.getLogger(KAbstractPushNotificationService.class);
 
 	// ----------------------------------------------------------------------------
 
@@ -31,12 +31,12 @@ public abstract class KAbstractAppNotificationService<T extends KAppNotification
 	// ----------------------------------------------------------------------------
 
 	@Override
-	public void validate(T appNotification) {
-		if (appNotification.getCreatedDate() == null) {
-			appNotification.setCreatedDate(new Date());
+	public void validate(T pushNotification) {
+		if (pushNotification.getCreatedDate() == null) {
+			pushNotification.setCreatedDate(new Date());
 		}
 
-		appNotification.setLastUpdated(new Date());
+		pushNotification.setLastUpdated(new Date());
 	}
 
 	// ----------------------------------------------------------------------------
@@ -98,7 +98,7 @@ public abstract class KAbstractAppNotificationService<T extends KAppNotification
 		String endpoint = getPushService().createApplicationEndpoint(pushPlatform, app.getName(), principal, credential);
 
 		if (endpoint == null) {
-			throw new IllegalStateException("Unable to create endpoint for appNotificationId: " + notification.getId());
+			throw new IllegalStateException("Unable to create endpoint for pushNotificationId: " + notification.getId());
 		}
 
 		notification.setPushEndpoint(endpoint);

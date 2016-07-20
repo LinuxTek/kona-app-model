@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import com.linuxtek.kona.app.entity.KAccount;
 import com.linuxtek.kona.app.entity.KAppUser;
+import com.linuxtek.kona.app.entity.KInvitation;
 import com.linuxtek.kona.app.entity.KRegistration;
 import com.linuxtek.kona.app.entity.KToken;
 import com.linuxtek.kona.app.entity.KUser;
@@ -32,6 +33,7 @@ public abstract class KAbstractUserService<U extends KUser, EXAMPLE,
 										   A extends KAccount, 
 										   AU extends KAppUser, 
 										   R extends KRegistration, 
+										   I extends KInvitation, 
 										   T extends KToken> 
 		extends KAbstractService<U,EXAMPLE>
 		implements KUserService<U> {
@@ -49,6 +51,8 @@ public abstract class KAbstractUserService<U extends KUser, EXAMPLE,
 	protected abstract <S extends KRegistrationService<R,U>> S getRegistrationService();
 	
 	protected abstract <S extends KTokenService<T>> S getTokenService();
+	
+	protected abstract <S extends KInvitationService<I>> S getInvitationService();
     
 	protected abstract void sendRegisteredUserEmail(Long appId, U user);
 	
@@ -191,6 +195,9 @@ public abstract class KAbstractUserService<U extends KUser, EXAMPLE,
         
         // create AppUser record
         getAppUserService().create(client.getAppId(), user.getId(), null, null);
+        
+        // process invitations sent for this user
+        getInvitationService().processInvitations(user.getId());
 
         sendRegisteredUserEmail(client.getAppId(), user);
         
