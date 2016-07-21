@@ -14,6 +14,8 @@ import com.linuxtek.kona.remote.service.KService;
 public interface KAddressBookService<ADDRESSBOOK extends KAddressBook> extends KService, KDataService<ADDRESSBOOK> {
     public static final String SERVICE_PATH = "rpc/kona/AddressBookService";
 
+    public ADDRESSBOOK create(Long userId, String mobileNumber, String email, String firstName, String lastName);
+    
     public List<ADDRESSBOOK> fetchByEmail(Long userId, String email);
 
     public List<ADDRESSBOOK> fetchByMobileNumber(Long userId, String mobileNumber);

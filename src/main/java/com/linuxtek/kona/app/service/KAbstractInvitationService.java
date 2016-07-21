@@ -25,8 +25,8 @@ public abstract class KAbstractInvitationService<INVITATION extends KInvitation,
 										ADDRESSBOOK extends KAddressBook,
 										FRIENDSHIP extends KFriendship,
 										USER extends KUser>
-extends KAbstractService<INVITATION,INVITATION_EXAMPLE>
-implements KInvitationService<INVITATION> {
+		extends KAbstractService<INVITATION,INVITATION_EXAMPLE>
+		implements KInvitationService<INVITATION> {
 
     private static Logger logger = LoggerFactory.getLogger(KAbstractInvitationService.class);
 
@@ -191,23 +191,118 @@ implements KInvitationService<INVITATION> {
     // ----------------------------------------------------------------------
     
 	@Override 
-	public INVITATION invite(Long addressBookId, KInvitationType type, KInvitationChannel channel, 
-				String message, boolean resend) {
+	public INVITATION inviteByMobileNumber(Long userId, KInvitationType type, String mobileNumber, String firstName, boolean resend) {
+		ADDRESSBOOK addressBook = null;
+		
+		List<ADDRESSBOOK> list = getAddressBookService().fetchByMobileNumber(userId, mobileNumber);
+		
+		if (list == null || list.size() == 0)  {
+			addressBook = getAddressBookService().create(userId, mobileNumber, null, firstName, null);
+		} else {
+			addressBook = list.get(0);
+		}
+		
+		return invite(addressBook.getId(), type, KInvitationChannel.SMS, resend);
+	}
+	
+    // ----------------------------------------------------------------------
+	    
+	@Override 
+	public INVITATION inviteByEmail(Long userId, KInvitationType type, String email, String firstName, boolean resend) {
+		ADDRESSBOOK addressBook = null;
+		
+		List<ADDRESSBOOK> list = getAddressBookService().fetchByEmail(userId, email);
+		
+		if (list == null || list.size() == 0)  {
+			addressBook = getAddressBookService().create(userId, null, email, firstName, null);
+		} else {
+			addressBook = list.get(0);
+		}
+		
+		return invite(addressBook.getId(), type, KInvitationChannel.EMAIL, resend);
+	}
+	
+
+	
+    // ----------------------------------------------------------------------
+	
+	protected boolean existingUser(ADDRESSBOOK addressBook) {
+		USER user = null;
+		
+		if (addressBook.getRefUserId() != null) {
+			user = getUserService().fetchById(addressBook.getRefUserId());
+			if (user != null) {
+				return true;
+			} else {
+				addressBook.setRefUserId(null);
+				addressBook = getAddressBookService().update(addressBook);
+			}
+		}
+		
+		if (addressBook.getMobileNumber() != null) {
+			user = getUserService().fetchByMobileNumber(addressBook.getMobileNumber());
+			if (user != null) {
+				addressBook.setRefUserId(user.getId());
+				addressBook = getAddressBookService().update(addressBook);
+				return true;
+			}
+		}
+		
+		if (addressBook.getEmail() != null) {
+			user = getUserService().fetchByEmail(addressBook.getEmail());
+			if (user != null) {
+				addressBook.setRefUserId(user.getId());
+				addressBook = getAddressBookService().update(addressBook);
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+    // ----------------------------------------------------------------------
+	
+	//FIXME: invitations can be made to current users who are not necessarily in the user's address book
+    
+	@Override 
+	public INVITATION invite(Long addressBookId, KInvitationType type, KInvitationChannel channel, boolean resend) {
 		
 		ADDRESSBOOK addressBook = getAddressBookService().fetchById(addressBookId);
+		
+		if (existingUser(addressBook) && (type == KInvitationType.JOIN || channel != KInvitationChannel.IN_APP)) {
+			throw new KInvitationException("Invitation being sent to existing user."); 
+		}
 		
 		// first check if an invitation has already been sent 
 		INVITATION invitation = null;
         
 		List<INVITATION> list = fetchByAddressBookId(addressBook.getId(), null, type, null);
 		
-		if (list != null && list.size()>0) {
-            invitation = list.get(0);
+		for (INVITATION pastInvitation : list) {
+			KInvitationStatus status = KInvitationStatus.getInstance(pastInvitation.getStatusId());
+			if (status != KInvitationStatus.PENDING) {
+				// we already sent an inviation to this person that was already accepted, ignored, etc.
+				// only resend pending invitations
+				logger.info("Invitation has already been sent to user and acknowledged: {}", pastInvitation);
+				return pastInvitation;
+			}
+			
+			// ok we have a pending invitation
+			if (!resend) {
+				logger.info("Found past invitation and resend set to false. Returning current invitation: {}", pastInvitation);
+				return pastInvitation;
+			} else {
+				// if the pastInvitation is not on the same channel then we create a new invitation
+				if (pastInvitation.getChannelId().equals(channel.getId())) {
+					invitation = pastInvitation;
+					break;
+				}
+			}
 		}
-        
+		
 		try {
             if (invitation == null) {
-            	invitation = createInvitation(addressBook, type, channel, message);
+            	invitation = createInvitation(addressBook, type, channel);
             }
             
             String invitationUrl = getInvitationUrl(invitation.getUserId(), invitation.getInvitationCode());
@@ -233,8 +328,7 @@ implements KInvitationService<INVITATION> {
     
     // ----------------------------------------------------------------------
 	
-	protected INVITATION createInvitation(ADDRESSBOOK addressBook, KInvitationType type,
-			KInvitationChannel channel, String message) {
+	protected INVITATION createInvitation(ADDRESSBOOK addressBook, KInvitationType type, KInvitationChannel channel) {
         
 		//String code = sequence.getHexNo("confirmation.code", 9);
 		String code = generateAccessCode();
@@ -249,7 +343,9 @@ implements KInvitationService<INVITATION> {
 		invitation.setAddressBookId(addressBook.getId());
         invitation.setInviteeUserId(inviteeUserId);
 		invitation.setInvitationCode(code);
-		invitation.setMessage(message);
+		invitation.setFirstName(addressBook.getFirstName());
+		invitation.setLastName(addressBook.getLastName());
+		invitation.setDisplayName(addressBook.getDisplayName());
         invitation.setEmail(addressBook.getEmail());
         invitation.setMobileNumber(addressBook.getMobileNumber());
         invitation.setInvitedCount(0);
@@ -310,6 +406,7 @@ implements KInvitationService<INVITATION> {
 		Long friendId = invitation.getInviteeUserId();
 
 		invitation.setStatusId(KInvitationStatus.ACCEPTED.getId());
+		
 		invitation.setAcceptedDate(new Date());
 		
 		invitation = update(invitation);
@@ -330,7 +427,7 @@ implements KInvitationService<INVITATION> {
 	// ----------------------------------------------------------------------
 	
     @Override
-    public void processInvitations(Long userId) {
+    public void processNewUserInvitations(Long userId) {
     	USER user = getUserService().fetchById(userId);
     	
         List<INVITATION> invitationList = null;

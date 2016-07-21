@@ -56,6 +56,10 @@ public enum KInvitationType implements KEnumObject {
         return KEnumUtil.getInstance(KInvitationType.class, id);
     }
 
+    public static KInvitationType getInstance(String name) {
+        return KEnumUtil.getInstance(KInvitationType.class, name);
+    }
+
     public static LinkedHashMap<Long,String> getMap() {
         return KEnumUtil.getMap(KInvitationType.class);
     }

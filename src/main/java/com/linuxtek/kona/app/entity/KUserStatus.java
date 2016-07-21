@@ -56,6 +56,10 @@ public enum KUserStatus implements KEnumObject {
         return KEnumUtil.getInstance(KUserStatus.class, id);
     }
 
+    public static KUserStatus getInstance(String name) {
+        return KEnumUtil.getInstance(KUserStatus.class, name);
+    } 
+
     public static LinkedHashMap<Long,String> getMap() {
         return KEnumUtil.getMap(KUserStatus.class);
     }

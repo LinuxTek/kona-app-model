@@ -113,6 +113,10 @@ public enum KUserRole implements KEnumObject {
         return KEnumUtil.getInstance(KUserRole.class, id);
     }
 
+    public static KUserRole getInstance(String name) {
+        return KEnumUtil.getInstance(KUserRole.class, name);
+    } 
+
     public static LinkedHashMap<Long,String> getMap() {
         return KEnumUtil.getMap(KUserRole.class);
     }

@@ -59,6 +59,10 @@ public enum KInvitationChannel implements KEnumObject {
         return KEnumUtil.getInstance(KInvitationChannel.class, id);
     }
 
+    public static KInvitationChannel getInstance(String name) {
+        return KEnumUtil.getInstance(KInvitationChannel.class, name);
+    } 
+
     public static LinkedHashMap<Long,String> getMap() {
         return KEnumUtil.getMap(KInvitationChannel.class);
     }

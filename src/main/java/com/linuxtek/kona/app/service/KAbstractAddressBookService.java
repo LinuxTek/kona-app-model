@@ -43,7 +43,7 @@ public abstract class KAbstractAddressBookService<ADDRESSBOOK extends KAddressBo
         
         Long userId = addressBook.getUserId();
 
-        USER user = null;
+        USER refUser = null;
         
         List<ADDRESSBOOK> abList = null;
         
@@ -59,7 +59,7 @@ public abstract class KAbstractAddressBookService<ADDRESSBOOK extends KAddressBo
             	return abList.get(0);
             }
             
-            user = getUserService().fetchByMobileNumber(addressBook.getMobileNumber());
+            refUser = getUserService().fetchByMobileNumber(addressBook.getMobileNumber());
         }
 
         // mobile is null, so check if email exists
@@ -73,14 +73,17 @@ public abstract class KAbstractAddressBookService<ADDRESSBOOK extends KAddressBo
             	return abList.get(0);
             }
             
-            user = getUserService().fetchByEmail(addressBook.getEmail());
+            if (refUser == null) {
+            	refUser = getUserService().fetchByEmail(addressBook.getEmail());
+            }
         }
 
         // email is null, so check first name, last name and address
-        if (addressBook.getFirstName() != null && addressBook.getLastName() != null 
+        if (addressBook.getFirstName() != null 
+        		&& addressBook.getLastName() != null 
                 && addressBook.getAddress() != null) {
+        	
 		    Map<String,Object> filter = KMyBatisUtil.createFilter("firstName", addressBook.getFirstName());
-		    
 		    filter.put("lastName", addressBook.getLastName());
 		    filter.put("address", addressBook.getAddress());
 		    
@@ -97,11 +100,12 @@ public abstract class KAbstractAddressBookService<ADDRESSBOOK extends KAddressBo
             }
         }
                 
-        if (user != null) {
-            addressBook.setRefUserId(user.getId());
+        if (refUser != null) {
+            addressBook.setRefUserId(refUser.getId());
         }
         
         getDao().insert(addressBook);
+        
         return addressBook;
     }
 
@@ -277,4 +281,15 @@ public abstract class KAbstractAddressBookService<ADDRESSBOOK extends KAddressBo
 	}
     
     // ----------------------------------------------------------------------
+	
+	@Override
+	public ADDRESSBOOK create(Long userId, String mobileNumber, String email, String firstName, String lastName) {
+		ADDRESSBOOK addressBook = getNewObject();
+		addressBook.setUserId(userId);
+		addressBook.setMobileNumber(mobileNumber);
+		addressBook.setEmail(email);
+		addressBook.setFirstName(firstName);
+		addressBook.setLastName(lastName);
+		return add(addressBook);
+	}
 }

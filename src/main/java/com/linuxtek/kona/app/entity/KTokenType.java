@@ -57,6 +57,10 @@ public enum KTokenType implements KEnumObject {
         return KEnumUtil.getInstance(KTokenType.class, id);
     }
 
+    public static KTokenType getInstance(String name) {
+        return KEnumUtil.getInstance(KTokenType.class, name);
+    }
+
     public static LinkedHashMap<Long,String> getMap() {
         return KEnumUtil.getMap(KTokenType.class);
     }

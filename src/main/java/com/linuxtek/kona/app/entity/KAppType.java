@@ -57,6 +57,10 @@ public enum KAppType implements KEnumObject {
         return KEnumUtil.getInstance(KAppType.class, id);
     }
 
+    public static KAppType getInstance(String name) {
+        return KEnumUtil.getInstance(KAppType.class, name);
+    }
+
     public static LinkedHashMap<Long,String> getMap() {
         return KEnumUtil.getMap(KAppType.class);
     }

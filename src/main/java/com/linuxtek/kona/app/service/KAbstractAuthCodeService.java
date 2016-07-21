@@ -16,8 +16,6 @@ import com.linuxtek.kona.app.entity.KAuthCodeType;
 import com.linuxtek.kona.app.entity.KRegistration;
 import com.linuxtek.kona.app.entity.KUser;
 import com.linuxtek.kona.data.mybatis.KMyBatisUtil;
-import com.linuxtek.kona.remote.service.KServiceClient;
-import com.linuxtek.kona.util.KDateUtil;
 
 public abstract class KAbstractAuthCodeService<T extends KAuthCode,EXAMPLE,
 											   U extends KUser,
@@ -115,7 +113,7 @@ public abstract class KAbstractAuthCodeService<T extends KAuthCode,EXAMPLE,
 	// ----------------------------------------------------------------------
 
 	@Override
-	public T accessCode(String code,  KServiceClient client) {
+	public T accessCode(String code) {
 		if (code == null) return null;
         
 		T authCode = fetchByCode(code);

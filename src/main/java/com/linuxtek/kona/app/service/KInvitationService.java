@@ -16,8 +16,11 @@ import com.linuxtek.kona.remote.service.KService;
 public interface KInvitationService<INVITATION extends KInvitation> extends KService, KDataService<INVITATION> {
     public static final String SERVICE_PATH = "rpc/kona/InvitationService";
 
-    public INVITATION invite(Long addressBookId, KInvitationType type,
-    		KInvitationChannel channel, String message, boolean resend);
+    public INVITATION invite(Long addressBookId, KInvitationType type, KInvitationChannel channel, boolean resend);
+    
+    public INVITATION inviteByMobileNumber(Long userId, KInvitationType type, String mobileNumber, String firstName, boolean resend);
+    
+    public INVITATION inviteByEmail(Long userId, KInvitationType type, String email, String firstName, boolean resend);
     
     public INVITATION accept(INVITATION invitation);
     
@@ -27,7 +30,7 @@ public interface KInvitationService<INVITATION extends KInvitation> extends KSer
     
     // process a user's invitations after he/she has registered
     // this method is called by UserService()
-	public void processInvitations(Long userId);
+	public void processNewUserInvitations(Long userId);
 
     
     public List<INVITATION> fetchByUserId(Long userId, KInvitationStatus status, 

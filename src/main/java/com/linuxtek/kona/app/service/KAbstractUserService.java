@@ -197,7 +197,7 @@ public abstract class KAbstractUserService<U extends KUser, EXAMPLE,
         getAppUserService().create(client.getAppId(), user.getId(), null, null);
         
         // process invitations sent for this user
-        getInvitationService().processInvitations(user.getId());
+        getInvitationService().processNewUserInvitations(user.getId());
 
         sendRegisteredUserEmail(client.getAppId(), user);
         

@@ -8,7 +8,6 @@ import java.util.List;
 import com.linuxtek.kona.app.entity.KAuthCode;
 import com.linuxtek.kona.data.service.KDataService;
 import com.linuxtek.kona.remote.service.KService;
-import com.linuxtek.kona.remote.service.KServiceClient;
 
 
 /**
@@ -20,7 +19,7 @@ public interface KAuthCodeService<T extends KAuthCode> extends KService, KDataSe
 	public T fetchByCode(String code);
 	
 	// indicate code has been accessed
-	public T accessCode(String code, KServiceClient client);
+	public T accessCode(String code);
     
     //public void requestPasswordReset(Long userId, Long appId, boolean resend);
     

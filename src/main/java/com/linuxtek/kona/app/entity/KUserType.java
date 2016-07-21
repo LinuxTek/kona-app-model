@@ -57,6 +57,10 @@ public enum KUserType implements KEnumObject {
         return KEnumUtil.getInstance(KUserType.class, id);
     }
 
+    public static KUserType getInstance(String name) {
+        return KEnumUtil.getInstance(KUserType.class, name);
+    }
+
     public static LinkedHashMap<Long,String> getMap() {
         return KEnumUtil.getMap(KUserType.class);
     }
