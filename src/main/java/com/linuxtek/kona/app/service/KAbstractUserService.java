@@ -360,4 +360,24 @@ public abstract class KAbstractUserService<U extends KUser, EXAMPLE,
 		user.setLastUpdated(new Date());
 	}
 	
+	// ----------------------------------------------------------------------------
+	
+	@Override
+	public boolean isEmailVerified(Long userId) {
+		R registration = getRegistrationService().fetchByUserId(userId);
+		if (registration == null) return false;
+		return registration.isEmailVerified();
+		
+	}
+	
+	// ----------------------------------------------------------------------------
+	
+	@Override
+	public boolean isMobileNumberVerified(Long userId) {
+		R registration = getRegistrationService().fetchByUserId(userId);
+		if (registration == null) return false;
+		return registration.isMobileVerified();
+		
+	}
+	
 }

@@ -9,9 +9,7 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
---
--- Table structure for table `_changelog`
---
+-- --------------------------------------------------------------------------
 
 DROP TABLE IF EXISTS `_changelog`;
 CREATE TABLE `_changelog` (
@@ -21,11 +19,8 @@ CREATE TABLE `_changelog` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Table structure for table `account`
---
+-- --------------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `account`;
 CREATE TABLE `account` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `uid` varchar(255) NOT NULL,
@@ -43,14 +38,14 @@ CREATE TABLE `account` (
   UNIQUE KEY `ux_account_name` (`name`),
   UNIQUE KEY `ux_account_uid` (`uid`),
   UNIQUE KEY `ux_account_owner` (`owner_id`),
-  CONSTRAINT `fk_account_owner` FOREIGN KEY (`owner_id`) REFERENCES `user` (`id`) ON DELETE SET NULL
+
+  CONSTRAINT `fk_account_owner` FOREIGN KEY (`owner_id`) 
+        REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Table structure for table `api_log`
---
+-- --------------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `api_log`;
 CREATE TABLE `api_log` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `uid` varchar(255) NOT NULL,
@@ -76,21 +71,26 @@ CREATE TABLE `api_log` (
   KEY `ix_api_log_version` (`version_id`),
   KEY `ix_api_log_client` (`client_id`),
   KEY `ix_api_log_user` (`user_id`),
-  CONSTRAINT `fk_api_log_app` FOREIGN KEY (`app_id`) REFERENCES `app` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_api_log_client` FOREIGN KEY (`client_id`) REFERENCES `app_creds` (`client_id`),
-  CONSTRAINT `fk_api_log_owner` FOREIGN KEY (`owner_id`) REFERENCES `user` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_api_log_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
-  CONSTRAINT `fk_api_log_version` FOREIGN KEY (`version_id`) REFERENCES `api_version` (`id`)
+
+  CONSTRAINT `fk_api_log_app` FOREIGN KEY (`app_id`) 
+        REFERENCES `app` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+
+  CONSTRAINT `fk_api_log_client` FOREIGN KEY (`client_id`) 
+        REFERENCES `app_creds` (`client_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+
+  CONSTRAINT `fk_api_log_owner` FOREIGN KEY (`owner_id`) 
+        REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+
+  CONSTRAINT `fk_api_log_user` FOREIGN KEY (`user_id`) 
+        REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+
+  CONSTRAINT `fk_api_log_version` FOREIGN KEY (`version_id`) 
+        REFERENCES `api_version` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- --------------------------------------------------------------------------
 
---
--- Table structure for table `api_version`
---
-
-DROP TABLE IF EXISTS `api_version`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `api_version` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
@@ -102,15 +102,9 @@ CREATE TABLE `api_version` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `ux_api_version_name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `app`
---
+-- --------------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `app`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `app` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `uid` varchar(255) NOT NULL,
@@ -136,19 +130,20 @@ CREATE TABLE `app` (
   KEY `ix_app_type` (`type_id`),
   KEY `ix_app_user` (`user_id`),
   KEY `ix_app_logo` (`logo_id`),
-  CONSTRAINT `fk_app_logo` FOREIGN KEY (`logo_id`) REFERENCES `file` (`id`) ON DELETE SET NULL,
-  CONSTRAINT `fk_app_type` FOREIGN KEY (`type_id`) REFERENCES `app_type` (`id`),
-  CONSTRAINT `fk_app_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
+
+  CONSTRAINT `fk_app_logo` FOREIGN KEY (`logo_id`) 
+        REFERENCES `file` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+
+  CONSTRAINT `fk_app_type` FOREIGN KEY (`type_id`) 
+        REFERENCES `app_type` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+
+  CONSTRAINT `fk_app_user` FOREIGN KEY (`user_id`) 
+        REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `app_config`
---
+-- --------------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `app_config`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `app_config` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `app_id` bigint(20) unsigned NOT NULL,
@@ -161,17 +156,14 @@ CREATE TABLE `app_config` (
   UNIQUE KEY `id` (`id`),
   UNIQUE KEY `app_config_env_name` (`app_id`,`env`,`name`),
   KEY `ix_app_config_app` (`app_id`),
-  CONSTRAINT `fk_app_config_app` FOREIGN KEY (`app_id`) REFERENCES `app` (`id`) ON DELETE CASCADE
+
+  CONSTRAINT `fk_app_config_app` FOREIGN KEY (`app_id`) 
+        REFERENCES `app` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `app_creds`
---
+-- --------------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `app_creds`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `app_creds` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `app_id` bigint(20) unsigned NOT NULL,
@@ -193,16 +185,17 @@ CREATE TABLE `app_creds` (
   UNIQUE KEY `ux_app_creds_client_id` (`client_id`),
   UNIQUE KEY `ux_app_creds_client_secret` (`client_secret`),
   KEY `ix_app_creds_api_version` (`api_version_id`),
-  CONSTRAINT `fk_app_creds_api_version` FOREIGN KEY (`api_version_id`) REFERENCES `api_version` (`id`),
-  CONSTRAINT `fk_app_creds_app` FOREIGN KEY (`app_id`) REFERENCES `app` (`id`) ON DELETE CASCADE
+
+  CONSTRAINT `fk_app_creds_api_version` FOREIGN KEY (`api_version_id`) 
+        REFERENCES `api_version` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+
+  CONSTRAINT `fk_app_creds_app` FOREIGN KEY (`app_id`) 
+        REFERENCES `app` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `push_notification_device`
---
+-- --------------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `push_notification_device`;
 CREATE TABLE `push_notification_device` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `app_id` bigint(20) unsigned NOT NULL,
@@ -218,28 +211,29 @@ CREATE TABLE `push_notification_device` (
   `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`),
-  UNIQUE KEY `ux_push_notification` (`app_id`,`user_id`,`device_uuid`,`sandbox`), -- different users using same app on same device
+
+  -- different users using same app on same device
+  UNIQUE KEY `ux_push_notification` (`app_id`,`user_id`,`device_uuid`,`sandbox`), 
+
   UNIQUE KEY `ux_push_notification_device_push_token` (`push_token`(255)),
+
   KEY `ix_push_notification_device_app` (`app_id`),
   KEY `ix_push_notification_device_user` (`user_id`),
   KEY `ix_push_notification_device_device` (`device_uuid`),
 
-  CONSTRAINT `fk_push_notification_device_app` 
-        FOREIGN KEY (`app_id`) REFERENCES `app` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_push_notification_device_app` FOREIGN KEY (`app_id`) 
+        REFERENCES `app` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
 
-  CONSTRAINT `fk_push_notification_device_push_notification` 
-        FOREIGN KEY (`push_notification_id`) REFERENCES `push_notification` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_push_notification_device_push_notification` FOREIGN KEY (`push_notification_id`) 
+        REFERENCES `push_notification` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
 
-  CONSTRAINT `fk_push_notification_device_user` 
-        FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
+  CONSTRAINT `fk_push_notification_device_user` FOREIGN KEY (`user_id`) 
+        REFERENCES `user` (`id`) ON DELETE CASCAD ON UPDATE CASCADEE
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Table structure for table `push_notification`
---
+-- --------------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `push_notification`;
 CREATE TABLE `push_notification` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `app_id` bigint(20) unsigned NOT NULL,
@@ -253,12 +247,14 @@ CREATE TABLE `push_notification` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`),
   UNIQUE KEY `ux_push_notification` (`app_id`,`platform_name`,`sandbox`),
-  CONSTRAINT `fk_push_notification_app` FOREIGN KEY (`app_id`) REFERENCES `app` (`id`) ON DELETE CASCADE
+
+  CONSTRAINT `fk_push_notification_app` FOREIGN KEY (`app_id`) 
+        REFERENCES `app` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- --------------------------------------------------------------------------
 
-
-DROP TABLE IF EXISTS `push_notification_message`;
 CREATE TABLE `push_notification_message` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `uid` varchar(255) NOT NULL,
@@ -272,21 +268,18 @@ CREATE TABLE `push_notification_message` (
   `devices` blob DEFAULT NULL,
   `device_count` int(11) unsigned NOT NULL,
   `created_date` datetime(6) NOT NULL,
-  `last_updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
   PRIMARY KEY (`id`),
   UNIQUE KEY `ux_push_notification_message_uid` (`uid`),
   KEY `ix_push_notification_message_app` (`app_id`),
-  CONSTRAINT `fk_push_notification_message_app` FOREIGN KEY (`app_id`) REFERENCES `app` (`id`) ON DELETE CASCADE
+
+  CONSTRAINT `fk_push_notification_message_app` FOREIGN KEY (`app_id`) 
+        REFERENCES `app` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- --------------------------------------------------------------------------
 
---
--- Table structure for table `app_type`
---
-
-DROP TABLE IF EXISTS `app_type`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `app_type` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
@@ -296,15 +289,9 @@ CREATE TABLE `app_type` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `ux_app_type_name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `app_user`
---
+-- --------------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `app_user`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `app_user` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) unsigned NOT NULL,
@@ -319,11 +306,19 @@ CREATE TABLE `app_user` (
   UNIQUE KEY `ux_app_user_app_user` (`app_id`,`user_id`),
   KEY `ix_user_app_user` (`user_id`),
   KEY `ix_user_app_token` (`token_id`),
-  CONSTRAINT `fk_app_user_app` FOREIGN KEY (`app_id`) REFERENCES `app` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_app_user_token` FOREIGN KEY (`token_id`) REFERENCES `token` (`id`) ON DELETE SET NULL,
-  CONSTRAINT `fk_app_user_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
+
+  CONSTRAINT `fk_app_user_app` FOREIGN KEY (`app_id`) 
+        REFERENCES `app` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+
+  CONSTRAINT `fk_app_user_token` FOREIGN KEY (`token_id`) 
+        REFERENCES `token` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+
+  CONSTRAINT `fk_app_user_user` FOREIGN KEY (`user_id`) 
+        REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
+-- --------------------------------------------------------------------------
 
 --
 -- Table structure for table `app_webhook`
@@ -348,7 +343,8 @@ CREATE TABLE `app_webhook` (
   UNIQUE KEY `ux_app_webhook_uid` (`uid`),
   UNIQUE KEY `ux_app_webhook_app_name` (`app_id`,`name`),
   KEY `ix_app_webhook_app` (`app_id`),
-  CONSTRAINT `fk_app_webhook_app` FOREIGN KEY (`app_id`) REFERENCES `app` (`id`) ON DELETE CASCADE
+  CONSTRAINT `fk_app_webhook_app` FOREIGN KEY (`app_id`) 
+        REFERENCES `app` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -378,9 +374,12 @@ CREATE TABLE `auth_code` (
   KEY `ix_auth_code_type` (`type_id`),
   KEY `ix_auth_code_app` (`app_id`),
   KEY `ix_auth_code_user` (`user_id`),
-  CONSTRAINT `fk_auth_code_type` FOREIGN KEY (`type_id`) REFERENCES `auth_code_type` (`id`),
-  CONSTRAINT `fk_auth_code_app` FOREIGN KEY (`app_id`) REFERENCES `app` (`id`),
-  CONSTRAINT `fk_auth_code_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
+  CONSTRAINT `fk_auth_code_type` FOREIGN KEY (`type_id`) 
+        REFERENCES `auth_code_type` (`id`),
+  CONSTRAINT `fk_auth_code_app` FOREIGN KEY (`app_id`) 
+        REFERENCES `app` (`id`),
+  CONSTRAINT `fk_auth_code_user` FOREIGN KEY (`user_id`) 
+        REFERENCES `user` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -434,12 +433,18 @@ CREATE TABLE `file` (
   KEY `ix_file_thumb` (`thumb_id`),
   KEY `ix_file_access` (`access_id`),
   KEY `ix_file_url_path` (`url_path`),
-  CONSTRAINT `fk_file_access` FOREIGN KEY (`access_id`) REFERENCES `file_access` (`id`) ON DELETE SET NULL,
-  CONSTRAINT `fk_file_parent` FOREIGN KEY (`parent_id`) REFERENCES `file` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_file_thumb` FOREIGN KEY (`thumb_id`) REFERENCES `file` (`id`) ON DELETE SET NULL,
-  CONSTRAINT `fk_file_token` FOREIGN KEY (`token_id`) REFERENCES `token` (`id`) ON DELETE SET NULL,
-  CONSTRAINT `fk_file_type` FOREIGN KEY (`type_id`) REFERENCES `file_type` (`id`) ON DELETE SET NULL,
-  CONSTRAINT `fk_file_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
+  CONSTRAINT `fk_file_access` FOREIGN KEY (`access_id`) 
+        REFERENCES `file_access` (`id`) ON DELETE SET NULL,
+  CONSTRAINT `fk_file_parent` FOREIGN KEY (`parent_id`) 
+        REFERENCES `file` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_file_thumb` FOREIGN KEY (`thumb_id`) 
+        REFERENCES `file` (`id`) ON DELETE SET NULL,
+  CONSTRAINT `fk_file_token` FOREIGN KEY (`token_id`) 
+        REFERENCES `token` (`id`) ON DELETE SET NULL,
+  CONSTRAINT `fk_file_type` FOREIGN KEY (`type_id`) 
+        REFERENCES `file_type` (`id`) ON DELETE SET NULL,
+  CONSTRAINT `fk_file_user` FOREIGN KEY (`user_id`) 
+        REFERENCES `user` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -509,8 +514,10 @@ CREATE TABLE `redirect` (
   PRIMARY KEY (`id`),
   KEY `ix_redirect_short_url` (`short_url_id`),
   KEY `ix_redirect_promo` (`promo_id`),
-  CONSTRAINT `fk_redirect_promo` FOREIGN KEY (`promo_id`) REFERENCES `promo` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `fk_redirect_short_url` FOREIGN KEY (`short_url_id`) REFERENCES `short_url` (`id`) ON DELETE CASCADE
+  CONSTRAINT `fk_redirect_promo` FOREIGN KEY (`promo_id`) 
+        REFERENCES `promo` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `fk_redirect_short_url` FOREIGN KEY (`short_url_id`) 
+        REFERENCES `short_url` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -556,12 +563,18 @@ CREATE TABLE `registration` (
   KEY `ix_registration_partner` (`partner_id`),
   KEY `ix_registration_promo` (`promo_id`),
   KEY `ix_registration_referred_by` (`referred_by_id`),
-  CONSTRAINT `fk_registration_referred_by` FOREIGN KEY (`referred_by_id`) REFERENCES `user` (`id`) ON DELETE SET NULL,
-  CONSTRAINT `fk_registration_app` FOREIGN KEY (`app_id`) REFERENCES `app` (`id`),
-  CONSTRAINT `fk_registration_campaign` FOREIGN KEY (`campaign_id`) REFERENCES `campaign` (`id`) ON DELETE SET NULL,
-  CONSTRAINT `fk_registration_partner` FOREIGN KEY (`partner_id`) REFERENCES `partner` (`id`) ON DELETE SET NULL,
-  CONSTRAINT `fk_registration_promo` FOREIGN KEY (`promo_id`) REFERENCES `promo` (`id`) ON DELETE SET NULL,
-  CONSTRAINT `fk_registration_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
+  CONSTRAINT `fk_registration_referred_by` FOREIGN KEY (`referred_by_id`) 
+        REFERENCES `user` (`id`) ON DELETE SET NULL,
+  CONSTRAINT `fk_registration_app` FOREIGN KEY (`app_id`) 
+        REFERENCES `app` (`id`),
+  CONSTRAINT `fk_registration_campaign` FOREIGN KEY (`campaign_id`) 
+        REFERENCES `campaign` (`id`) ON DELETE SET NULL,
+  CONSTRAINT `fk_registration_partner` FOREIGN KEY (`partner_id`) 
+        REFERENCES `partner` (`id`) ON DELETE SET NULL,
+  CONSTRAINT `fk_registration_promo` FOREIGN KEY (`promo_id`) 
+        REFERENCES `promo` (`id`) ON DELETE SET NULL,
+  CONSTRAINT `fk_registration_user` FOREIGN KEY (`user_id`) 
+        REFERENCES `user` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -610,8 +623,10 @@ CREATE TABLE `remote_service_app_creds` (
   UNIQUE KEY `id` (`id`),
   UNIQUE KEY `ux_remote_service_app_creds_app_remote_service` (`app_id`,`remote_service_id`),
   KEY `ix_remote_service_app_creds_remote_service` (`remote_service_id`),
-  CONSTRAINT `fk_remote_service_app_creds_app` FOREIGN KEY (`app_id`) REFERENCES `app` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_remote_service_app_creds_remote_service` FOREIGN KEY (`remote_service_id`) REFERENCES `remote_service` (`id`) ON DELETE CASCADE
+  CONSTRAINT `fk_remote_service_app_creds_app` FOREIGN KEY (`app_id`) 
+        REFERENCES `app` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_remote_service_app_creds_remote_service` FOREIGN KEY (`remote_service_id`) 
+        REFERENCES `remote_service` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -647,10 +662,14 @@ CREATE TABLE `remote_service_user_creds` (
   KEY `ix_remote_service_user_creds_remote_service` (`remote_service_id`),
   KEY `ix_remote_service_user_creds_remote_service_user` (`remote_service_user_id`),
   KEY `ix_remote_service_user_creds_remote_service_screen_name` (`remote_service_screen_name`),
-  CONSTRAINT `fk_remote_service_user_creds_account` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_remote_service_user_creds_app` FOREIGN KEY (`app_id`) REFERENCES `app` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_remote_service_user_creds_remote_service` FOREIGN KEY (`remote_service_id`) REFERENCES `remote_service` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_remote_service_user_creds_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
+  CONSTRAINT `fk_remote_service_user_creds_account` FOREIGN KEY (`account_id`) 
+        REFERENCES `account` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_remote_service_user_creds_app` FOREIGN KEY (`app_id`) 
+        REFERENCES `app` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_remote_service_user_creds_remote_service` FOREIGN KEY (`remote_service_id`) 
+        REFERENCES `remote_service` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_remote_service_user_creds_user` FOREIGN KEY (`user_id`) 
+        REFERENCES `user` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -674,7 +693,8 @@ CREATE TABLE `setting` (
   UNIQUE KEY `ux_setting_user_name` (`user_id`,`name`),
   KEY `ix_setting_user` (`user_id`),
   KEY `ix_setting_name` (`name`),
-  CONSTRAINT `fk_setting_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
+  CONSTRAINT `fk_setting_user` FOREIGN KEY (`user_id`) 
+        REFERENCES `user` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -709,10 +729,14 @@ CREATE TABLE `short_url` (
   KEY `ix_short_url_promo` (`promo_id`),
   KEY `ix_short_url_long_url` (`long_url`(255)),
   KEY `ix_short_url_partner` (`partner_id`),
-  CONSTRAINT `fk_short_url_app` FOREIGN KEY (`app_id`) REFERENCES `app` (`id`),
-  CONSTRAINT `fk_short_url_partner` FOREIGN KEY (`partner_id`) REFERENCES `partner` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `fk_short_url_promo` FOREIGN KEY (`promo_id`) REFERENCES `promo` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `fk_short_url_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+  CONSTRAINT `fk_short_url_app` FOREIGN KEY (`app_id`) 
+        REFERENCES `app` (`id`),
+  CONSTRAINT `fk_short_url_partner` FOREIGN KEY (`partner_id`) 
+        REFERENCES `partner` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `fk_short_url_promo` FOREIGN KEY (`promo_id`) 
+        REFERENCES `promo` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `fk_short_url_user` FOREIGN KEY (`user_id`) 
+        REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -760,10 +784,14 @@ CREATE TABLE `token` (
   KEY `ix_token_user` (`user_id`),
   KEY `ix_token_type` (`type_id`),
   KEY `ix_token_hostname` (`hostname`),
-  CONSTRAINT `fk_token_app` FOREIGN KEY (`app_id`) REFERENCES `app` (`id`),
-  CONSTRAINT `fk_token_client` FOREIGN KEY (`client_id`) REFERENCES `app_creds` (`client_id`),
-  CONSTRAINT `fk_token_type` FOREIGN KEY (`type_id`) REFERENCES `token_type` (`id`),
-  CONSTRAINT `fk_token_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
+  CONSTRAINT `fk_token_app` FOREIGN KEY (`app_id`) 
+        REFERENCES `app` (`id`),
+  CONSTRAINT `fk_token_client` FOREIGN KEY (`client_id`) 
+        REFERENCES `app_creds` (`client_id`),
+  CONSTRAINT `fk_token_type` FOREIGN KEY (`type_id`) 
+        REFERENCES `token_type` (`id`),
+  CONSTRAINT `fk_token_user` FOREIGN KEY (`user_id`) 
+        REFERENCES `user` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -834,11 +862,16 @@ CREATE TABLE `user` (
   KEY `ix_user_account` (`account_id`),
   KEY `ix_user_coords` (`coords`(255)),
   KEY `ix_user_presence` (`presence_id`),
-  CONSTRAINT `fk_user_account` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_user_parent` FOREIGN KEY (`parent_id`) REFERENCES `user` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_user_status` FOREIGN KEY (`status_id`) REFERENCES `user_status` (`id`) ON DELETE SET NULL,
-  CONSTRAINT `fk_user_presence` FOREIGN KEY (`presence_id`) REFERENCES `user_presence` (`id`) ON DELETE SET NULL,
-  CONSTRAINT `fk_user_type` FOREIGN KEY (`type_id`) REFERENCES `user_type` (`id`) ON DELETE SET NULL
+  CONSTRAINT `fk_user_account` FOREIGN KEY (`account_id`) 
+        REFERENCES `account` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_user_parent` FOREIGN KEY (`parent_id`) 
+        REFERENCES `user` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_user_status` FOREIGN KEY (`status_id`) 
+        REFERENCES `user_status` (`id`) ON DELETE SET NULL,
+  CONSTRAINT `fk_user_presence` FOREIGN KEY (`presence_id`) 
+        REFERENCES `user_presence` (`id`) ON DELETE SET NULL,
+  CONSTRAINT `fk_user_type` FOREIGN KEY (`type_id`) 
+        REFERENCES `user_type` (`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -864,7 +897,8 @@ CREATE TABLE `user_auth` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`),
   UNIQUE KEY `ux_user_auth_user` (`user_id`),
-  CONSTRAINT `fk_user_auth_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
+  CONSTRAINT `fk_user_auth_user` FOREIGN KEY (`user_id`) 
+        REFERENCES `user` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -892,8 +926,10 @@ CREATE TABLE `user_media` (
   UNIQUE KEY `ux_user_media_uid` (`uid`),
   UNIQUE KEY `ux_user_media_file` (`file_id`),
   KEY `ix_user_media_user` (`user_id`),
-  CONSTRAINT `fk_user_media_file` FOREIGN KEY (`file_id`) REFERENCES `file` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_user_media_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `fk_user_media_file` FOREIGN KEY (`file_id`) 
+        REFERENCES `file` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_user_media_user` FOREIGN KEY (`user_id`) 
+        REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -1024,8 +1060,10 @@ CREATE TABLE `position` (
   UNIQUE KEY `id` (`id`),
   KEY `ix_position_app` (`app_id`),
   KEY `ix_position_user` (`user_id`),
-  CONSTRAINT `fk_position_app` FOREIGN KEY (`app_id`) REFERENCES `app` (`id`),
-  CONSTRAINT `fk_position_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
+  CONSTRAINT `fk_position_app` FOREIGN KEY (`app_id`) 
+        REFERENCES `app` (`id`),
+  CONSTRAINT `fk_position_user` FOREIGN KEY (`user_id`) 
+        REFERENCES `user` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -1053,7 +1091,7 @@ CREATE TABLE `email` (
   `forward_count` int(11) NOT NULL DEFAULT '0',
   `created_date` datetime(6) NOT NULL,
   `sent_date` datetime(6) NOT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`),
   UNIQUE KEY `ux_email_uid` (`uid`),
@@ -1063,10 +1101,14 @@ CREATE TABLE `email` (
   KEY `ix_email_group` (`group_id`),
   KEY `ix_email_to_address` (`to_address_id`),
   KEY `ix_email_campaign_channel` (`campaign_channel_id`),
-  CONSTRAINT `fk_email_campaign` FOREIGN KEY (`campaign_id`) REFERENCES `campaign` (`id`) ON DELETE SET NULL,
-  CONSTRAINT `fk_email_campaign_channel` FOREIGN KEY (`campaign_channel_id`) REFERENCES `campaign_channel` (`id`) ON DELETE SET NULL,
-  CONSTRAINT `fk_email_group` FOREIGN KEY (`group_id`) REFERENCES `email_group` (`id`) ON DELETE SET NULL,
-  CONSTRAINT `fk_email_to_address` FOREIGN KEY (`to_address_id`) REFERENCES `email_address` (`id`) ON DELETE SET NULL
+  CONSTRAINT `fk_email_campaign` FOREIGN KEY (`campaign_id`) 
+        REFERENCES `campaign` (`id`) ON DELETE SET NULL,
+  CONSTRAINT `fk_email_campaign_channel` FOREIGN KEY (`campaign_channel_id`) 
+        REFERENCES `campaign_channel` (`id`) ON DELETE SET NULL,
+  CONSTRAINT `fk_email_group` FOREIGN KEY (`group_id`) 
+        REFERENCES `email_group` (`id`) ON DELETE SET NULL,
+  CONSTRAINT `fk_email_to_address` FOREIGN KEY (`to_address_id`) 
+        REFERENCES `email_address` (`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -1101,12 +1143,13 @@ CREATE TABLE `email_address` (
   `bounced_date` datetime(6) DEFAULT NULL,
   `complained_date` datetime(6) DEFAULT NULL,
   `created_date` datetime(6) NOT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
   PRIMARY KEY (`id`),
   UNIQUE KEY `ux_email_address_uid` (`uid`),
   UNIQUE KEY `ux_email_address_email` (`email`),
   KEY `ix_email_address_user` (`user_id`),
-  CONSTRAINT `fk_email_address_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE SET NULL
+  CONSTRAINT `fk_email_address_user` FOREIGN KEY (`user_id`) 
+        REFERENCES `user` (`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -1122,12 +1165,14 @@ CREATE TABLE `email_event` (
   `browser` varchar(512) DEFAULT NULL,
   `event_date` datetime(6) NOT NULL,
   `created_date` datetime(6) NOT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
   PRIMARY KEY (`id`),
   KEY `ix_email_event_type` (`type_id`),
   KEY `ix_email_event_email` (`email_id`),
-  CONSTRAINT `fk_email_event_email` FOREIGN KEY (`email_id`) REFERENCES `email` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_email_event_type` FOREIGN KEY (`type_id`) REFERENCES `email_event_type` (`id`) ON UPDATE CASCADE
+  CONSTRAINT `fk_email_event_email` FOREIGN KEY (`email_id`) 
+        REFERENCES `email` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_email_event_type` FOREIGN KEY (`type_id`) 
+        REFERENCES `email_event_type` (`id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -1137,7 +1182,7 @@ CREATE TABLE `email_event_type` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(64) DEFAULT NULL,
   `display_name` varchar(128) DEFAULT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -1149,7 +1194,7 @@ CREATE TABLE `email_group` (
   `name` varchar(255) NOT NULL,
   `display_name` varchar(255) NOT NULL,
   `created_date` datetime(6) NOT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
   PRIMARY KEY (`id`),
   UNIQUE KEY `ux_email_group_uid` (`uid`),
   UNIQUE KEY `ux_email_group_name` (`name`)
@@ -1162,12 +1207,14 @@ CREATE TABLE `email_group_address` (
   `group_id` bigint(20) unsigned NOT NULL,
   `address_id` bigint(20) unsigned NOT NULL,
   `created_date` datetime(6) NOT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
   PRIMARY KEY (`id`),
   UNIQUE KEY `ix_email_group_address_group_address` (`group_id`,`address_id`),
   KEY `fk_email_group_address_address` (`address_id`),
-  CONSTRAINT `fk_email_group_address_address` FOREIGN KEY (`address_id`) REFERENCES `email_address` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_email_group_address_group` FOREIGN KEY (`group_id`) REFERENCES `email_group` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `fk_email_group_address_address` FOREIGN KEY (`address_id`) 
+        REFERENCES `email_address` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_email_group_address_group` FOREIGN KEY (`group_id`) 
+        REFERENCES `email_group` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -1190,10 +1237,14 @@ CREATE TABLE `friendship` (
   KEY `ix_friendship_friend` (`friend_id`),
   KEY `ix_friendship_circle` (`circle_id`),
   KEY `ix_friendship_status` (`status_id`),
-  CONSTRAINT `fk_friendship_friend` FOREIGN KEY (`friend_id`) REFERENCES `user` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_friendship_status` FOREIGN KEY (`status_id`) REFERENCES `friendship_status` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_friendship_circle` FOREIGN KEY (`circle_id`) REFERENCES `friendship_circle` (`id`) ON DELETE SET NULL,
-  CONSTRAINT `fk_friendship_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
+  CONSTRAINT `fk_friendship_friend` FOREIGN KEY (`friend_id`) 
+        REFERENCES `user` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_friendship_status` FOREIGN KEY (`status_id`) 
+        REFERENCES `friendship_status` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_friendship_circle` FOREIGN KEY (`circle_id`) 
+        REFERENCES `friendship_circle` (`id`) ON DELETE SET NULL,
+  CONSTRAINT `fk_friendship_user` FOREIGN KEY (`user_id`) 
+        REFERENCES `user` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -1215,10 +1266,14 @@ CREATE TABLE `friendship_event` (
   KEY `ix_friendship_event_friendship` (`friendship_id`),
   KEY `ix_friendship_event_user` (`user_id`),
   KEY `ix_friendship_event_friend` (`friend_id`),
-  CONSTRAINT `fk_friendship_event_friend` FOREIGN KEY (`friend_id`) REFERENCES `user` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_friendship_event_friendship` FOREIGN KEY (`friendship_id`) REFERENCES `friendship` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_friendship_event_type` FOREIGN KEY (`type_id`) REFERENCES `friendship_event_type` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_friendship_event_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
+  CONSTRAINT `fk_friendship_event_friend` FOREIGN KEY (`friend_id`) 
+        REFERENCES `user` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_friendship_event_friendship` FOREIGN KEY (`friendship_id`) 
+        REFERENCES `friendship` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_friendship_event_type` FOREIGN KEY (`type_id`) 
+        REFERENCES `friendship_event_type` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_friendship_event_user` FOREIGN KEY (`user_id`) 
+        REFERENCES `user` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -1255,12 +1310,13 @@ CREATE TABLE `friendship_circle` (
       `display_name` varchar(255) NOT NULL,
       `default_circle` tinyint(1) NOT NULL DEFAULT '0',
       `created_date` datetime(6) NOT NULL,
-      `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+      `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
       PRIMARY KEY (`id`),
       UNIQUE KEY `id` (`id`),
       UNIQUE KEY `ux_circle_uid` (`uid`),
       UNIQUE KEY `ux_circle_name` (`user_id`,`name`),
-      CONSTRAINT `fk_circle_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
+      CONSTRAINT `fk_circle_user` FOREIGN KEY (`user_id`) 
+            REFERENCES `user` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -1291,15 +1347,18 @@ CREATE TABLE `address_book` (
       `invited_date` datetime(6) DEFAULT NULL,
       `registered_date` datetime(6) DEFAULT NULL,
       `created_date` datetime(6) NOT NULL,
-      `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+      `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
       PRIMARY KEY (`id`),
       UNIQUE KEY `id` (`id`),
       KEY `ix_address_book_user` (`user_id`),
       KEY `ix_address_book_ref_user` (`ref_user_id`),
       KEY `ix_address_book_photo` (`photo_id`),
-      CONSTRAINT `fk_address_book_photo` FOREIGN KEY (`photo_id`) REFERENCES `file` (`id`) ON DELETE SET NULL,
-      CONSTRAINT `fk_address_book_ref_user` FOREIGN KEY (`ref_user_id`) REFERENCES `user` (`id`) ON DELETE SET NULL,
-      CONSTRAINT `fk_address_book_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
+      CONSTRAINT `fk_address_book_photo` FOREIGN KEY (`photo_id`) 
+            REFERENCES `file` (`id`) ON DELETE SET NULL,
+      CONSTRAINT `fk_address_book_ref_user` FOREIGN KEY (`ref_user_id`) 
+            REFERENCES `user` (`id`) ON DELETE SET NULL,
+      CONSTRAINT `fk_address_book_user` FOREIGN KEY (`user_id`) 
+            REFERENCES `user` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 
@@ -1309,7 +1368,7 @@ CREATE TABLE `invitation_channel` (
     `name` varchar(255) DEFAULT NULL,
     `display_name` varchar(255) DEFAULT NULL,
     `created_date` datetime(6) NOT NULL,
-    `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
     PRIMARY KEY (`id`),
     UNIQUE KEY `ux_invitation_channel_name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -1320,7 +1379,7 @@ CREATE TABLE `invitation_type` (
   `name` varchar(255) DEFAULT NULL,
   `display_name` varchar(255) DEFAULT NULL,
   `created_date` datetime(6) NOT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
   PRIMARY KEY (`id`),
   UNIQUE KEY `ux_invitation_type_name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -1331,7 +1390,7 @@ CREATE TABLE `invitation_status` (
   `name` varchar(255) DEFAULT NULL,
   `display_name` varchar(255) DEFAULT NULL,
   `created_date` datetime(6) NOT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
   PRIMARY KEY (`id`),
   UNIQUE KEY `ux_invitation_status_name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -1359,7 +1418,7 @@ CREATE TABLE `invitation` (
   `accepted_date` datetime(6) DEFAULT NULL,
   `registered_date` datetime(6) DEFAULT NULL,
   `created_date` datetime(6) NOT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`),
   UNIQUE KEY `ux_invitation_code` (`invitation_code`),
@@ -1371,12 +1430,18 @@ CREATE TABLE `invitation` (
   KEY `ix_invitation_user` (`user_id`),
   KEY `ix_invitation_address_book` (`address_book_id`),
   KEY `ix_invitation_invitee_user` (`invitee_user_id`),
-  CONSTRAINT `fk_invitation_address_book` FOREIGN KEY (`address_book_id`) REFERENCES `address_book` (`id`) ON DELETE SET NULL,
-  CONSTRAINT `fk_invitation_channel` FOREIGN KEY (`channel_id`) REFERENCES `invitation_channel` (`id`),
-  CONSTRAINT `fk_invitation_invitee_user` FOREIGN KEY (`invitee_user_id`) REFERENCES `user` (`id`) ON DELETE SET NULL,
-  CONSTRAINT `fk_invitation_status` FOREIGN KEY (`status_id`) REFERENCES `invitation_status` (`id`),
-  CONSTRAINT `fk_invitation_type` FOREIGN KEY (`type_id`) REFERENCES `invitation_type` (`id`),
-  CONSTRAINT `fk_invitation_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
+  CONSTRAINT `fk_invitation_address_book` FOREIGN KEY (`address_book_id`) 
+        REFERENCES `address_book` (`id`) ON DELETE SET NULL,
+  CONSTRAINT `fk_invitation_channel` FOREIGN KEY (`channel_id`) 
+        REFERENCES `invitation_channel` (`id`),
+  CONSTRAINT `fk_invitation_invitee_user` FOREIGN KEY (`invitee_user_id`) 
+        REFERENCES `user` (`id`) ON DELETE SET NULL,
+  CONSTRAINT `fk_invitation_status` FOREIGN KEY (`status_id`) 
+        REFERENCES `invitation_status` (`id`),
+  CONSTRAINT `fk_invitation_type` FOREIGN KEY (`type_id`) 
+        REFERENCES `invitation_type` (`id`),
+  CONSTRAINT `fk_invitation_user` FOREIGN KEY (`user_id`) 
+        REFERENCES `user` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 

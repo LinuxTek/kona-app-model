@@ -33,21 +33,21 @@ public abstract class KAbstractMediaObjectService<T extends KMediaObject, EXAMPL
 	// ----------------------------------------------------------------------------
     
 	@Override
-	public void validate(T userMedia) {
-		if (userMedia.getCreatedDate() == null) {
-			userMedia.setCreatedDate(new Date());
+	public void validate(T media) {
+		if (media.getCreatedDate() == null) {
+			media.setCreatedDate(new Date());
 		}
 
-		userMedia.setLastUpdated(new Date());
+		media.setLastUpdated(new Date());
 
-		if (userMedia.getUid() == null) {
-			userMedia.setUid(uuid());
+		if (media.getUid() == null) {
+			media.setUid(uuid());
 		}
 	}
     
 	// ----------------------------------------------------------------------------
     
-    protected T add(F file,Double latitude, Double longitude, 
+    public T add(F file,Double latitude, Double longitude, 
     		Integer floor, String description) throws IOException {
         file = getFileService().add(file);
         T media = getNewMediaObject();
@@ -68,14 +68,14 @@ public abstract class KAbstractMediaObjectService<T extends KMediaObject, EXAMPL
 	// ----------------------------------------------------------------------------
     
 	@Override 
-	public void remove(T userMedia) {
-		if (userMedia == null || userMedia.getId() == null) return;
+	public void remove(T media) {
+		if (media == null || media.getId() == null) return;
 		
-		if (userMedia.getFileId() != null) {
-			getFileService().removeById(userMedia.getFileId());
+		if (media.getFileId() != null) {
+			getFileService().removeById(media.getFileId());
 		}
 		
-		getDao().deleteByPrimaryKey(userMedia.getId());
+		getDao().deleteByPrimaryKey(media.getId());
 	}
     
 	// ----------------------------------------------------------------------------

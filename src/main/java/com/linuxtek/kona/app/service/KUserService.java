@@ -41,5 +41,9 @@ public interface KUserService<U extends KUser> extends KService, KDataService<U>
 	public List<U> fetchAllRegistered(Map<String,Object> filter); // exclude system, test, etc users
 	
 	public boolean isUsernameAvailable(String name);
+
+	public boolean isEmailVerified(Long userId);
+
+	public boolean isMobileNumberVerified(Long userId);
 	
 }
