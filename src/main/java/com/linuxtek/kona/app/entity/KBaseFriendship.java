@@ -12,6 +12,7 @@ public class KBaseFriendship implements KFriendship {
     private Long friendId;
     private Long statusId;
     private Long circleId;
+    private boolean friendshipRequested;
     private Date createdDate;
     private Date lastUpdated;
 
@@ -73,13 +74,23 @@ public class KBaseFriendship implements KFriendship {
     }
 
     @Override
-	public void setCircleId(Long circleId) {
-        this.circleId = circleId;
+    public void setCircleId(Long circleId) {
+    	this.circleId = circleId;
     }
 
     @Override
-	public Date getCreatedDate() {
-        return createdDate;
+    public boolean isFriendshipRequested() {
+    	return friendshipRequested;
+    }
+
+    @Override
+    public void setFriendshipRequested(boolean friendshipRequested) {
+    	this.friendshipRequested = friendshipRequested;
+    }
+
+    @Override
+    public Date getCreatedDate() {
+    	return createdDate;
     }
 
     @Override

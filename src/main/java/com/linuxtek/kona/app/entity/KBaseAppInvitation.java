@@ -5,7 +5,7 @@ package com.linuxtek.kona.app.entity;
 
 import java.util.Date;
 
-public class KBaseInvitation implements KInvitation {
+public class KBaseAppInvitation implements KAppInvitation {
 	private Long id;
     private Long typeId;
     private Long channelId;

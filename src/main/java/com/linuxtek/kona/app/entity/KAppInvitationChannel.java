@@ -6,7 +6,7 @@ import com.linuxtek.kona.data.entity.KEnumObject;
 import com.linuxtek.kona.data.entity.KEnumUtil;
 
 
-public enum KInvitationChannel implements KEnumObject {
+public enum KAppInvitationChannel implements KEnumObject {
     // ---------------------------------------------------------------
 
     IN_APP(100L, "In App"),
@@ -22,11 +22,11 @@ public enum KInvitationChannel implements KEnumObject {
     private String displayName;
     private boolean enabled = true;
 
-    private KInvitationChannel(Long id) {
+    private KAppInvitationChannel(Long id) {
         this(id, null);
     }
 
-    private KInvitationChannel(Long id, String displayName) {
+    private KAppInvitationChannel(Long id, String displayName) {
         this.id = id;
         this.displayName = displayName;
     }
@@ -55,19 +55,19 @@ public enum KInvitationChannel implements KEnumObject {
 
     // ---------------------------------------------------------------
 
-    public static KInvitationChannel getInstance(Long id) {
-        return KEnumUtil.getInstance(KInvitationChannel.class, id);
+    public static KAppInvitationChannel getInstance(Long id) {
+        return KEnumUtil.getInstance(KAppInvitationChannel.class, id);
     }
 
-    public static KInvitationChannel getInstance(String name) {
-        return KEnumUtil.getInstance(KInvitationChannel.class, name);
+    public static KAppInvitationChannel getInstance(String name) {
+        return KEnumUtil.getInstance(KAppInvitationChannel.class, name);
     } 
 
     public static LinkedHashMap<Long,String> getMap() {
-        return KEnumUtil.getMap(KInvitationChannel.class);
+        return KEnumUtil.getMap(KAppInvitationChannel.class);
     }
 
     public static LinkedHashMap<String,String> getStringMap() {
-        return KEnumUtil.getStringMap(KInvitationChannel.class);
+        return KEnumUtil.getStringMap(KAppInvitationChannel.class);
     }
 }

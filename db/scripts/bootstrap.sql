@@ -228,7 +228,7 @@ CREATE TABLE `push_notification_device` (
         REFERENCES `push_notification` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
 
   CONSTRAINT `fk_push_notification_device_user` FOREIGN KEY (`user_id`) 
-        REFERENCES `user` (`id`) ON DELETE CASCAD ON UPDATE CASCADEE
+        REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -320,13 +320,6 @@ CREATE TABLE `app_user` (
 
 -- --------------------------------------------------------------------------
 
---
--- Table structure for table `app_webhook`
---
-
-DROP TABLE IF EXISTS `app_webhook`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `app_webhook` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `uid` varchar(255) NOT NULL,
@@ -346,15 +339,10 @@ CREATE TABLE `app_webhook` (
   CONSTRAINT `fk_app_webhook_app` FOREIGN KEY (`app_id`) 
         REFERENCES `app` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `auth_code`
---
 
-DROP TABLE IF EXISTS `auth_code`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+-- --------------------------------------------------------------------------
+
 CREATE TABLE `auth_code` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `type_id` bigint(20) unsigned NOT NULL,
@@ -381,7 +369,8 @@ CREATE TABLE `auth_code` (
   CONSTRAINT `fk_auth_code_user` FOREIGN KEY (`user_id`) 
         REFERENCES `user` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
+-- --------------------------------------------------------------------------
 
 
 --
@@ -1211,10 +1200,13 @@ CREATE TABLE `email_group_address` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `ix_email_group_address_group_address` (`group_id`,`address_id`),
   KEY `fk_email_group_address_address` (`address_id`),
+
   CONSTRAINT `fk_email_group_address_address` FOREIGN KEY (`address_id`) 
         REFERENCES `email_address` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+
   CONSTRAINT `fk_email_group_address_group` FOREIGN KEY (`group_id`) 
         REFERENCES `email_group` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -1227,6 +1219,7 @@ CREATE TABLE `friendship` (
   `friend_id` bigint(20) unsigned DEFAULT NULL,
   `circle_id` bigint(20) unsigned DEFAULT NULL,
   `status_id` bigint(20) unsigned NOT NULL,
+  `friendship_requested` tinyint(1) NOT NULL DEFAULT '0',
   `created_date` datetime(6) NOT NULL,
   `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
   PRIMARY KEY (`id`),
@@ -1237,14 +1230,19 @@ CREATE TABLE `friendship` (
   KEY `ix_friendship_friend` (`friend_id`),
   KEY `ix_friendship_circle` (`circle_id`),
   KEY `ix_friendship_status` (`status_id`),
+
   CONSTRAINT `fk_friendship_friend` FOREIGN KEY (`friend_id`) 
         REFERENCES `user` (`id`) ON DELETE CASCADE,
+
   CONSTRAINT `fk_friendship_status` FOREIGN KEY (`status_id`) 
         REFERENCES `friendship_status` (`id`) ON DELETE CASCADE,
+
   CONSTRAINT `fk_friendship_circle` FOREIGN KEY (`circle_id`) 
         REFERENCES `friendship_circle` (`id`) ON DELETE SET NULL,
+
   CONSTRAINT `fk_friendship_user` FOREIGN KEY (`user_id`) 
         REFERENCES `user` (`id`) ON DELETE CASCADE
+
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -1363,40 +1361,40 @@ CREATE TABLE `address_book` (
 
 
 
-CREATE TABLE `invitation_channel` (
+CREATE TABLE `app_invitation_channel` (
     `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
     `name` varchar(255) DEFAULT NULL,
     `display_name` varchar(255) DEFAULT NULL,
     `created_date` datetime(6) NOT NULL,
     `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
     PRIMARY KEY (`id`),
-    UNIQUE KEY `ux_invitation_channel_name` (`name`)
+    UNIQUE KEY `ux_app_invitation_channel_name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-CREATE TABLE `invitation_type` (
+CREATE TABLE `app_invitation_type` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
   `display_name` varchar(255) DEFAULT NULL,
   `created_date` datetime(6) NOT NULL,
   `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
   PRIMARY KEY (`id`),
-  UNIQUE KEY `ux_invitation_type_name` (`name`)
+  UNIQUE KEY `ux_app_invitation_type_name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-CREATE TABLE `invitation_status` (
+CREATE TABLE `app_invitation_status` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
   `display_name` varchar(255) DEFAULT NULL,
   `created_date` datetime(6) NOT NULL,
   `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
   PRIMARY KEY (`id`),
-  UNIQUE KEY `ux_invitation_status_name` (`name`)
+  UNIQUE KEY `ux_app_invitation_status_name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-CREATE TABLE `invitation` (
+CREATE TABLE `app_invitation` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `type_id` bigint(20) unsigned NOT NULL,
   `channel_id` bigint(20) unsigned NOT NULL,
@@ -1421,26 +1419,26 @@ CREATE TABLE `invitation` (
   `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`),
-  UNIQUE KEY `ux_invitation_code` (`invitation_code`),
-  KEY `ix_invitation_email` (`email`),
-  KEY `ix_invitation_mobile_number` (`mobile_number`),
-  KEY `ix_invitation_type` (`type_id`),
-  KEY `ix_invitation_channel` (`channel_id`),
-  KEY `ix_invitation_status` (`status_id`),
-  KEY `ix_invitation_user` (`user_id`),
-  KEY `ix_invitation_address_book` (`address_book_id`),
-  KEY `ix_invitation_invitee_user` (`invitee_user_id`),
-  CONSTRAINT `fk_invitation_address_book` FOREIGN KEY (`address_book_id`) 
+  UNIQUE KEY `ux_app_invitation_code` (`invitation_code`),
+  KEY `ix_app_invitation_email` (`email`),
+  KEY `ix_app_invitation_mobile_number` (`mobile_number`),
+  KEY `ix_app_invitation_type` (`type_id`),
+  KEY `ix_app_invitation_channel` (`channel_id`),
+  KEY `ix_app_invitation_status` (`status_id`),
+  KEY `ix_app_invitation_user` (`user_id`),
+  KEY `ix_app_invitation_address_book` (`address_book_id`),
+  KEY `ix_app_invitation_invitee_user` (`invitee_user_id`),
+  CONSTRAINT `fk_app_invitation_address_book` FOREIGN KEY (`address_book_id`) 
         REFERENCES `address_book` (`id`) ON DELETE SET NULL,
-  CONSTRAINT `fk_invitation_channel` FOREIGN KEY (`channel_id`) 
-        REFERENCES `invitation_channel` (`id`),
-  CONSTRAINT `fk_invitation_invitee_user` FOREIGN KEY (`invitee_user_id`) 
+  CONSTRAINT `fk_app_invitation_channel` FOREIGN KEY (`channel_id`) 
+        REFERENCES `app_invitation_channel` (`id`),
+  CONSTRAINT `fk_app_invitation_invitee_user` FOREIGN KEY (`invitee_user_id`) 
         REFERENCES `user` (`id`) ON DELETE SET NULL,
-  CONSTRAINT `fk_invitation_status` FOREIGN KEY (`status_id`) 
-        REFERENCES `invitation_status` (`id`),
-  CONSTRAINT `fk_invitation_type` FOREIGN KEY (`type_id`) 
-        REFERENCES `invitation_type` (`id`),
-  CONSTRAINT `fk_invitation_user` FOREIGN KEY (`user_id`) 
+  CONSTRAINT `fk_app_invitation_status` FOREIGN KEY (`status_id`) 
+        REFERENCES `app_invitation_status` (`id`),
+  CONSTRAINT `fk_app_invitation_type` FOREIGN KEY (`type_id`) 
+        REFERENCES `app_invitation_type` (`id`),
+  CONSTRAINT `fk_app_invitation_user` FOREIGN KEY (`user_id`) 
         REFERENCES `user` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

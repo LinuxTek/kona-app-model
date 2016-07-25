@@ -2,7 +2,7 @@ package com.linuxtek.kona.app.entity;
 
 import java.util.Date;
 
-public class KBaseAppNotificationMessage implements KPushNotificationMessage {
+public class KBasePushNotificationMessage implements KPushNotificationMessage {
 	private static final long serialVersionUID = 1L;
 	
     private Long id;

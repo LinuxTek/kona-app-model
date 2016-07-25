@@ -30,6 +30,11 @@ public interface KFriendship extends KEntityObject {
 
 	void setCircleId(Long circleId);
 
+	/** Flag to indicate if a friend request was made by this user to the friend.  If false, the user simply followed the friend. */
+	boolean isFriendshipRequested();
+
+	void setFriendshipRequested(boolean friendshipRequested);
+	
 	Date getCreatedDate();
 
 	void setCreatedDate(Date createdDate);
@@ -37,5 +42,7 @@ public interface KFriendship extends KEntityObject {
 	Date getLastUpdated();
 
 	void setLastUpdated(Date lastUpdated);
+
+
 
 }

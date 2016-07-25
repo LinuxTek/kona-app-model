@@ -112,11 +112,11 @@ public abstract class KAbstractFriendshipService<FRIENDSHIP extends KFriendship,
 	// ----------------------------------------------------------------------
 
 	@Override 
-	public FRIENDSHIP follow(Long userId, Long friendId) {
-		return follow(userId, friendId, false, true);
+	public FRIENDSHIP follow(Long userId, Long friendId, Long circleId) {
+		return follow(userId, friendId, circleId, false, true);
 	}
 	
-	private FRIENDSHIP follow(Long userId, Long friendId, boolean friendshipRequest, boolean notifyEvent) {
+	private FRIENDSHIP follow(Long userId, Long friendId, Long circleId, boolean friendshipRequest, boolean notifyEvent) {
 		// user following friend
 		FRIENDSHIP friendship = fetchByUserIdAndFriendId(userId, friendId);
 		FRIENDSHIP_EVENT event =  null;
@@ -125,7 +125,9 @@ public abstract class KAbstractFriendshipService<FRIENDSHIP extends KFriendship,
 			friendship = getNewFriendshipObject();
 			friendship.setUserId(userId);
 			friendship.setFriendId(friendId);
+			friendship.setCircleId(circleId);
 			friendship.setStatusId(KFriendshipStatus.FOLLOWING.getId());
+			friendship.setFriendshipRequested(friendshipRequest);
 			friendship = add(friendship);
 			if (friendshipRequest) {
 				event = addEvent(friendship, KFriendshipEventType.FRIENDSHIP_REQUEST);
@@ -143,11 +145,15 @@ public abstract class KAbstractFriendshipService<FRIENDSHIP extends KFriendship,
 			switch (status) {
 			case NONE:
 				friendship.setStatusId(KFriendshipStatus.FOLLOWING.getId());
+				friendship.setFriendshipRequested(friendshipRequest);
+				friendship.setCircleId(circleId);
 				dirty = true; 
 				break;
 				
 			case FOLLOWED:
 				friendship.setStatusId(KFriendshipStatus.FRIENDS.getId());
+				friendship.setFriendshipRequested(friendshipRequest);
+				friendship.setCircleId(circleId);
 				dirty = true; 
 				break;
 				
@@ -440,15 +446,15 @@ public abstract class KAbstractFriendshipService<FRIENDSHIP extends KFriendship,
 	// ----------------------------------------------------------------------
 
 	@Override
-	public FRIENDSHIP requestFriendship(Long userId, Long friendId) {
-		return follow(userId, friendId, true, true);
+	public FRIENDSHIP requestFriendship(Long userId, Long friendId, Long circleId) {
+		return follow(userId, friendId, circleId, true, true);
 	}
     
 	// ----------------------------------------------------------------------
 	
 	@Override
-	public FRIENDSHIP createFriendship(Long userId, Long friendId, boolean notifyUser) {
-		 follow(userId, friendId, true, false);
+	public FRIENDSHIP createFriendship(Long userId, Long friendId, Long circleId, boolean notifyUser) {
+		 follow(userId, friendId, circleId, true, false);
 		 acceptFriendship(friendId, userId, notifyUser);
 		 
 		 return fetchByUserIdAndFriendId(userId, friendId);

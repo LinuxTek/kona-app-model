@@ -6,13 +6,11 @@ import com.linuxtek.kona.data.entity.KEnumObject;
 import com.linuxtek.kona.data.entity.KEnumUtil;
 
 
-public enum KInvitationStatus implements KEnumObject {
+public enum KAppInvitationType implements KEnumObject {
     // ---------------------------------------------------------------
 
-    PENDING(100L, "Pending"),
-    ACCEPTED(200L, "Accepted"),
-    DECLINED(300L, "Declined"),
-    IGNORED(400L, "Ignored");
+    JOIN(100L, "Join"),
+    FRIEND(200L, "Friend");
 
     // ---------------------------------------------------------------
     
@@ -21,11 +19,11 @@ public enum KInvitationStatus implements KEnumObject {
     private String displayName;
     private boolean enabled = true;
 
-    private KInvitationStatus(Long id) {
+    private KAppInvitationType(Long id) {
         this(id, null);
     }
 
-    private KInvitationStatus(Long id, String displayName) {
+    private KAppInvitationType(Long id, String displayName) {
         this.id = id;
         this.displayName = displayName;
     }
@@ -54,19 +52,19 @@ public enum KInvitationStatus implements KEnumObject {
 
     // ---------------------------------------------------------------
 
-    public static KInvitationStatus getInstance(Long id) {
-        return KEnumUtil.getInstance(KInvitationStatus.class, id);
+    public static KAppInvitationType getInstance(Long id) {
+        return KEnumUtil.getInstance(KAppInvitationType.class, id);
     }
 
-    public static KInvitationStatus getInstance(String name) {
-        return KEnumUtil.getInstance(KInvitationStatus.class, name);
-    } 
+    public static KAppInvitationType getInstance(String name) {
+        return KEnumUtil.getInstance(KAppInvitationType.class, name);
+    }
 
     public static LinkedHashMap<Long,String> getMap() {
-        return KEnumUtil.getMap(KInvitationStatus.class);
+        return KEnumUtil.getMap(KAppInvitationType.class);
     }
 
     public static LinkedHashMap<String,String> getStringMap() {
-        return KEnumUtil.getStringMap(KInvitationStatus.class);
+        return KEnumUtil.getStringMap(KAppInvitationType.class);
     }
 }

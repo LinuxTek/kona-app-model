@@ -13,6 +13,8 @@ import com.linuxtek.kona.remote.service.KService;
 public interface KFriendshipCircleService<CIRCLE extends KFriendshipCircle> extends KService, KDataService<CIRCLE> {
 	public static final String SERVICE_PATH = "rpc/kona/FriendshipCircleService";
 	
+    public CIRCLE fetchByUid(String uid);
+	
     public List<CIRCLE> fetchByUserId(Long userId);
 
     public CIRCLE fetchDefaultByUserId(Long userId);

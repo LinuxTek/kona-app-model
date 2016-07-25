@@ -2,18 +2,15 @@ package com.linuxtek.kona.app.entity;
 
 import java.util.Date;
 
-public class KBaseAppNotificationDevice implements KPushNotificationDevice {
+public class KBasePushNotification implements KPushNotification {
 	private static final long serialVersionUID = 1L;
     
     private Long id;
     private Long appId;
-    private Long pushNotificationId;
-    private Long userId;
-    private String deviceUuid;
     private String platformName;
-	private String pushToken;
+    private String pushServerKey;
+    private String pushServerSecret;
     private String pushEndpoint;
-    private boolean enabled;
     private boolean sandbox;
     private Date createdDate;
     private Date lastUpdated;
@@ -29,16 +26,6 @@ public class KBaseAppNotificationDevice implements KPushNotificationDevice {
     }
 
     @Override
-	public Long getPushNotificationId() {
-        return pushNotificationId;
-    }
-
-    @Override
-	public void setPushNotificationId(Long pushNotificationId) {
-        this.pushNotificationId = pushNotificationId;
-    }
-
-    @Override
 	public Long getAppId() {
         return appId;
     }
@@ -49,43 +36,33 @@ public class KBaseAppNotificationDevice implements KPushNotificationDevice {
     }
 
     @Override
-	public String getDeviceUuid() {
-        return deviceUuid;
+	public String getPlatformName() {
+        return platformName;
     }
-
-    @Override
-	public void setDeviceUuid(String deviceUuid) {
-        this.deviceUuid = deviceUuid;
-    }
-    
-    @Override
-    public String getPlatformName() {
-		return platformName;
-	}
 
     @Override
 	public void setPlatformName(String platformName) {
-		this.platformName = platformName;
-	}
-
-    @Override
-	public Long getUserId() {
-        return userId;
+        this.platformName = platformName;
     }
 
     @Override
-	public void setUserId(Long userId) {
-        this.userId = userId;
+	public String getPushServerKey() {
+        return pushServerKey;
     }
 
     @Override
-	public String getPushToken() {
-        return pushToken;
+	public void setPushServerKey(String pushServerKey) {
+        this.pushServerKey = pushServerKey == null ? null : pushServerKey.trim();
     }
 
     @Override
-	public void setPushToken(String pushToken) {
-        this.pushToken = pushToken == null ? null : pushToken.trim();
+	public String getPushServerSecret() {
+        return pushServerSecret;
+    }
+
+    @Override
+	public void setPushServerSecret(String pushServerSecret) {
+        this.pushServerSecret = pushServerSecret == null ? null : pushServerSecret.trim();
     }
 
     @Override
@@ -99,24 +76,14 @@ public class KBaseAppNotificationDevice implements KPushNotificationDevice {
     }
 
     @Override
-	public boolean isEnabled() {
-        return enabled;
-    }
-
-    @Override
-	public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-    
-    @Override
 	public boolean isSandbox() {
-		return sandbox;
-	}
+        return sandbox;
+    }
 
     @Override
 	public void setSandbox(boolean sandbox) {
-		this.sandbox = sandbox;
-	}
+        this.sandbox = sandbox;
+    }
 
     @Override
 	public Date getCreatedDate() {
@@ -145,16 +112,16 @@ public class KBaseAppNotificationDevice implements KPushNotificationDevice {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", pushNotificationId=").append(pushNotificationId);
         sb.append(", appId=").append(appId);
-        sb.append(", deviceUuid=").append(deviceUuid);
-        sb.append(", userId=").append(userId);
-        sb.append(", pushToken=").append(pushToken);
+        sb.append(", platformName=").append(platformName);
+        sb.append(", pushServerKey=").append(pushServerKey);
+        sb.append(", pushServerSecret=").append(pushServerSecret);
         sb.append(", pushEndpoint=").append(pushEndpoint);
-        sb.append(", enabled=").append(enabled);
+        sb.append(", sandbox=").append(sandbox);
         sb.append(", createdDate=").append(createdDate);
         sb.append(", lastUpdated=").append(lastUpdated);
         sb.append("]");
         return sb.toString();
     }
+    
 }

@@ -41,6 +41,14 @@ public abstract class KAbstractFriendshipCircleService<CIRCLE extends KFriendshi
 	// ----------------------------------------------------------------------------
 
 	@Override
+	public CIRCLE fetchByUid(String uid) {
+		Map<String,Object> filter = KMyBatisUtil.createFilter("uid", uid);
+		return KMyBatisUtil.fetchOne(fetchByCriteria(0, 99999, null, filter, false));
+	}
+	
+	// ----------------------------------------------------------------------------
+
+	@Override
 	public List<CIRCLE> fetchByUserId(Long userId) {
 		Map<String,Object> filter = KMyBatisUtil.createFilter("userId", userId);
 		return fetchByCriteria(0, 99999, null, filter, false);

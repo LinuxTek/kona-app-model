@@ -12,23 +12,24 @@ import org.slf4j.LoggerFactory;
 
 import com.linuxtek.kona.app.entity.KAddressBook;
 import com.linuxtek.kona.app.entity.KFriendship;
-import com.linuxtek.kona.app.entity.KInvitation;
-import com.linuxtek.kona.app.entity.KInvitationChannel;
-import com.linuxtek.kona.app.entity.KInvitationStatus;
-import com.linuxtek.kona.app.entity.KInvitationType;
+import com.linuxtek.kona.app.entity.KAppInvitation;
+import com.linuxtek.kona.app.entity.KAppInvitationChannel;
+import com.linuxtek.kona.app.entity.KAppInvitationStatus;
+import com.linuxtek.kona.app.entity.KAppInvitationType;
 import com.linuxtek.kona.app.entity.KUser;
 import com.linuxtek.kona.data.mybatis.KMyBatisUtil;
 
 
-public abstract class KAbstractInvitationService<INVITATION extends KInvitation, 
+public abstract class KAbstractAppInvitationService<
+                                        INVITATION extends KAppInvitation, 
 										INVITATION_EXAMPLE,
 										ADDRESSBOOK extends KAddressBook,
 										FRIENDSHIP extends KFriendship,
 										USER extends KUser>
 		extends KAbstractService<INVITATION,INVITATION_EXAMPLE>
-		implements KInvitationService<INVITATION> {
+		implements KAppInvitationService<INVITATION> {
 
-    private static Logger logger = LoggerFactory.getLogger(KAbstractInvitationService.class);
+    private static Logger logger = LoggerFactory.getLogger(KAbstractAppInvitationService.class);
 
 
 	// ----------------------------------------------------------------------------
@@ -73,8 +74,8 @@ public abstract class KAbstractInvitationService<INVITATION extends KInvitation,
 	// ----------------------------------------------------------------------
 	
 	@Override
-	public List<INVITATION> fetchByUserId(Long userId, KInvitationStatus status, 
-			KInvitationType type, KInvitationChannel channel) {
+	public List<INVITATION> fetchByUserId(Long userId, KAppInvitationStatus status, 
+			KAppInvitationType type, KAppInvitationChannel channel) {
 		Map<String,Object> filter = KMyBatisUtil.createFilter("userId", userId);
 		
 		if (status != null) {
@@ -95,8 +96,8 @@ public abstract class KAbstractInvitationService<INVITATION extends KInvitation,
     // ----------------------------------------------------------------------
 	
 	@Override
-	public List<INVITATION> fetchByAddressBookId(Long addressBookId, KInvitationStatus status, 
-			KInvitationType type, KInvitationChannel channel) {
+	public List<INVITATION> fetchByAddressBookId(Long addressBookId, KAppInvitationStatus status, 
+			KAppInvitationType type, KAppInvitationChannel channel) {
 		Map<String,Object> filter = KMyBatisUtil.createFilter("addressBookId", addressBookId);
 		
         if (status != null) {
@@ -117,8 +118,8 @@ public abstract class KAbstractInvitationService<INVITATION extends KInvitation,
     // ----------------------------------------------------------------------
 	
 	@Override
-	public List<INVITATION> fetchByEmail(String email, KInvitationStatus status, 
-			KInvitationType type, KInvitationChannel channel) {
+	public List<INVITATION> fetchByEmail(String email, KAppInvitationStatus status, 
+			KAppInvitationType type, KAppInvitationChannel channel) {
 		Map<String,Object> filter = KMyBatisUtil.createFilter("email", email);
 		
         if (status != null) {
@@ -141,8 +142,8 @@ public abstract class KAbstractInvitationService<INVITATION extends KInvitation,
     // ----------------------------------------------------------------------
 	
 	@Override
-	public List<INVITATION> fetchByMobileNumber(String mobileNumber, KInvitationStatus status, 
-			KInvitationType type, KInvitationChannel channel) {
+	public List<INVITATION> fetchByMobileNumber(String mobileNumber, KAppInvitationStatus status, 
+			KAppInvitationType type, KAppInvitationChannel channel) {
 		Map<String,Object> filter = KMyBatisUtil.createFilter("mobileNumber", mobileNumber);
 		
         if (status != null) {
@@ -191,7 +192,7 @@ public abstract class KAbstractInvitationService<INVITATION extends KInvitation,
     // ----------------------------------------------------------------------
     
 	@Override 
-	public INVITATION inviteByMobileNumber(Long userId, KInvitationType type, String mobileNumber, String firstName, boolean resend) {
+	public INVITATION inviteByMobileNumber(Long userId, KAppInvitationType type, String mobileNumber, String firstName, boolean resend) {
 		ADDRESSBOOK addressBook = null;
 		
 		List<ADDRESSBOOK> list = getAddressBookService().fetchByMobileNumber(userId, mobileNumber);
@@ -202,13 +203,13 @@ public abstract class KAbstractInvitationService<INVITATION extends KInvitation,
 			addressBook = list.get(0);
 		}
 		
-		return invite(addressBook.getId(), type, KInvitationChannel.SMS, resend);
+		return invite(addressBook.getId(), type, KAppInvitationChannel.SMS, resend);
 	}
 	
     // ----------------------------------------------------------------------
 	    
 	@Override 
-	public INVITATION inviteByEmail(Long userId, KInvitationType type, String email, String firstName, boolean resend) {
+	public INVITATION inviteByEmail(Long userId, KAppInvitationType type, String email, String firstName, boolean resend) {
 		ADDRESSBOOK addressBook = null;
 		
 		List<ADDRESSBOOK> list = getAddressBookService().fetchByEmail(userId, email);
@@ -219,7 +220,7 @@ public abstract class KAbstractInvitationService<INVITATION extends KInvitation,
 			addressBook = list.get(0);
 		}
 		
-		return invite(addressBook.getId(), type, KInvitationChannel.EMAIL, resend);
+		return invite(addressBook.getId(), type, KAppInvitationChannel.EMAIL, resend);
 	}
 	
 
@@ -265,12 +266,12 @@ public abstract class KAbstractInvitationService<INVITATION extends KInvitation,
 	//FIXME: invitations can be made to current users who are not necessarily in the user's address book
     
 	@Override 
-	public INVITATION invite(Long addressBookId, KInvitationType type, KInvitationChannel channel, boolean resend) {
+	public INVITATION invite(Long addressBookId, KAppInvitationType type, KAppInvitationChannel channel, boolean resend) {
 		
 		ADDRESSBOOK addressBook = getAddressBookService().fetchById(addressBookId);
 		
-		if (existingUser(addressBook) && (type == KInvitationType.JOIN || channel != KInvitationChannel.IN_APP)) {
-			throw new KInvitationException("Invitation being sent to existing user."); 
+		if (existingUser(addressBook) && (type == KAppInvitationType.JOIN || channel != KAppInvitationChannel.IN_APP)) {
+			throw new KAppInvitationException("Invitation being sent to existing user."); 
 		}
 		
 		// first check if an invitation has already been sent 
@@ -279,8 +280,8 @@ public abstract class KAbstractInvitationService<INVITATION extends KInvitation,
 		List<INVITATION> list = fetchByAddressBookId(addressBook.getId(), null, type, null);
 		
 		for (INVITATION pastInvitation : list) {
-			KInvitationStatus status = KInvitationStatus.getInstance(pastInvitation.getStatusId());
-			if (status != KInvitationStatus.PENDING) {
+			KAppInvitationStatus status = KAppInvitationStatus.getInstance(pastInvitation.getStatusId());
+			if (status != KAppInvitationStatus.PENDING) {
 				// we already sent an inviation to this person that was already accepted, ignored, etc.
 				// only resend pending invitations
 				logger.info("Invitation has already been sent to user and acknowledged: {}", pastInvitation);
@@ -328,7 +329,7 @@ public abstract class KAbstractInvitationService<INVITATION extends KInvitation,
     
     // ----------------------------------------------------------------------
 	
-	protected INVITATION createInvitation(ADDRESSBOOK addressBook, KInvitationType type, KInvitationChannel channel) {
+	protected INVITATION createInvitation(ADDRESSBOOK addressBook, KAppInvitationType type, KAppInvitationChannel channel) {
         
 		//String code = sequence.getHexNo("confirmation.code", 9);
 		String code = generateAccessCode();
@@ -338,7 +339,7 @@ public abstract class KAbstractInvitationService<INVITATION extends KInvitation,
         INVITATION invitation = getNewObject();
         invitation.setTypeId(type.getId());
         invitation.setChannelId(channel.getId());
-        invitation.setStatusId(KInvitationStatus.PENDING.getId());
+        invitation.setStatusId(KAppInvitationStatus.PENDING.getId());
         invitation.setUserId(addressBook.getUserId());
 		invitation.setAddressBookId(addressBook.getId());
         invitation.setInviteeUserId(inviteeUserId);
@@ -366,7 +367,7 @@ public abstract class KAbstractInvitationService<INVITATION extends KInvitation,
         
         ADDRESSBOOK addressBook = getAddressBookService().fetchById(invitation.getAddressBookId());
         
-        KInvitationChannel channel = KInvitationChannel.getInstance(invitation.getChannelId());
+        KAppInvitationChannel channel = KAppInvitationChannel.getInstance(invitation.getChannelId());
         
         switch (channel) {
         case  EMAIL:
@@ -405,17 +406,18 @@ public abstract class KAbstractInvitationService<INVITATION extends KInvitation,
 		
 		Long friendId = invitation.getInviteeUserId();
 
-		invitation.setStatusId(KInvitationStatus.ACCEPTED.getId());
+		invitation.setStatusId(KAppInvitationStatus.ACCEPTED.getId());
 		
 		invitation.setAcceptedDate(new Date());
 		
 		invitation = update(invitation);
 
-		KInvitationType type = KInvitationType.getInstance(invitation.getTypeId());
+		KAppInvitationType type = KAppInvitationType.getInstance(invitation.getTypeId());
+		
 		switch (type) {
 		case FRIEND:
 			// create friendship and notify user
-			getFriendshipService().createFriendship(userId, friendId, true);
+			getFriendshipService().createFriendship(userId, friendId, null, true);
 			break;
 		default:
 			
@@ -434,12 +436,12 @@ public abstract class KAbstractInvitationService<INVITATION extends KInvitation,
         
         if (user.getMobileNumber() != null) {
         	invitationList = fetchByMobileNumber(user.getMobileNumber(), 
-        			KInvitationStatus.PENDING, null, KInvitationChannel.SMS);
+        			KAppInvitationStatus.PENDING, null, KAppInvitationChannel.SMS);
         }
         
         if (invitationList == null && user.getEmail() != null) {
         	invitationList = fetchByEmail(user.getEmail(), 
-        			KInvitationStatus.PENDING, null, KInvitationChannel.EMAIL);
+        			KAppInvitationStatus.PENDING, null, KAppInvitationChannel.EMAIL);
         }
         
         if (invitationList == null) {

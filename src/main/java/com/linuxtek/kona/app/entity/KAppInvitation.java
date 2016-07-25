@@ -4,7 +4,7 @@ import java.util.Date;
 
 import com.linuxtek.kona.data.entity.KEntityObject;
 
-public interface KInvitation extends KEntityObject {
+public interface KAppInvitation extends KEntityObject {
 
 	@Override
 	Long getId();

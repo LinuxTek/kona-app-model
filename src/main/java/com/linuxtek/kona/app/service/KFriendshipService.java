@@ -29,17 +29,17 @@ public interface KFriendshipService<FRIENDSHIP extends KFriendship> extends KSer
     public Integer getFollowingCount(Long userId);
     public Integer getFollowerCount(Long userId);
     
-	public FRIENDSHIP follow(Long userId, Long friendId);
+	public FRIENDSHIP follow(Long userId, Long friendId, Long circleId);
 	public FRIENDSHIP block(Long userId, Long friendId);
 	public FRIENDSHIP unfollow(Long userId, Long friendId);
 	public FRIENDSHIP unblock(Long userId, Long friendId);
 	
-	public FRIENDSHIP requestFriendship(Long userId, Long friendId);
+	public FRIENDSHIP requestFriendship(Long userId, Long friendId, Long circleId);
 	public FRIENDSHIP acceptFriendship(Long userId, Long friendId);
 	public FRIENDSHIP rejectFriendship(Long userId, Long friendId);
 	public FRIENDSHIP revokeFriendship(Long userId, Long friendId);
 	
 	// request and accept friendship in single call without notifications
-	public FRIENDSHIP createFriendship(Long userId, Long friendId, boolean notifyUser);
+	public FRIENDSHIP createFriendship(Long userId, Long friendId, Long circleId, boolean notifyUser);
     
 }
