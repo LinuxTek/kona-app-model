@@ -3,10 +3,7 @@
  */
 package com.linuxtek.kona.app.service;
 
-import java.io.IOException;
 import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
 
 import com.linuxtek.kona.app.entity.KRemoteServiceAppCreds;
 import com.linuxtek.kona.data.service.KDataService;
@@ -19,6 +16,7 @@ public interface KRemoteServiceAppCredsService<REMOTE_SERVICE_APP_CREDS extends 
     public static final String SERVICE_PATH = "rpc/kona/RemoteServiceAppCredsService";
 
     public List<REMOTE_SERVICE_APP_CREDS> fetchByAppId(Long appId);
+    
     public REMOTE_SERVICE_APP_CREDS fetchByAppIdAndRemoteServiceId(Long appId, Long remoteServiceId);
 
 }

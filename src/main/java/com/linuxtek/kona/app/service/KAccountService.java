@@ -18,7 +18,7 @@ public interface KAccountService<A extends KAccount> extends KService, KDataServ
     
 	public A fetchByName(String name);
     
-	public A fetchByUserId(Long userId);
+	public A fetchByOwnerId(Long ownerId);
 	
 	public A retire(A account);
     

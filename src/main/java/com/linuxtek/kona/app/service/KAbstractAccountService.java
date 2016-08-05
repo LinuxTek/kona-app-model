@@ -120,8 +120,8 @@ public abstract class KAbstractAccountService<A extends KAccount,EXAMPLE,U exten
 	// ----------------------------------------------------------------------------
 
 	@Override
-	public A fetchByUserId(Long userId) {
-		Map<String,Object> filter = KMyBatisUtil.createFilter("userId", userId);
+	public A fetchByOwnerId(Long ownerId) {
+		Map<String,Object> filter = KMyBatisUtil.createFilter("ownerId", ownerId);
 		return KMyBatisUtil.fetchOne(fetchByCriteria(0, 99999, null, filter, false));
 	}
 
