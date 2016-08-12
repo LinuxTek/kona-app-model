@@ -56,6 +56,8 @@ public abstract class KAbstractUserService<U extends KUser, EXAMPLE,
     
 	protected abstract void sendRegisteredUserEmail(Long appId, U user);
 	
+	protected abstract Long getDefaultAppId();
+	
 	// ----------------------------------------------------------------------------
 	
 	protected String generateUid() {
@@ -187,6 +189,10 @@ public abstract class KAbstractUserService<U extends KUser, EXAMPLE,
 
         if (client.getHostname() == null) {
             client.setHostname("127.0.0.1"); // hostname cannot be null in registration table
+        }
+        
+        if (client.getAppId() == null) {
+        	client.setAppId(getDefaultAppId());
         }
         
         // log registration record

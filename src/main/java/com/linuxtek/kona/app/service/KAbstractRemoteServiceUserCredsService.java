@@ -56,4 +56,15 @@ public abstract class KAbstractRemoteServiceUserCredsService<REMOTE_SERVICE_USER
         remoteServiceUserCreds = add(remoteServiceUserCreds);
         return remoteServiceUserCreds;
     }
+    
+	// ----------------------------------------------------------------------------
+
+    
+ 
+    @Override
+    public List<REMOTE_SERVICE_USER_CREDS> fetchByRemoteServiceScreenName(Long remoteServiceId, String screenName) {
+        Map<String,Object> filter = KMyBatisUtil.createFilter("remoteServiceId", remoteServiceId);
+        filter.put("remoteServiceScreenName", screenName);
+        return fetchByCriteria(0,9999, null, filter,  false);
+    }
 }
