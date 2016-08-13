@@ -108,5 +108,9 @@ public class KUtil {
         NumberFormat form = NumberFormat.getCurrencyInstance(locale);
         return (form.format(d));
     }
+    
+    public static void sleep(Long ms) {
+    	try { Thread.sleep(ms); } catch (InterruptedException e) { }
+    }
 
 }
