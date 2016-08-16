@@ -19,6 +19,17 @@ public interface KUserService<U extends KUser> extends KService, KDataService<U>
 	public static final String SERVICE_PATH = "rpc/kona/UserService";
 	
 	public U registerUser(U user, String password, KServiceClient client);
+
+	/**
+	 * Create an anonymous user with ROLE set to GUEST.
+	 * 
+	 * Useful when you want to engage a user with your product before they signup.  When they do sign up, be sure to 
+	 * update the ROLE to USER.
+	 * 
+	 * @param client
+	 * @return user object
+	 */
+	public U createGuestUser(KServiceClient client);
 	
 	public U updatePrimaryPhotoUrl(Long userId, String urlPath);
 

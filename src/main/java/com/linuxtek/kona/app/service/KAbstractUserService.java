@@ -42,6 +42,8 @@ public abstract class KAbstractUserService<U extends KUser, EXAMPLE,
 
 	// ----------------------------------------------------------------------------
 	
+	protected abstract U getNewObject();
+	
 	protected abstract <S extends KAccountService<A>> S getAccountService();
 	
 	protected abstract <S extends KUserAuthService<UA,U>> S getUserAuthService();
@@ -109,6 +111,15 @@ public abstract class KAbstractUserService<U extends KUser, EXAMPLE,
 				throw new IllegalArgumentException("Email exists: " + email);
 			}
 		}
+	}
+	
+	// ----------------------------------------------------------------------------
+	
+	@Override
+	public U createGuestUser(KServiceClient client) {
+		U user = getNewObject();
+		user.setRoles(KUserRole.GUEST.getId());
+		return registerUser(user, null, client);
 	}
 	
 	// ----------------------------------------------------------------------------
