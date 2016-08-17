@@ -62,6 +62,17 @@ public abstract class KAbstractService<T extends KEntityObject,E> implements KDa
 	}
 	
 	// ----------------------------------------------------------------------------
+	
+	@Override @Transactional
+	public T save(T t) {
+		if (t.getId() == null) {
+			return add(t);
+		}
+		
+		return update(t);
+	}
+	
+	// ----------------------------------------------------------------------------
 
 	@Override @Transactional
 	public void remove(T t) {

@@ -83,9 +83,11 @@ implements KEntityNameRuleService<T> {
 	@Override
 	public boolean isReserved(String name) {
 		T rule = fetchForName(name);
+		
 		if (rule != null) {
 			return rule.isReserved();
 		}
+		
 		return false;
 	}
 	
@@ -94,9 +96,11 @@ implements KEntityNameRuleService<T> {
 	@Override
 	public boolean isBlackListed(String name) {
 		T rule = fetchForName(name);
+		
 		if (rule != null) {
 			return rule.isBlackListed();
 		}
+		
 		return false;
 	}
 	
@@ -105,9 +109,11 @@ implements KEntityNameRuleService<T> {
 	@Override
 	public boolean isAcceptable(String name) {
 		T rule = fetchForName(name);
+		
 		if (rule != null) {
 			return !rule.isBlackListed() && !rule.isReserved();
 		}
+		
 		return true;
 	}
 
