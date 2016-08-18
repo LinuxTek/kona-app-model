@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.TypeHandler;
 
-import com.linuxtek.kona.app.entity.KUserRole;
+import com.linuxtek.kona.app.core.entity.KUserRole;
 
 /**
  * KUserRole Handler

@@ -10,7 +10,7 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.linuxtek.kona.app.entity.KEmailAddress;
+import com.linuxtek.kona.app.messaging.entity.KEmailAddress;
 import com.linuxtek.kona.util.KClassUtil;
 import com.linuxtek.kona.util.KDateUtil;
 import com.linuxtek.kona.util.KStringUtil;

@@ -1,19 +1,11 @@
 package com.linuxtek.kona.app.util;
 
-import java.math.BigDecimal;
-import java.text.NumberFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-import java.util.TimeZone;
-import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.linuxtek.kona.app.entity.KPosition;
-import com.linuxtek.kona.util.KClassUtil;
-import com.linuxtek.kona.util.KDateUtil;
+import com.linuxtek.kona.app.core.entity.KPosition;
 
 public class KPositionUtil {
 	private static Logger logger = LoggerFactory.getLogger(KPositionUtil.class);
