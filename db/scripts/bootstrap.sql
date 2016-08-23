@@ -11,13 +11,12 @@
 
 -- --------------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `_changelog`;
 CREATE TABLE `_changelog` (
   `ID` decimal(20,0) NOT NULL,
   `APPLIED_AT` varchar(25) NOT NULL,
   `DESCRIPTION` varchar(255) NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 -- --------------------------------------------------------------------------
 
@@ -42,7 +41,7 @@ CREATE TABLE `account` (
   CONSTRAINT `fk_account_owner` FOREIGN KEY (`owner_id`) 
         REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 -- --------------------------------------------------------------------------
 
@@ -87,7 +86,7 @@ CREATE TABLE `api_log` (
   CONSTRAINT `fk_api_log_version` FOREIGN KEY (`version_id`) 
         REFERENCES `api_version` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 -- --------------------------------------------------------------------------
 
@@ -101,7 +100,7 @@ CREATE TABLE `api_version` (
   `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
   PRIMARY KEY (`id`),
   UNIQUE KEY `ux_api_version_name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 -- --------------------------------------------------------------------------
 
@@ -140,7 +139,7 @@ CREATE TABLE `app` (
   CONSTRAINT `fk_app_user` FOREIGN KEY (`user_id`) 
         REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 -- --------------------------------------------------------------------------
 
@@ -160,7 +159,7 @@ CREATE TABLE `app_config` (
   CONSTRAINT `fk_app_config_app` FOREIGN KEY (`app_id`) 
         REFERENCES `app` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 -- --------------------------------------------------------------------------
 
@@ -192,7 +191,7 @@ CREATE TABLE `app_creds` (
   CONSTRAINT `fk_app_creds_app` FOREIGN KEY (`app_id`) 
         REFERENCES `app` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 -- --------------------------------------------------------------------------
 
@@ -230,7 +229,7 @@ CREATE TABLE `push_notification_device` (
   CONSTRAINT `fk_push_notification_device_user` FOREIGN KEY (`user_id`) 
         REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 -- --------------------------------------------------------------------------
 
@@ -251,7 +250,7 @@ CREATE TABLE `push_notification` (
   CONSTRAINT `fk_push_notification_app` FOREIGN KEY (`app_id`) 
         REFERENCES `app` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 -- --------------------------------------------------------------------------
 
@@ -276,7 +275,7 @@ CREATE TABLE `push_notification_message` (
   CONSTRAINT `fk_push_notification_message_app` FOREIGN KEY (`app_id`) 
         REFERENCES `app` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 -- --------------------------------------------------------------------------
 
@@ -288,7 +287,7 @@ CREATE TABLE `app_type` (
   `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
   PRIMARY KEY (`id`),
   UNIQUE KEY `ux_app_type_name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 -- --------------------------------------------------------------------------
 
@@ -316,7 +315,7 @@ CREATE TABLE `app_user` (
   CONSTRAINT `fk_app_user_user` FOREIGN KEY (`user_id`) 
         REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 -- --------------------------------------------------------------------------
 
@@ -338,7 +337,7 @@ CREATE TABLE `app_webhook` (
   KEY `ix_app_webhook_app` (`app_id`),
   CONSTRAINT `fk_app_webhook_app` FOREIGN KEY (`app_id`) 
         REFERENCES `app` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 
 -- --------------------------------------------------------------------------
@@ -368,7 +367,7 @@ CREATE TABLE `auth_code` (
         REFERENCES `app` (`id`),
   CONSTRAINT `fk_auth_code_user` FOREIGN KEY (`user_id`) 
         REFERENCES `user` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 -- --------------------------------------------------------------------------
 
@@ -377,9 +376,6 @@ CREATE TABLE `auth_code` (
 -- Table structure for table `file`
 --
 
-DROP TABLE IF EXISTS `file`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `file` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `uid` varchar(255) NOT NULL,
@@ -434,16 +430,12 @@ CREATE TABLE `file` (
         REFERENCES `file_type` (`id`) ON DELETE SET NULL,
   CONSTRAINT `fk_file_user` FOREIGN KEY (`user_id`) 
         REFERENCES `user` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 --
 -- Table structure for table `file_access`
 --
 
-DROP TABLE IF EXISTS `file_access`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `file_access` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
@@ -453,16 +445,12 @@ CREATE TABLE `file_access` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`),
   UNIQUE KEY `ux_file_access_name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 --
 -- Table structure for table `file_type`
 --
 
-DROP TABLE IF EXISTS `file_type`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `file_type` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
@@ -471,8 +459,7 @@ CREATE TABLE `file_type` (
   `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
   PRIMARY KEY (`id`),
   UNIQUE KEY `ux_file_type_name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 
 
@@ -480,7 +467,6 @@ CREATE TABLE `file_type` (
 -- Table structure for table `redirect`
 --
 
-DROP TABLE IF EXISTS `redirect`;
 CREATE TABLE `redirect` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `short_url_id` bigint(20) unsigned NOT NULL,
@@ -507,16 +493,13 @@ CREATE TABLE `redirect` (
         REFERENCES `promo` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `fk_redirect_short_url` FOREIGN KEY (`short_url_id`) 
         REFERENCES `short_url` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 
 --
 -- Table structure for table `registration`
 --
 
-DROP TABLE IF EXISTS `registration`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `registration` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `app_id` bigint(20) unsigned NOT NULL,
@@ -564,16 +547,12 @@ CREATE TABLE `registration` (
         REFERENCES `promo` (`id`) ON DELETE SET NULL,
   CONSTRAINT `fk_registration_user` FOREIGN KEY (`user_id`) 
         REFERENCES `user` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 --
 -- Table structure for table `remote_service`
 --
 
-DROP TABLE IF EXISTS `remote_service`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `remote_service` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `uid` varchar(255) NOT NULL,
@@ -584,16 +563,12 @@ CREATE TABLE `remote_service` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `ux_remote_service_uid` (`uid`),
   UNIQUE KEY `ux_remote_service_name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 --
 -- Table structure for table `remote_service_app_creds`
 --
 
-DROP TABLE IF EXISTS `remote_service_app_creds`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `remote_service_app_creds` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `app_id` bigint(20) unsigned NOT NULL,
@@ -612,20 +587,19 @@ CREATE TABLE `remote_service_app_creds` (
   UNIQUE KEY `id` (`id`),
   UNIQUE KEY `ux_remote_service_app_creds_app_remote_service` (`app_id`,`remote_service_id`),
   KEY `ix_remote_service_app_creds_remote_service` (`remote_service_id`),
+
   CONSTRAINT `fk_remote_service_app_creds_app` FOREIGN KEY (`app_id`) 
         REFERENCES `app` (`id`) ON DELETE CASCADE,
+
   CONSTRAINT `fk_remote_service_app_creds_remote_service` FOREIGN KEY (`remote_service_id`) 
         REFERENCES `remote_service` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 --
 -- Table structure for table `remote_service_user_creds`
 --
 
-DROP TABLE IF EXISTS `remote_service_user_creds`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `remote_service_user_creds` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `app_id` bigint(20) unsigned NOT NULL,
@@ -659,16 +633,12 @@ CREATE TABLE `remote_service_user_creds` (
         REFERENCES `remote_service` (`id`) ON DELETE CASCADE,
   CONSTRAINT `fk_remote_service_user_creds_user` FOREIGN KEY (`user_id`) 
         REFERENCES `user` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 --
 -- Table structure for table `setting`
 --
 
-DROP TABLE IF EXISTS `setting`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `setting` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) unsigned DEFAULT NULL,
@@ -684,16 +654,12 @@ CREATE TABLE `setting` (
   KEY `ix_setting_name` (`name`),
   CONSTRAINT `fk_setting_user` FOREIGN KEY (`user_id`) 
         REFERENCES `user` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 --
 -- Table structure for table `short_url`
 --
 
-DROP TABLE IF EXISTS `short_url`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `short_url` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `app_id` bigint(20) unsigned NOT NULL,
@@ -726,16 +692,12 @@ CREATE TABLE `short_url` (
         REFERENCES `promo` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `fk_short_url_user` FOREIGN KEY (`user_id`) 
         REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 --
 -- Table structure for table `token`
 --
 
-DROP TABLE IF EXISTS `token`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `token` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `type_id` bigint(20) unsigned NOT NULL,
@@ -781,17 +743,13 @@ CREATE TABLE `token` (
         REFERENCES `token_type` (`id`),
   CONSTRAINT `fk_token_user` FOREIGN KEY (`user_id`) 
         REFERENCES `user` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 
 --
 -- Table structure for table `token_type`
 --
 
-DROP TABLE IF EXISTS `token_type`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `token_type` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
@@ -801,16 +759,12 @@ CREATE TABLE `token_type` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`),
   UNIQUE KEY `ux_token_type_name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 --
 -- Table structure for table `user`
 --
 
-DROP TABLE IF EXISTS `user`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `uid` varchar(255) NOT NULL,
@@ -861,17 +815,13 @@ CREATE TABLE `user` (
         REFERENCES `user_presence` (`id`) ON DELETE SET NULL,
   CONSTRAINT `fk_user_type` FOREIGN KEY (`type_id`) 
         REFERENCES `user_type` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 
 --
 -- Table structure for table `user_auth`
 --
 
-DROP TABLE IF EXISTS `user_auth`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user_auth` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) unsigned NOT NULL,
@@ -888,14 +838,12 @@ CREATE TABLE `user_auth` (
   UNIQUE KEY `ux_user_auth_user` (`user_id`),
   CONSTRAINT `fk_user_auth_user` FOREIGN KEY (`user_id`) 
         REFERENCES `user` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 --
 -- Table structure for table `user_media`
 --
 
-DROP TABLE IF EXISTS `user_media`;
 CREATE TABLE `user_media` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `uid` varchar(255) NOT NULL,
@@ -919,15 +867,12 @@ CREATE TABLE `user_media` (
         REFERENCES `file` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_user_media_user` FOREIGN KEY (`user_id`) 
         REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 --
 -- Table structure for table `user_presence`
 --
 
-DROP TABLE IF EXISTS `user_presence`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user_presence` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
@@ -936,16 +881,12 @@ CREATE TABLE `user_presence` (
   `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
   PRIMARY KEY (`id`),
   UNIQUE KEY `ux_user_presence_name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 --
 -- Table structure for table `user_role`
 --
 
-DROP TABLE IF EXISTS `user_role`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user_role` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
@@ -954,16 +895,12 @@ CREATE TABLE `user_role` (
   `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
   PRIMARY KEY (`id`),
   UNIQUE KEY `ux_user_role_name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 --
 -- Table structure for table `user_status`
 --
 
-DROP TABLE IF EXISTS `user_status`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user_status` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
@@ -972,14 +909,12 @@ CREATE TABLE `user_status` (
   `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
   PRIMARY KEY (`id`),
   UNIQUE KEY `ux_user_status_name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 --
 -- Table structure for table `user_type`
 --
 
-DROP TABLE IF EXISTS `user_type`;
 CREATE TABLE `user_type` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
@@ -988,13 +923,12 @@ CREATE TABLE `user_type` (
   `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
   PRIMARY KEY (`id`),
   UNIQUE KEY `ux_user_type_name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 
 --
 -- Table structure for table `auth_code_type`
 --
-DROP TABLE IF EXISTS `auth_code_type`;
 CREATE TABLE `auth_code_type` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL, 
@@ -1003,14 +937,13 @@ CREATE TABLE `auth_code_type` (
   `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
   PRIMARY KEY (`id`),
   UNIQUE KEY `ux_auth_code_type_name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 
 --
 -- Table structure for table `entity_name_rule`
 --
 
-DROP TABLE IF EXISTS `entity_name_rule`;
 CREATE TABLE `entity_name_rule` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `pattern` varchar(255) DEFAULT NULL,
@@ -1020,10 +953,9 @@ CREATE TABLE `entity_name_rule` (
   `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
   PRIMARY KEY (`id`),
   UNIQUE KEY `ux_entity_name_rule` (`pattern`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 
-DROP TABLE IF EXISTS `position`;
 CREATE TABLE `position` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `app_id` bigint(20) unsigned NOT NULL,
@@ -1053,11 +985,10 @@ CREATE TABLE `position` (
         REFERENCES `app` (`id`),
   CONSTRAINT `fk_position_user` FOREIGN KEY (`user_id`) 
         REFERENCES `user` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 
 
-DROP TABLE IF EXISTS `email`;
 CREATE TABLE `email` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `uid` varchar(255) NOT NULL,
@@ -1098,12 +1029,10 @@ CREATE TABLE `email` (
         REFERENCES `email_group` (`id`) ON DELETE SET NULL,
   CONSTRAINT `fk_email_to_address` FOREIGN KEY (`to_address_id`) 
         REFERENCES `email_address` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 
 
-
-DROP TABLE IF EXISTS `email_address`;
 CREATE TABLE `email_address` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `uid` varchar(255) NOT NULL,
@@ -1139,11 +1068,10 @@ CREATE TABLE `email_address` (
   KEY `ix_email_address_user` (`user_id`),
   CONSTRAINT `fk_email_address_user` FOREIGN KEY (`user_id`) 
         REFERENCES `user` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 
 
-DROP TABLE IF EXISTS `email_event`;
 CREATE TABLE `email_event` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `type_id` bigint(20) unsigned NOT NULL,
@@ -1162,21 +1090,19 @@ CREATE TABLE `email_event` (
         REFERENCES `email` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_email_event_type` FOREIGN KEY (`type_id`) 
         REFERENCES `email_event_type` (`id`) ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 
 
-DROP TABLE IF EXISTS `email_event_type`;
 CREATE TABLE `email_event_type` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(64) DEFAULT NULL,
   `display_name` varchar(128) DEFAULT NULL,
   `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 
-DROP TABLE IF EXISTS `email_group`;
 CREATE TABLE `email_group` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `uid` varchar(255) NOT NULL,
@@ -1187,10 +1113,9 @@ CREATE TABLE `email_group` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `ux_email_group_uid` (`uid`),
   UNIQUE KEY `ux_email_group_name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 
-DROP TABLE IF EXISTS `email_group_address`;
 CREATE TABLE `email_group_address` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `group_id` bigint(20) unsigned NOT NULL,
@@ -1207,7 +1132,7 @@ CREATE TABLE `email_group_address` (
   CONSTRAINT `fk_email_group_address_group` FOREIGN KEY (`group_id`) 
         REFERENCES `email_group` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 
 
@@ -1243,7 +1168,7 @@ CREATE TABLE `friendship` (
   CONSTRAINT `fk_friendship_user` FOREIGN KEY (`user_id`) 
         REFERENCES `user` (`id`) ON DELETE CASCADE
 
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 
 
@@ -1272,11 +1197,10 @@ CREATE TABLE `friendship_event` (
         REFERENCES `friendship_event_type` (`id`) ON DELETE CASCADE,
   CONSTRAINT `fk_friendship_event_user` FOREIGN KEY (`user_id`) 
         REFERENCES `user` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 
 
-DROP TABLE IF EXISTS `friendship_event_type`;
 CREATE TABLE `friendship_event_type` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
@@ -1285,10 +1209,9 @@ CREATE TABLE `friendship_event_type` (
   `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
   PRIMARY KEY (`id`),
   UNIQUE KEY `ux_friendship_event_type_name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 
-DROP TABLE IF EXISTS `friendship_status`;
 CREATE TABLE `friendship_status` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
@@ -1297,7 +1220,7 @@ CREATE TABLE `friendship_status` (
   `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
   PRIMARY KEY (`id`),
   UNIQUE KEY `ux_friendship_status_name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 
 CREATE TABLE `friendship_circle` (
@@ -1315,11 +1238,10 @@ CREATE TABLE `friendship_circle` (
       UNIQUE KEY `ux_circle_name` (`user_id`,`name`),
       CONSTRAINT `fk_circle_user` FOREIGN KEY (`user_id`) 
             REFERENCES `user` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 
 
-DROP TABLE IF EXISTS `address_book`;
 CREATE TABLE `address_book` (
       `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
       `user_id` bigint(20) unsigned NOT NULL,
@@ -1357,7 +1279,7 @@ CREATE TABLE `address_book` (
             REFERENCES `user` (`id`) ON DELETE SET NULL,
       CONSTRAINT `fk_address_book_user` FOREIGN KEY (`user_id`) 
             REFERENCES `user` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 
 
@@ -1369,7 +1291,7 @@ CREATE TABLE `app_invitation_channel` (
     `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
     PRIMARY KEY (`id`),
     UNIQUE KEY `ux_app_invitation_channel_name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 
 CREATE TABLE `app_invitation_type` (
@@ -1380,7 +1302,7 @@ CREATE TABLE `app_invitation_type` (
   `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
   PRIMARY KEY (`id`),
   UNIQUE KEY `ux_app_invitation_type_name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 
 CREATE TABLE `app_invitation_status` (
@@ -1391,7 +1313,7 @@ CREATE TABLE `app_invitation_status` (
   `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
   PRIMARY KEY (`id`),
   UNIQUE KEY `ux_app_invitation_status_name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 
 CREATE TABLE `app_invitation` (
@@ -1440,7 +1362,7 @@ CREATE TABLE `app_invitation` (
         REFERENCES `app_invitation_type` (`id`),
   CONSTRAINT `fk_app_invitation_user` FOREIGN KEY (`user_id`) 
         REFERENCES `user` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 
 
