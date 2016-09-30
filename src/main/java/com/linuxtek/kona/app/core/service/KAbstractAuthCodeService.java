@@ -118,11 +118,11 @@ public abstract class KAbstractAuthCodeService<T extends KAuthCode,EXAMPLE,
         
 		T authCode = fetchByCode(code);
 		
+		if (authCode == null || !isActive(authCode)) return null;
+		
 		boolean isActive = isActive(authCode);
 		
-		logger.debug("authCode: {}  isActive: {}", authCode, isActive);
         
-		if (authCode == null || !isActive(authCode)) return null;
 
 		Integer useCount = authCode.getUseCount() + 1;
         
@@ -286,6 +286,8 @@ public abstract class KAbstractAuthCodeService<T extends KAuthCode,EXAMPLE,
 			return false;
 		}
         
+		logger.debug("authCode: {}  isActive: {}", authCode, true);
+		
 		return true;
 	}
 }
