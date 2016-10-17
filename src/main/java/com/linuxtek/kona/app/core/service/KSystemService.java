@@ -10,4 +10,8 @@ public interface KSystemService extends KService {
     public static final String SERVICE_PATH = "rpc/kona/SystemService";
     
     public void alert(String subject, String message);
+    
+    public void alert(String message, Throwable t);
+    
+    public void alert(String subject, String message, Throwable t);
 }
