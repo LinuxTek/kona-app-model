@@ -66,7 +66,9 @@ public abstract class KAbstractSettingService<S extends KSetting,EXAMPLE>
             // if this is a local value, check if the value is different from global
             if (setting.getUserId() != null) {
             	S s2 = fetchGlobalByName(setting.getName());
+                
             	logger.debug("fetched global setting for name {}: {}", setting.getName(), s2);
+                
             	if (s2 != null && s2.getValue().equals(setting.getValue())) {
             		
             		// if same as global and overwrite is set then add record
@@ -83,6 +85,7 @@ public abstract class KAbstractSettingService<S extends KSetting,EXAMPLE>
             } else {
             	// this is a new Global setting so add it.
             	logger.debug("setting not found for userId {} and name {} .. adding new record", setting.getUserId(), setting.getName());
+                
             	return add(setting);
             }
         }
