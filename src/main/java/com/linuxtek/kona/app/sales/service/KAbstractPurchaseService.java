@@ -12,25 +12,25 @@ import com.linuxtek.kona.app.core.entity.KUser;
 import com.linuxtek.kona.app.core.service.KAbstractService;
 import com.linuxtek.kona.app.core.service.KUserService;
 import com.linuxtek.kona.app.sales.entity.KProduct;
-import com.linuxtek.kona.app.sales.entity.KProductPurchase;
+import com.linuxtek.kona.app.sales.entity.KPurchase;
 import com.linuxtek.kona.app.sales.entity.KPromo;
 import com.linuxtek.kona.data.mybatis.KMyBatisUtil;
 import com.linuxtek.kona.util.KDateUtil;
 
-public abstract class KAbstractProductPurchaseService<PRODUCT_PURCHASE extends KProductPurchase, 
-										      PRODUCT_PURCHASE_EXAMPLE,
+public abstract class KAbstractPurchaseService<PURCHASE extends KPurchase, 
+										      PURCHASE_EXAMPLE,
 										      PRODUCT extends KProduct,
 										      PROMO extends KPromo,
 										      USER extends KUser,
 										      ACCOUNT extends KAccount>
-		extends KAbstractService<PRODUCT_PURCHASE,PRODUCT_PURCHASE_EXAMPLE>
-		implements KProductPurchaseService<PRODUCT_PURCHASE> {
+		extends KAbstractService<PURCHASE,PURCHASE_EXAMPLE>
+		implements KPurchaseService<PURCHASE> {
 
-	private static Logger logger = LoggerFactory.getLogger(KAbstractProductPurchaseService.class);
+	private static Logger logger = LoggerFactory.getLogger(KAbstractPurchaseService.class);
 
 	// ----------------------------------------------------------------------------
     
-	protected abstract PRODUCT_PURCHASE getNewObject();
+	protected abstract PURCHASE getNewObject();
     
 	protected abstract <S extends KPromoService<PROMO,ACCOUNT,PRODUCT>> S getPromoService();
     
@@ -38,42 +38,42 @@ public abstract class KAbstractProductPurchaseService<PRODUCT_PURCHASE extends K
     
 	protected abstract <S extends KProductService<PRODUCT>> S getProductService();
     
-	protected abstract void sendPendingProductExpirationEmail(PRODUCT_PURCHASE productPurchase, int days);
+	protected abstract void sendPendingProductExpirationEmail(PURCHASE purchase, int days);
 
 	// ----------------------------------------------------------------------------
 
 	@Override 
-	public void validate(PRODUCT_PURCHASE productPurchase) {
-		if (productPurchase.getCreatedDate() == null) {
-			productPurchase.setCreatedDate(new Date());
+	public void validate(PURCHASE purchase) {
+		if (purchase.getCreatedDate() == null) {
+			purchase.setCreatedDate(new Date());
 		}
         
-		productPurchase.setLastUpdated(new Date());
+		purchase.setLastUpdated(new Date());
 	}
     
 	// ----------------------------------------------------------------------------
 
 	@Override
-	public PRODUCT_PURCHASE update(PRODUCT_PURCHASE productPurchase) {
-		super.update(productPurchase);
+	public PURCHASE update(PURCHASE purchase) {
+		super.update(purchase);
 		
-		List<PRODUCT_PURCHASE> children = fetchByParentId(productPurchase.getId());
+		List<PURCHASE> children = fetchByParentId(purchase.getId());
         
 		if (children != null && children.size()>0) {
-			for (PRODUCT_PURCHASE child : children) {
-				child.setEnabled(productPurchase.isEnabled());
-				child.setExpirationDate(productPurchase.getExpirationDate());
+			for (PURCHASE child : children) {
+				child.setEnabled(purchase.isEnabled());
+				child.setExpirationDate(purchase.getExpirationDate());
 				update(child);
 			}
 		}
 		
-		return productPurchase;
+		return purchase;
 	}
     
 	// ----------------------------------------------------------------------------
 	
 	@Override 
-	public List<PRODUCT_PURCHASE> fetchSubscriptionsByExpirationDate(Date startDate, Date endDate, Boolean autoRenew) {
+	public List<PURCHASE> fetchSubscriptionsByExpirationDate(Date startDate, Date endDate, Boolean autoRenew) {
 		if (endDate == null) {
 			endDate = startDate;
 		}
@@ -96,7 +96,7 @@ public abstract class KAbstractProductPurchaseService<PRODUCT_PURCHASE extends K
     
 	// ----------------------------------------------------------------------------
 
-	private List<PRODUCT_PURCHASE> fetchExpired() {
+	private List<PURCHASE> fetchExpired() {
 		Date now = new Date();
         
         // .andExpirationDateIsNotNull()
@@ -111,7 +111,7 @@ public abstract class KAbstractProductPurchaseService<PRODUCT_PURCHASE extends K
 	// ----------------------------------------------------------------------------
 
 	@Override
-	public PRODUCT_PURCHASE fetchByAccountIdAndProductId(Long accountId, Long productId) {
+	public PURCHASE fetchByAccountIdAndProductId(Long accountId, Long productId) {
 		Map<String,Object> filter = KMyBatisUtil.createFilter("accountId", accountId);
 		filter.put("productId", productId);
 		//filter.put("enabled", true);
@@ -121,7 +121,7 @@ public abstract class KAbstractProductPurchaseService<PRODUCT_PURCHASE extends K
 	// ----------------------------------------------------------------------------
 
 	@Override
-	public List<PRODUCT_PURCHASE> fetchByAccountId(Long accountId) {
+	public List<PURCHASE> fetchByAccountId(Long accountId) {
 		Map<String,Object> filter = KMyBatisUtil.createFilter("accountId", accountId);
 		//filter.put("enabled", true);
 		return fetchByCriteria(0, 99999, null, filter, false);
@@ -130,7 +130,7 @@ public abstract class KAbstractProductPurchaseService<PRODUCT_PURCHASE extends K
 	// ----------------------------------------------------------------------------
 
 	@Override
-	public List<PRODUCT_PURCHASE> fetchByParentId(Long parentId) {
+	public List<PURCHASE> fetchByParentId(Long parentId) {
 		Map<String,Object> filter = KMyBatisUtil.createFilter("parentId", parentId);
 		return fetchByCriteria(0, 99999, null, filter, false);
 	}
@@ -139,7 +139,7 @@ public abstract class KAbstractProductPurchaseService<PRODUCT_PURCHASE extends K
 
 	// NOTE: appId is optional. if set to null, then all products for account are returned.
 	@Override
-	public List<PRODUCT_PURCHASE> fetchByAccountIdAndAppId(Long accountId, Long appId) {
+	public List<PURCHASE> fetchByAccountIdAndAppId(Long accountId, Long appId) {
 		Map<String,Object> filter = KMyBatisUtil.createFilter("accountId", accountId);
 		if (appId != null) {
 			filter.put("appId", appId);
@@ -152,9 +152,9 @@ public abstract class KAbstractProductPurchaseService<PRODUCT_PURCHASE extends K
 
 	@Override
 	public void expireSubscriptions() {
-		List<PRODUCT_PURCHASE> result = fetchExpired();
-		for (PRODUCT_PURCHASE purchase : result) {
-			logger.debug("expireProducts: removing ProductPurchase:\n" + purchase);
+		List<PURCHASE> result = fetchExpired();
+		for (PURCHASE purchase : result) {
+			logger.debug("expireProducts: removing Purchase:\n" + purchase);
 			purchase.setAutoRenew(false);
 			purchase.setExpirationDate(new Date());
 			update(purchase);
@@ -164,7 +164,7 @@ public abstract class KAbstractProductPurchaseService<PRODUCT_PURCHASE extends K
 	// ----------------------------------------------------------------------------
 
 	@Override 
-	public List<PRODUCT_PURCHASE> fetchSubscriptionsPendingExpiration(int days) {
+	public List<PURCHASE> fetchSubscriptionsPendingExpiration(int days) {
 		Date startDate = new Date();
 		Date endDate = KDateUtil.addDays(startDate, days);
 		return fetchSubscriptionsByExpirationDate(startDate, endDate, false); 
@@ -174,8 +174,8 @@ public abstract class KAbstractProductPurchaseService<PRODUCT_PURCHASE extends K
 
 	@Override
 	public void remindSubscriptionsPendingExpiration(int days) {
-		List<PRODUCT_PURCHASE> productPurchaseList = fetchSubscriptionsPendingExpiration(days);
-		for (PRODUCT_PURCHASE purchase : productPurchaseList) {
+		List<PURCHASE> purchaseList = fetchSubscriptionsPendingExpiration(days);
+		for (PURCHASE purchase : purchaseList) {
 			if (purchase.getProductId() == null || purchase.isAutoRenew()) continue;
 			try {
 				sendPendingProductExpirationEmail(purchase, days);
@@ -190,12 +190,12 @@ public abstract class KAbstractProductPurchaseService<PRODUCT_PURCHASE extends K
 
 
 	@Override
-	public PRODUCT_PURCHASE savePromoPurchase(Long userId, Long productId, Long promoId) {
+	public PURCHASE savePromoPurchase(Long userId, Long productId, Long promoId) {
 		USER user = getUserService().fetchById(userId);
 		PRODUCT product = getProductService().fetchById(productId);
 		PROMO promo = getPromoService().fetchById(promoId);
 
-		PRODUCT_PURCHASE purchase = fetchByAccountIdAndProductId(user.getAccountId(), product.getId());
+		PURCHASE purchase = fetchByAccountIdAndProductId(user.getAccountId(), product.getId());
 
 		if (purchase == null) {
 			purchase = getNewObject();

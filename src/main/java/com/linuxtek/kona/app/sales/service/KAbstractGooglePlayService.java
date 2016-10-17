@@ -26,17 +26,17 @@ import com.linuxtek.kona.app.sales.entity.KInvoice;
 import com.linuxtek.kona.app.sales.entity.KPayment;
 import com.linuxtek.kona.app.sales.entity.KPaymentType;
 import com.linuxtek.kona.app.sales.entity.KProduct;
-import com.linuxtek.kona.app.sales.entity.KProductPurchase;
+import com.linuxtek.kona.app.sales.entity.KPurchase;
 import com.linuxtek.kona.encryption.KEncryptUtil;
 
 public abstract class KAbstractGooglePlayService<
-										   PRODUCT_PURCHASE extends KProductPurchase,
+										   PURCHASE extends KPurchase,
 										   CART extends KCart,
 										   CART_ITEM extends KCartItem,
 										   PAYMENT extends KPayment,
 										   INVOICE extends KInvoice,
 										   PRODUCT extends KProduct>
-		implements KGooglePlayService<PRODUCT_PURCHASE> {
+		implements KGooglePlayService<PURCHASE> {
 
 	private static Logger logger = LoggerFactory.getLogger(KAbstractGooglePlayService.class);
     
@@ -46,7 +46,7 @@ public abstract class KAbstractGooglePlayService<
 
 	// ----------------------------------------------------------------------------
     
-	protected abstract PRODUCT_PURCHASE getNewProductPurchaseObject();
+	protected abstract PURCHASE getNewPurchaseObject();
     
 	protected abstract String getGooglePlayPackageName(Long appId);
     
@@ -60,7 +60,7 @@ public abstract class KAbstractGooglePlayService<
     
 	protected abstract <S extends KProductService<PRODUCT>> S getProductService();
     
-	protected abstract <S extends KProductPurchaseService<PRODUCT_PURCHASE>> S getProductPurchaseService();
+	protected abstract <S extends KPurchaseService<PURCHASE>> S getPurchaseService();
     
 	protected abstract <S extends KPaymentService<PAYMENT,INVOICE>> S getPaymentService();
     
@@ -127,7 +127,7 @@ public abstract class KAbstractGooglePlayService<
 	// ----------------------------------------------------------------------------
 
 	private String getSubscriptionToken(Long accountId, Long productId) {
-		PRODUCT_PURCHASE purchase = getProductPurchaseService()
+		PURCHASE purchase = getPurchaseService()
 						.fetchByAccountIdAndProductId(accountId, productId);
 		
 		if (purchase == null) {
@@ -175,7 +175,7 @@ public abstract class KAbstractGooglePlayService<
 
 
 	@Override
-	public PRODUCT_PURCHASE getSubscription(Long accountId, Long productId) throws IOException {
+	public PURCHASE getSubscription(Long accountId, Long productId) throws IOException {
         String token = getSubscriptionToken(accountId, productId);
         if (token == null) {
         	logger.warn("No subscription token found for accountId: " + accountId);
@@ -200,7 +200,7 @@ public abstract class KAbstractGooglePlayService<
 	// ----------------------------------------------------------------------------
 	
     @Override
-	public PRODUCT_PURCHASE getSubscription(Long productId, String token) throws IOException {
+	public PURCHASE getSubscription(Long productId, String token) throws IOException {
         PRODUCT product = getProductService().fetchById(productId);
     	//String packageName = getConfig(product.getAppId()).getString("google.play.packageName");
         String packageName = getGooglePlayPackageName(product.getAppId());
@@ -211,11 +211,11 @@ public abstract class KAbstractGooglePlayService<
 	// ----------------------------------------------------------------------------
 
     @Override
-	public PRODUCT_PURCHASE getSubscription(Long appId, String packageName, String productId, String token) throws IOException {
+	public PURCHASE getSubscription(Long appId, String packageName, String productId, String token) throws IOException {
         Subscriptions subs = getAndroidPublisher(appId).purchases().subscriptions();
         Get get = subs.get(packageName, productId, token);
         com.google.api.services.androidpublisher.model.SubscriptionPurchase result = get.execute();
-        PRODUCT_PURCHASE purchase = getNewProductPurchaseObject();
+        PURCHASE purchase = getNewPurchaseObject();
         purchase.setEnabled(true);
 
         if (result.getAutoRenewing() != null) {

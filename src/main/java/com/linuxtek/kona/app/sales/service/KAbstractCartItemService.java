@@ -15,7 +15,7 @@ import com.linuxtek.kona.app.core.service.KUserService;
 import com.linuxtek.kona.app.sales.entity.KCart;
 import com.linuxtek.kona.app.sales.entity.KCartItem;
 import com.linuxtek.kona.app.sales.entity.KProduct;
-import com.linuxtek.kona.app.sales.entity.KProductPurchase;
+import com.linuxtek.kona.app.sales.entity.KPurchase;
 import com.linuxtek.kona.app.sales.entity.KPromo;
 import com.linuxtek.kona.data.mybatis.KMyBatisUtil;
 import com.linuxtek.kona.remote.service.KServiceClient;
@@ -29,7 +29,7 @@ public abstract class KAbstractCartItemService<CART_ITEM extends KCartItem,
 										   ACCOUNT extends KAccount,
 										   PROMO extends KPromo,
 										   PRODUCT extends KProduct,
-										   PRODUCT_PURCHASE extends KProductPurchase>
+										   PURCHASE extends KPurchase>
 		extends KAbstractService<CART_ITEM,CART_ITEM_EXAMPLE>
 		implements KCartItemService<CART_ITEM,CART> {
 
@@ -47,7 +47,7 @@ public abstract class KAbstractCartItemService<CART_ITEM extends KCartItem,
     
 	protected abstract <S extends KProductService<PRODUCT>> S getProductService();
     
-	protected abstract <S extends KProductPurchaseService<PRODUCT_PURCHASE>> S getProductPurchaseService();
+	protected abstract <S extends KPurchaseService<PURCHASE>> S getPurchaseService();
     
     
 	// ----------------------------------------------------------------------------
@@ -306,7 +306,7 @@ public abstract class KAbstractCartItemService<CART_ITEM extends KCartItem,
     	Date endDate = null;
     	
     	// if we have a product, then add to its endDate
-    	PRODUCT_PURCHASE purchase = getProductPurchase(user.getAccountId(), product.getId());
+    	PURCHASE purchase = getPurchase(user.getAccountId(), product.getId());
     	if (purchase != null) {
     		endDate = purchase.getExpirationDate();
     	}
@@ -334,8 +334,8 @@ public abstract class KAbstractCartItemService<CART_ITEM extends KCartItem,
     
     // ----------------------------------------------------------------------------
     
-    private PRODUCT_PURCHASE getProductPurchase(Long accountId, Long productId) {
-    	return getProductPurchaseService().fetchByAccountIdAndProductId(accountId, productId);
+    private PURCHASE getPurchase(Long accountId, Long productId) {
+    	return getPurchaseService().fetchByAccountIdAndProductId(accountId, productId);
     }
   
 }

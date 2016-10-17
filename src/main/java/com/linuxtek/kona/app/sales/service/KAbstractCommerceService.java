@@ -30,7 +30,7 @@ import com.linuxtek.kona.app.sales.entity.KPayment;
 import com.linuxtek.kona.app.sales.entity.KPaymentStatus;
 import com.linuxtek.kona.app.sales.entity.KPaymentType;
 import com.linuxtek.kona.app.sales.entity.KProduct;
-import com.linuxtek.kona.app.sales.entity.KProductPurchase;
+import com.linuxtek.kona.app.sales.entity.KPurchase;
 import com.linuxtek.kona.app.sales.entity.KPromo;
 import com.linuxtek.kona.remote.service.KServiceClient;
 import com.linuxtek.kona.stripe.entity.KCard;
@@ -52,7 +52,7 @@ public abstract class KAbstractCommerceService<
 							PRODUCT extends KProduct,
 							PROMO extends KPromo,
 							PAYMENT extends KPayment,
-							PRODUCT_PURCHASE extends KProductPurchase>
+							PURCHASE extends KPurchase>
 		implements KCommerceService<PAYMENT,ACCOUNT,CART,INVOICE> {
 
 	private static Logger logger = LoggerFactory.getLogger(KAbstractCommerceService.class);
@@ -61,7 +61,7 @@ public abstract class KAbstractCommerceService<
     
 	protected abstract PAYMENT getNewPaymentObject();
     
-	protected abstract PRODUCT_PURCHASE getNewProductPurchaseObject();
+	protected abstract PURCHASE getNewPurchaseObject();
     
 	protected abstract String getGooglePlayPackageName(Long appId);
     
@@ -91,13 +91,13 @@ public abstract class KAbstractCommerceService<
     
 	protected abstract <S extends KProductService<PRODUCT>> S getProductService();
     
-	protected abstract <S extends KProductPurchaseService<PRODUCT_PURCHASE>> S getProductPurchaseService();
+	protected abstract <S extends KPurchaseService<PURCHASE>> S getPurchaseService();
     
 	protected abstract <S extends KPaymentService<PAYMENT,INVOICE>> S getPaymentService();
     
 	protected abstract <S extends KStripeService<ACCOUNT>> S getStripeService();
     
-	protected abstract <S extends KGooglePlayService<PRODUCT_PURCHASE>> S getGooglePlayService();
+	protected abstract <S extends KGooglePlayService<PURCHASE>> S getGooglePlayService();
     
 	protected abstract <S extends KSystemService<APP,USER>> S getSystemService();
     
@@ -250,7 +250,7 @@ public abstract class KAbstractCommerceService<
             			paymentType = KPaymentType.CARD;
             		}
             		
-            		addProductPurchase(account, invoice, item, paymentType, autoRenew);
+            		addPurchase(account, invoice, item, paymentType, autoRenew);
             		incPromoUseCount(item.getPromoId());
             	}
 
@@ -272,20 +272,20 @@ public abstract class KAbstractCommerceService<
     
 	// ----------------------------------------------------------------------------
    
-    private PRODUCT_PURCHASE addProductPurchase(ACCOUNT account, INVOICE invoice, INVOICE_ITEM item, 
+    private PURCHASE addPurchase(ACCOUNT account, INVOICE invoice, INVOICE_ITEM item, 
     		KPaymentType paymentType, boolean autoRenew) {
     	
-    	PRODUCT_PURCHASE purchase = getProductPurchaseService()
+    	PURCHASE purchase = getPurchaseService()
 				.fetchByAccountIdAndProductId(account.getId(), item.getProductId());
     	
     	if (purchase == null) {
-    		purchase = getNewProductPurchaseObject();
+    		purchase = getNewPurchaseObject();
     		purchase.setAccountId(account.getId());
     		purchase.setUserId(invoice.getUserId());
     		purchase.setProductId(item.getProductId());
     		
     		// IMPORTANT! invoice appId is the app that generated the cart/invoice.
-    		// ProductPurchase appId is the app associated with the subscription itself.
+    		// Purchase appId is the app associated with the subscription itself.
     		PRODUCT product = getProductService().fetchById(item.getProductId());
     		purchase.setAppId(product.getAppId());
     	}
@@ -298,9 +298,9 @@ public abstract class KAbstractCommerceService<
     	purchase.setExpirationDate(item.getSubscriptionEndDate());
     	
     	if (purchase.getId() == null) {
-    		purchase = getProductPurchaseService().add(purchase);
+    		purchase = getPurchaseService().add(purchase);
     	} else {
-    		purchase = getProductPurchaseService().update(purchase);
+    		purchase = getPurchaseService().update(purchase);
     	}
         
     	return purchase;
@@ -376,7 +376,7 @@ public abstract class KAbstractCommerceService<
     	Long userId = invoice.getUserId();
     	ACCOUNT account = getAccountByUserId(userId);
     	for (INVOICE_ITEM item : getInvoiceItemService().getInvoiceItemList(invoice)) {
-    		addProductPurchase(account, invoice, item, KPaymentType.getInstance(paymentTypeId), true);
+    		addPurchase(account, invoice, item, KPaymentType.getInstance(paymentTypeId), true);
     		incPromoUseCount(item.getPromoId());
     	}
 
@@ -584,15 +584,15 @@ public abstract class KAbstractCommerceService<
 		// subscriptions for the past 7 days
 		startDate = KDateUtil.addDays(startDate, -7);
 
-		List<PRODUCT_PURCHASE> subscriptionList = getProductPurchaseService().fetchSubscriptionsByExpirationDate(
+		List<PURCHASE> subscriptionList = getPurchaseService().fetchSubscriptionsByExpirationDate(
 				startDate, endDate, true);
 
 		List<Long> accountIdList = new ArrayList<Long>();
 
         // only renew subscriptions for which PaymentType is CARD
         // assumes the account has a StripeID associated with a  default card.
-		List<PRODUCT_PURCHASE> subscriptionRenewList = new ArrayList<PRODUCT_PURCHASE>();
-		for (PRODUCT_PURCHASE purchase : subscriptionList) {
+		List<PURCHASE> subscriptionRenewList = new ArrayList<PURCHASE>();
+		for (PURCHASE purchase : subscriptionList) {
             KPaymentType paymentType = null;
             if (purchase.getPaymentTypeId() != null) {
             	paymentType = KPaymentType.getInstance(purchase.getPaymentTypeId());
@@ -604,7 +604,7 @@ public abstract class KAbstractCommerceService<
             	purchase.setEnabled(false);
             	purchase.setAutoRenew(false);
             	purchase.setExpirationDate(new Date());
-            	getProductPurchaseService().update(purchase);
+            	getPurchaseService().update(purchase);
             	continue;
             }
             
@@ -640,7 +640,7 @@ public abstract class KAbstractCommerceService<
             
 			CART cart = getCartService().createCart(userId, appId, null);
 			
-			for (PRODUCT_PURCHASE purchase : subscriptionRenewList) {
+			for (PURCHASE purchase : subscriptionRenewList) {
 				if (purchase.getAccountId().equals(accountId)) {
 					Long productId = purchase.getProductId();
 					if (productId != null) {
@@ -919,7 +919,7 @@ public abstract class KAbstractCommerceService<
                 PRODUCT product = getProductService().fetchById(productId);
                 String googleProductId = product.getName();
                 try {
-					PRODUCT_PURCHASE purchase = getGooglePlayService().getSubscription(appId, packageName, googleProductId, receipt);
+					PURCHASE purchase = getGooglePlayService().getSubscription(appId, packageName, googleProductId, receipt);
                     if (purchase == null) {
                     	logger.warn("Google Service subscription service returned null"
                     			+ "\nproductId: " + googleProductId 

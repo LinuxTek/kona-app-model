@@ -597,7 +597,7 @@ CREATE TABLE `product` (
 
 -- --------------------------------------------------------------------------
 
-CREATE TABLE `product_purchase` (
+CREATE TABLE `purchase` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `parent_id` bigint(20) unsigned DEFAULT NULL,
   `account_id` bigint(20) unsigned NOT NULL,
@@ -616,26 +616,26 @@ CREATE TABLE `product_purchase` (
   `expiration_date` datetime(6) DEFAULT NULL,
   `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `ux_product_purchase` (`account_id`,`product_id`),
-  KEY `ix_product_purchase_parent` (`parent_id`),
-  KEY `ix_product_purchase_user` (`user_id`),
-  KEY `ix_product_purchase_product` (`product_id`),
-  KEY `ix_product_purchase_app` (`app_id`),
-  KEY `ix_product_purchase_promo` (`promo_id`),
-  KEY `ix_product_purchase_partner` (`partner_id`),
-  KEY `ix_product_purchase_campaign` (`campaign_id`),
-  KEY `ix_product_purchase_payment_type` (`payment_type_id`),
-  KEY `ix_product_purchase_invoice` (`invoice_no`),
-  CONSTRAINT `fk_product_purchase_account` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_product_purchase_app` FOREIGN KEY (`app_id`) REFERENCES `app` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_product_purchase_campaign` FOREIGN KEY (`campaign_id`) REFERENCES `campaign` (`id`),
-  CONSTRAINT `fk_product_purchase_invoice` FOREIGN KEY (`invoice_no`) REFERENCES `invoice` (`invoice_no`),
-  CONSTRAINT `fk_product_purchase_parent` FOREIGN KEY (`parent_id`) REFERENCES `product_purchase` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `fk_product_purchase_partner` FOREIGN KEY (`partner_id`) REFERENCES `partner` (`id`),
-  CONSTRAINT `fk_product_purchase_payment_type` FOREIGN KEY (`payment_type_id`) REFERENCES `payment_type` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `fk_product_purchase_promo` FOREIGN KEY (`promo_id`) REFERENCES `promo` (`id`),
-  CONSTRAINT `fk_product_purchase_product` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_product_purchase_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
+  UNIQUE KEY `ux_purchase` (`account_id`,`product_id`),
+  KEY `ix_purchase_parent` (`parent_id`),
+  KEY `ix_purchase_user` (`user_id`),
+  KEY `ix_purchase_product` (`product_id`),
+  KEY `ix_purchase_app` (`app_id`),
+  KEY `ix_purchase_promo` (`promo_id`),
+  KEY `ix_purchase_partner` (`partner_id`),
+  KEY `ix_purchase_campaign` (`campaign_id`),
+  KEY `ix_purchase_payment_type` (`payment_type_id`),
+  KEY `ix_purchase_invoice` (`invoice_no`),
+  CONSTRAINT `fk_purchase_account` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_purchase_app` FOREIGN KEY (`app_id`) REFERENCES `app` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_purchase_campaign` FOREIGN KEY (`campaign_id`) REFERENCES `campaign` (`id`),
+  CONSTRAINT `fk_purchase_invoice` FOREIGN KEY (`invoice_no`) REFERENCES `invoice` (`invoice_no`),
+  CONSTRAINT `fk_purchase_parent` FOREIGN KEY (`parent_id`) REFERENCES `purchase` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `fk_purchase_partner` FOREIGN KEY (`partner_id`) REFERENCES `partner` (`id`),
+  CONSTRAINT `fk_purchase_payment_type` FOREIGN KEY (`payment_type_id`) REFERENCES `payment_type` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `fk_purchase_promo` FOREIGN KEY (`promo_id`) REFERENCES `promo` (`id`),
+  CONSTRAINT `fk_purchase_product` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_purchase_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 -- --------------------------------------------------------------------------

@@ -2,7 +2,7 @@ package com.linuxtek.kona.app.sales.entity;
 
 import java.util.Date;
 
-public class KBaseProductPurchase implements KProductPurchase {
+public class KBasePurchase implements KPurchase {
 
 	private static final long serialVersionUID = 1L;
 
@@ -143,7 +143,7 @@ public class KBaseProductPurchase implements KProductPurchase {
     private Date lastUpdated;
 
     /* (non-Javadoc)
-	 * @see com.linuxtek.kona.app.sales.entity.KProductPurchase#getId()
+	 * @see com.linuxtek.kona.app.sales.entity.KPurchase#getId()
 	 */
     @Override
 	public Long getId() {
@@ -151,7 +151,7 @@ public class KBaseProductPurchase implements KProductPurchase {
     }
 
     /* (non-Javadoc)
-	 * @see com.linuxtek.kona.app.sales.entity.KProductPurchase#setId(java.lang.Long)
+	 * @see com.linuxtek.kona.app.sales.entity.KPurchase#setId(java.lang.Long)
 	 */
     @Override
 	public void setId(Long id) {
@@ -159,7 +159,7 @@ public class KBaseProductPurchase implements KProductPurchase {
     }
 
     /* (non-Javadoc)
-	 * @see com.linuxtek.kona.app.sales.entity.KProductPurchase#getParentId()
+	 * @see com.linuxtek.kona.app.sales.entity.KPurchase#getParentId()
 	 */
     @Override
 	public Long getParentId() {
@@ -167,7 +167,7 @@ public class KBaseProductPurchase implements KProductPurchase {
     }
 
     /* (non-Javadoc)
-	 * @see com.linuxtek.kona.app.sales.entity.KProductPurchase#setParentId(java.lang.Long)
+	 * @see com.linuxtek.kona.app.sales.entity.KPurchase#setParentId(java.lang.Long)
 	 */
     @Override
 	public void setParentId(Long parentId) {
@@ -175,7 +175,7 @@ public class KBaseProductPurchase implements KProductPurchase {
     }
 
     /* (non-Javadoc)
-	 * @see com.linuxtek.kona.app.sales.entity.KProductPurchase#getAccountId()
+	 * @see com.linuxtek.kona.app.sales.entity.KPurchase#getAccountId()
 	 */
     @Override
 	public Long getAccountId() {
@@ -183,7 +183,7 @@ public class KBaseProductPurchase implements KProductPurchase {
     }
 
     /* (non-Javadoc)
-	 * @see com.linuxtek.kona.app.sales.entity.KProductPurchase#setAccountId(java.lang.Long)
+	 * @see com.linuxtek.kona.app.sales.entity.KPurchase#setAccountId(java.lang.Long)
 	 */
     @Override
 	public void setAccountId(Long accountId) {
@@ -191,7 +191,7 @@ public class KBaseProductPurchase implements KProductPurchase {
     }
 
     /* (non-Javadoc)
-	 * @see com.linuxtek.kona.app.sales.entity.KProductPurchase#getUserId()
+	 * @see com.linuxtek.kona.app.sales.entity.KPurchase#getUserId()
 	 */
     @Override
 	public Long getUserId() {
@@ -199,7 +199,7 @@ public class KBaseProductPurchase implements KProductPurchase {
     }
 
     /* (non-Javadoc)
-	 * @see com.linuxtek.kona.app.sales.entity.KProductPurchase#setUserId(java.lang.Long)
+	 * @see com.linuxtek.kona.app.sales.entity.KPurchase#setUserId(java.lang.Long)
 	 */
     @Override
 	public void setUserId(Long userId) {
@@ -207,7 +207,7 @@ public class KBaseProductPurchase implements KProductPurchase {
     }
 
     /* (non-Javadoc)
-	 * @see com.linuxtek.kona.app.sales.entity.KProductPurchase#getProductId()
+	 * @see com.linuxtek.kona.app.sales.entity.KPurchase#getProductId()
 	 */
     @Override
 	public Long getProductId() {
@@ -215,7 +215,7 @@ public class KBaseProductPurchase implements KProductPurchase {
     }
 
     /* (non-Javadoc)
-	 * @see com.linuxtek.kona.app.sales.entity.KProductPurchase#setProductId(java.lang.Long)
+	 * @see com.linuxtek.kona.app.sales.entity.KPurchase#setProductId(java.lang.Long)
 	 */
     @Override
 	public void setProductId(Long productId) {
@@ -223,7 +223,7 @@ public class KBaseProductPurchase implements KProductPurchase {
     }
 
     /* (non-Javadoc)
-	 * @see com.linuxtek.kona.app.sales.entity.KProductPurchase#getAppId()
+	 * @see com.linuxtek.kona.app.sales.entity.KPurchase#getAppId()
 	 */
     @Override
 	public Long getAppId() {
@@ -231,7 +231,7 @@ public class KBaseProductPurchase implements KProductPurchase {
     }
 
     /* (non-Javadoc)
-	 * @see com.linuxtek.kona.app.sales.entity.KProductPurchase#setAppId(java.lang.Long)
+	 * @see com.linuxtek.kona.app.sales.entity.KPurchase#setAppId(java.lang.Long)
 	 */
     @Override
 	public void setAppId(Long appId) {
@@ -239,7 +239,7 @@ public class KBaseProductPurchase implements KProductPurchase {
     }
 
     /* (non-Javadoc)
-	 * @see com.linuxtek.kona.app.sales.entity.KProductPurchase#getPromoId()
+	 * @see com.linuxtek.kona.app.sales.entity.KPurchase#getPromoId()
 	 */
     @Override
 	public Long getPromoId() {
@@ -247,7 +247,7 @@ public class KBaseProductPurchase implements KProductPurchase {
     }
 
     /* (non-Javadoc)
-	 * @see com.linuxtek.kona.app.sales.entity.KProductPurchase#setPromoId(java.lang.Long)
+	 * @see com.linuxtek.kona.app.sales.entity.KPurchase#setPromoId(java.lang.Long)
 	 */
     @Override
 	public void setPromoId(Long promoId) {
@@ -255,7 +255,7 @@ public class KBaseProductPurchase implements KProductPurchase {
     }
 
     /* (non-Javadoc)
-	 * @see com.linuxtek.kona.app.sales.entity.KProductPurchase#getPartnerId()
+	 * @see com.linuxtek.kona.app.sales.entity.KPurchase#getPartnerId()
 	 */
     @Override
 	public Long getPartnerId() {
@@ -263,7 +263,7 @@ public class KBaseProductPurchase implements KProductPurchase {
     }
 
     /* (non-Javadoc)
-	 * @see com.linuxtek.kona.app.sales.entity.KProductPurchase#setPartnerId(java.lang.Long)
+	 * @see com.linuxtek.kona.app.sales.entity.KPurchase#setPartnerId(java.lang.Long)
 	 */
     @Override
 	public void setPartnerId(Long partnerId) {
@@ -271,7 +271,7 @@ public class KBaseProductPurchase implements KProductPurchase {
     }
 
     /* (non-Javadoc)
-	 * @see com.linuxtek.kona.app.sales.entity.KProductPurchase#getCampaignId()
+	 * @see com.linuxtek.kona.app.sales.entity.KPurchase#getCampaignId()
 	 */
     @Override
 	public Long getCampaignId() {
@@ -279,7 +279,7 @@ public class KBaseProductPurchase implements KProductPurchase {
     }
 
     /* (non-Javadoc)
-	 * @see com.linuxtek.kona.app.sales.entity.KProductPurchase#setCampaignId(java.lang.Long)
+	 * @see com.linuxtek.kona.app.sales.entity.KPurchase#setCampaignId(java.lang.Long)
 	 */
     @Override
 	public void setCampaignId(Long campaignId) {
@@ -287,7 +287,7 @@ public class KBaseProductPurchase implements KProductPurchase {
     }
 
     /* (non-Javadoc)
-	 * @see com.linuxtek.kona.app.sales.entity.KProductPurchase#getPaymentTypeId()
+	 * @see com.linuxtek.kona.app.sales.entity.KPurchase#getPaymentTypeId()
 	 */
     @Override
 	public Long getPaymentTypeId() {
@@ -295,7 +295,7 @@ public class KBaseProductPurchase implements KProductPurchase {
     }
 
     /* (non-Javadoc)
-	 * @see com.linuxtek.kona.app.sales.entity.KProductPurchase#setPaymentTypeId(java.lang.Long)
+	 * @see com.linuxtek.kona.app.sales.entity.KPurchase#setPaymentTypeId(java.lang.Long)
 	 */
     @Override
 	public void setPaymentTypeId(Long paymentTypeId) {
@@ -303,7 +303,7 @@ public class KBaseProductPurchase implements KProductPurchase {
     }
 
     /* (non-Javadoc)
-	 * @see com.linuxtek.kona.app.sales.entity.KProductPurchase#getKind()
+	 * @see com.linuxtek.kona.app.sales.entity.KPurchase#getKind()
 	 */
     @Override
 	public String getKind() {
@@ -311,7 +311,7 @@ public class KBaseProductPurchase implements KProductPurchase {
     }
 
     /* (non-Javadoc)
-	 * @see com.linuxtek.kona.app.sales.entity.KProductPurchase#setKind(java.lang.String)
+	 * @see com.linuxtek.kona.app.sales.entity.KPurchase#setKind(java.lang.String)
 	 */
     @Override
 	public void setKind(String kind) {
@@ -319,7 +319,7 @@ public class KBaseProductPurchase implements KProductPurchase {
     }
 
     /* (non-Javadoc)
-	 * @see com.linuxtek.kona.app.sales.entity.KProductPurchase#getInvoiceNo()
+	 * @see com.linuxtek.kona.app.sales.entity.KPurchase#getInvoiceNo()
 	 */
     @Override
 	public String getInvoiceNo() {
@@ -327,7 +327,7 @@ public class KBaseProductPurchase implements KProductPurchase {
     }
 
     /* (non-Javadoc)
-	 * @see com.linuxtek.kona.app.sales.entity.KProductPurchase#setInvoiceNo(java.lang.String)
+	 * @see com.linuxtek.kona.app.sales.entity.KPurchase#setInvoiceNo(java.lang.String)
 	 */
     @Override
 	public void setInvoiceNo(String invoiceNo) {
@@ -335,7 +335,7 @@ public class KBaseProductPurchase implements KProductPurchase {
     }
 
     /* (non-Javadoc)
-	 * @see com.linuxtek.kona.app.sales.entity.KProductPurchase#isAutoRenew()
+	 * @see com.linuxtek.kona.app.sales.entity.KPurchase#isAutoRenew()
 	 */
     @Override
 	public boolean isAutoRenew() {
@@ -343,7 +343,7 @@ public class KBaseProductPurchase implements KProductPurchase {
     }
 
     /* (non-Javadoc)
-	 * @see com.linuxtek.kona.app.sales.entity.KProductPurchase#setAutoRenew(boolean)
+	 * @see com.linuxtek.kona.app.sales.entity.KPurchase#setAutoRenew(boolean)
 	 */
     @Override
 	public void setAutoRenew(boolean autoRenew) {
@@ -351,7 +351,7 @@ public class KBaseProductPurchase implements KProductPurchase {
     }
 
     /* (non-Javadoc)
-	 * @see com.linuxtek.kona.app.sales.entity.KProductPurchase#isEnabled()
+	 * @see com.linuxtek.kona.app.sales.entity.KPurchase#isEnabled()
 	 */
     @Override
 	public boolean isEnabled() {
@@ -359,7 +359,7 @@ public class KBaseProductPurchase implements KProductPurchase {
     }
 
     /* (non-Javadoc)
-	 * @see com.linuxtek.kona.app.sales.entity.KProductPurchase#setEnabled(boolean)
+	 * @see com.linuxtek.kona.app.sales.entity.KPurchase#setEnabled(boolean)
 	 */
     @Override
 	public void setEnabled(boolean enabled) {
@@ -367,7 +367,7 @@ public class KBaseProductPurchase implements KProductPurchase {
     }
 
     /* (non-Javadoc)
-	 * @see com.linuxtek.kona.app.sales.entity.KProductPurchase#getCreatedDate()
+	 * @see com.linuxtek.kona.app.sales.entity.KPurchase#getCreatedDate()
 	 */
     @Override
 	public Date getCreatedDate() {
@@ -375,7 +375,7 @@ public class KBaseProductPurchase implements KProductPurchase {
     }
 
     /* (non-Javadoc)
-	 * @see com.linuxtek.kona.app.sales.entity.KProductPurchase#setCreatedDate(java.util.Date)
+	 * @see com.linuxtek.kona.app.sales.entity.KPurchase#setCreatedDate(java.util.Date)
 	 */
     @Override
 	public void setCreatedDate(Date createdDate) {
@@ -383,7 +383,7 @@ public class KBaseProductPurchase implements KProductPurchase {
     }
 
     /* (non-Javadoc)
-	 * @see com.linuxtek.kona.app.sales.entity.KProductPurchase#getExpirationDate()
+	 * @see com.linuxtek.kona.app.sales.entity.KPurchase#getExpirationDate()
 	 */
     @Override
 	public Date getExpirationDate() {
@@ -391,7 +391,7 @@ public class KBaseProductPurchase implements KProductPurchase {
     }
 
     /* (non-Javadoc)
-	 * @see com.linuxtek.kona.app.sales.entity.KProductPurchase#setExpirationDate(java.util.Date)
+	 * @see com.linuxtek.kona.app.sales.entity.KPurchase#setExpirationDate(java.util.Date)
 	 */
     @Override
 	public void setExpirationDate(Date expirationDate) {
@@ -399,7 +399,7 @@ public class KBaseProductPurchase implements KProductPurchase {
     }
 
     /* (non-Javadoc)
-	 * @see com.linuxtek.kona.app.sales.entity.KProductPurchase#getLastUpdated()
+	 * @see com.linuxtek.kona.app.sales.entity.KPurchase#getLastUpdated()
 	 */
     @Override
 	public Date getLastUpdated() {
@@ -407,7 +407,7 @@ public class KBaseProductPurchase implements KProductPurchase {
     }
 
     /* (non-Javadoc)
-	 * @see com.linuxtek.kona.app.sales.entity.KProductPurchase#setLastUpdated(java.util.Date)
+	 * @see com.linuxtek.kona.app.sales.entity.KPurchase#setLastUpdated(java.util.Date)
 	 */
     @Override
 	public void setLastUpdated(Date lastUpdated) {

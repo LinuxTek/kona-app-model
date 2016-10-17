@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import com.linuxtek.kona.app.core.entity.KAccount;
 import com.linuxtek.kona.app.core.service.KAbstractService;
 import com.linuxtek.kona.app.sales.entity.KProduct;
-import com.linuxtek.kona.app.sales.entity.KProductPurchase;
+import com.linuxtek.kona.app.sales.entity.KPurchase;
 import com.linuxtek.kona.app.sales.entity.KPromo;
 import com.linuxtek.kona.data.mybatis.KMyBatisUtil;
 import com.linuxtek.kona.locale.KValidator;
@@ -21,7 +21,7 @@ public abstract class KAbstractPromoService<PROMO extends KPromo,
 										    PROMO_EXAMPLE,
 										    ACCOUNT extends KAccount,
 										    PRODUCT extends KProduct,
-										    PRODUCT_PURCHASE extends KProductPurchase>
+										    PURCHASE extends KPurchase>
 		extends KAbstractService<PROMO,PROMO_EXAMPLE>
 		implements KPromoService<PROMO,ACCOUNT,PRODUCT> {
 
@@ -29,7 +29,7 @@ public abstract class KAbstractPromoService<PROMO extends KPromo,
 
 	// ----------------------------------------------------------------------------
     
-	protected abstract <S extends KProductPurchaseService<PRODUCT_PURCHASE>> S getProductPurchaseService();
+	protected abstract <S extends KPurchaseService<PURCHASE>> S getPurchaseService();
     
 	// ----------------------------------------------------------------------------
 
@@ -154,9 +154,9 @@ public abstract class KAbstractPromoService<PROMO extends KPromo,
 
 
 		if (promo.getUsePerAccount() != null && account != null && product != null) {
-			List<PRODUCT_PURCHASE> purchases = getProductPurchaseService().fetchByAccountId(account.getId());
+			List<PURCHASE> purchases = getPurchaseService().fetchByAccountId(account.getId());
 			useCount = 0;
-			for (PRODUCT_PURCHASE purchase : purchases) {
+			for (PURCHASE purchase : purchases) {
 				if (purchase.getPromoId() != null && purchase.getPromoId().equals(promo.getId())) {
 					useCount +=1;
 				}
