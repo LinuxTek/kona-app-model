@@ -53,7 +53,7 @@ public abstract class KAbstractCommerceService<CART_ITEM extends KCartItem,
 										   PRODUCT_PURCHASE extends KProductPurchase>
 		implements KCommerceService<PAYMENT,ACCOUNT,CART,INVOICE> {
 
-	private static Logger logger = LoggerFactory.getLogger(KAbstractCartItemService.class);
+	private static Logger logger = LoggerFactory.getLogger(KAbstractCommerceService.class);
 
 	// ----------------------------------------------------------------------------
     
@@ -61,7 +61,7 @@ public abstract class KAbstractCommerceService<CART_ITEM extends KCartItem,
     
 	protected abstract PRODUCT_PURCHASE getNewProductPurchaseObject();
     
-	protected abstract String getGooglePackageName(Long appId);
+	protected abstract String getGooglePlayPackageName(Long appId);
     
 	protected abstract String getAppleVerifyReceiptUrl(Long appId);
     
@@ -914,7 +914,7 @@ public abstract class KAbstractCommerceService<CART_ITEM extends KCartItem,
         		}
         	} else if (store.equalsIgnoreCase("google")) {
                 //String packageName = getConfig(appId).getString("google.play.packageName");
-                String packageName = getGooglePackageName(appId);
+                String packageName = getGooglePlayPackageName(appId);
                 PRODUCT product = getProductService().fetchById(productId);
                 String googleProductId = product.getName();
                 try {

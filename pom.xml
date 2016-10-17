@@ -73,6 +73,15 @@
         </dependency>
         <!-- Groovy -->
 
+        <!-- Google Play Android Developer API -->
+        <!-- used to manage in-app billing -->
+        <dependency>
+            <groupId>com.google.apis</groupId>
+            <artifactId>google-api-services-androidpublisher</artifactId>
+            <version>v2-rev3-1.19.0</version>
+        </dependency>
+        <!-- Google Play Android Developer API -->
+
         <!-- Spring -->
         <dependency>
             <groupId>org.springframework</groupId>
