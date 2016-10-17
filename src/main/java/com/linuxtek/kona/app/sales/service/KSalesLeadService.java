@@ -12,5 +12,7 @@ public interface KSalesLeadService<SALES_LEAD extends KSalesLead>
     
     public static final String SERVICE_PATH = "rpc/KSalesLeadService";
 
+	public SALES_LEAD create(SALES_LEAD salesLead);
+    
 	public List<SALES_LEAD> fetchByReferredByUserId(Long userId);
 }

@@ -17,6 +17,7 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import com.linuxtek.kona.app.core.entity.KAccount;
+import com.linuxtek.kona.app.core.entity.KApp;
 import com.linuxtek.kona.app.core.entity.KUser;
 import com.linuxtek.kona.app.core.service.KAccountService;
 import com.linuxtek.kona.app.core.service.KSystemService;
@@ -40,17 +41,18 @@ import com.linuxtek.kona.util.KDateUtil;
 import com.linuxtek.kona.util.KStringUtil;
 import com.linuxtek.kona.util.KSystemUtil;
 
-public abstract class KAbstractCommerceService<CART_ITEM extends KCartItem, 
-										   CART_ITEM_EXAMPLE,
-										   CART extends KCart,
-										   USER extends KUser,
-										   ACCOUNT extends KAccount,
-										   PAYMENT extends KPayment,
-										   INVOICE extends KInvoice,
-										   INVOICE_ITEM extends KInvoiceItem,
-										   PROMO extends KPromo,
-										   PRODUCT extends KProduct,
-										   PRODUCT_PURCHASE extends KProductPurchase>
+public abstract class KAbstractCommerceService<
+							APP extends KApp,
+							USER extends KUser,
+							ACCOUNT extends KAccount,
+							CART extends KCart,
+							CART_ITEM extends KCartItem, 
+							INVOICE extends KInvoice,
+							INVOICE_ITEM extends KInvoiceItem,
+							PRODUCT extends KProduct,
+							PROMO extends KPromo,
+							PAYMENT extends KPayment,
+							PRODUCT_PURCHASE extends KProductPurchase>
 		implements KCommerceService<PAYMENT,ACCOUNT,CART,INVOICE> {
 
 	private static Logger logger = LoggerFactory.getLogger(KAbstractCommerceService.class);
@@ -73,8 +75,6 @@ public abstract class KAbstractCommerceService<CART_ITEM extends KCartItem,
     
 	protected abstract void sendInvalidCardEmail(INVOICE invoice);
        
-	protected abstract Long getSystemAppId();
-
 	protected abstract <S extends KAccountService<ACCOUNT>> S getAccountService();
     
 	protected abstract <S extends KUserService<USER>> S getUserService();
@@ -99,7 +99,7 @@ public abstract class KAbstractCommerceService<CART_ITEM extends KCartItem,
     
 	protected abstract <S extends KGooglePlayService<PRODUCT_PURCHASE>> S getGooglePlayService();
     
-	protected abstract <S extends KSystemService> S getSystemService();
+	protected abstract <S extends KSystemService<APP,USER>> S getSystemService();
     
 	// ----------------------------------------------------------------------------
     
@@ -636,7 +636,8 @@ public abstract class KAbstractCommerceService<CART_ITEM extends KCartItem,
             USER user = getUserService().fetchById(account.getOwnerId());
             Long userId = user.getId();
                         
-            Long appId = getSystemAppId();
+            Long appId = getSystemService().getSystemApp().getId();
+            
 			CART cart = getCartService().createCart(userId, appId, null);
 			
 			for (PRODUCT_PURCHASE purchase : subscriptionRenewList) {
