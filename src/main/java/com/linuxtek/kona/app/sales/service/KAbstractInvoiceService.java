@@ -208,6 +208,7 @@ public abstract class KAbstractInvoiceService<INVOICE extends KInvoice,
         
         invoice.setSubtotal(total);
         invoice.setTotal(total);
+        invoice.setAmountDue(total);
         invoice = update(invoice);
 
         return invoice;
