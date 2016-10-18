@@ -120,10 +120,6 @@ public abstract class KAbstractAuthCodeService<T extends KAuthCode,EXAMPLE,
 		
 		if (authCode == null || !isActive(authCode)) return null;
 		
-		boolean isActive = isActive(authCode);
-		
-        
-
 		Integer useCount = authCode.getUseCount() + 1;
         
 		authCode.setUseCount(useCount);
