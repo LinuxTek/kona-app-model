@@ -170,6 +170,13 @@ public abstract class KAbstractInvoiceService<INVOICE extends KInvoice,
         ACCOUNT account = getAccountService().fetchById(accountId);
         
         BigDecimal zero = new BigDecimal(0);
+        
+        // quick sanity check before creating invoice
+        for (INVOICE_ITEM item : itemList) {
+            if (item.getId() != null || item.getInvoiceId() != null) {
+            	throw new IllegalArgumentException("Invalid InvoiceItem object: id and/or invoiceId are already defined");
+            }
+        }
 
         // first create an empty invoice
         INVOICE invoice = getNewInvoiceObject();
@@ -201,7 +208,7 @@ public abstract class KAbstractInvoiceService<INVOICE extends KInvoice,
             item.setInvoiceId(invoiceId);
             item.setCreatedDate(now);
             
-            item = getInvoiceItemService().update(item);
+            item = getInvoiceItemService().add(item);
             
             total = total.add(item.getTotal());
         }
