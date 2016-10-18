@@ -83,7 +83,7 @@ public abstract class KAbstractCommerceService<
     
 	protected abstract <S extends KCartItemService<CART_ITEM,CART>> S getCartItemService();
     
-	protected abstract <S extends KInvoiceService<INVOICE,CART,CART_ITEM>> S getInvoiceService();
+	protected abstract <S extends KInvoiceService<INVOICE,INVOICE_ITEM,CART,CART_ITEM>> S getInvoiceService();
     
 	protected abstract <S extends KInvoiceItemService<INVOICE_ITEM,INVOICE,CART_ITEM>> S getInvoiceItemService();
     
@@ -283,11 +283,16 @@ public abstract class KAbstractCommerceService<
     		purchase.setAccountId(account.getId());
     		purchase.setUserId(invoice.getUserId());
     		purchase.setProductId(item.getProductId());
+    	}
     		
-    		// IMPORTANT! invoice appId is the app that generated the cart/invoice.
-    		// Purchase appId is the app associated with the subscription itself.
-    		PRODUCT product = getProductService().fetchById(item.getProductId());
-    		purchase.setAppId(product.getAppId());
+    	// IMPORTANT! invoice appId is the app that generated the cart/invoice.
+    	// Purchase appId is the app associated with the product itself.
+    	PRODUCT product = getProductService().fetchById(item.getProductId());
+    	purchase.setAppId(product.getAppId());
+
+        // ignore value of autoRenew if product is not a subscription
+    	if (!product.isSubscription()) {
+    		autoRenew = false;
     	}
     	
     	purchase.setPromoId(item.getPromoId());

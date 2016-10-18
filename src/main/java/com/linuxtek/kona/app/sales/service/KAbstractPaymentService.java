@@ -12,6 +12,7 @@ import com.linuxtek.kona.app.core.service.KAbstractService;
 import com.linuxtek.kona.app.sales.entity.KCart;
 import com.linuxtek.kona.app.sales.entity.KCartItem;
 import com.linuxtek.kona.app.sales.entity.KInvoice;
+import com.linuxtek.kona.app.sales.entity.KInvoiceItem;
 import com.linuxtek.kona.app.sales.entity.KPayment;
 import com.linuxtek.kona.app.sales.entity.KPaymentStatus;
 import com.linuxtek.kona.app.sales.entity.KPaymentType;
@@ -23,6 +24,7 @@ import com.linuxtek.kona.stripe.entity.KStripeException;
 public abstract class KAbstractPaymentService<PAYMENT extends KPayment, 
 										      PAYMENT_EXAMPLE,
 										      INVOICE extends KInvoice,
+										      INVOICE_ITEM extends KInvoiceItem,
 										      CART extends KCart,
 										      CART_ITEM extends KCartItem>
 		extends KAbstractService<PAYMENT,PAYMENT_EXAMPLE>
@@ -34,7 +36,7 @@ public abstract class KAbstractPaymentService<PAYMENT extends KPayment,
     
 	protected abstract PAYMENT getNewPaymentObject();
     
-	protected abstract <S extends KInvoiceService<INVOICE,CART,CART_ITEM>> S getInvoiceService();
+	protected abstract <S extends KInvoiceService<INVOICE,INVOICE_ITEM,CART,CART_ITEM>> S getInvoiceService();
     
 	// ----------------------------------------------------------------------------
     

@@ -8,21 +8,25 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.linuxtek.kona.app.core.entity.KAccount;
 import com.linuxtek.kona.app.core.service.KAbstractService;
+import com.linuxtek.kona.app.core.service.KAccountService;
 import com.linuxtek.kona.app.sales.entity.KCart;
 import com.linuxtek.kona.app.sales.entity.KCartItem;
+import com.linuxtek.kona.app.sales.entity.KCurrency;
 import com.linuxtek.kona.app.sales.entity.KInvoice;
 import com.linuxtek.kona.app.sales.entity.KInvoiceItem;
 import com.linuxtek.kona.data.mybatis.KMyBatisUtil;
 import com.linuxtek.kona.sequence.flake.KFlake;
 
 public abstract class KAbstractInvoiceService<INVOICE extends KInvoice, 
-										   		  INVOICE_EXAMPLE,
-										   		  INVOICE_ITEM extends KInvoiceItem,
-										   		  CART extends KCart,
-										   		  CART_ITEM extends KCartItem>
+										   	  INVOICE_EXAMPLE,
+										   	  INVOICE_ITEM extends KInvoiceItem,
+										   	  CART extends KCart,
+										   	  CART_ITEM extends KCartItem,
+										   	  ACCOUNT extends KAccount>
 		extends KAbstractService<INVOICE,INVOICE_EXAMPLE>
-		implements KInvoiceService<INVOICE,CART,CART_ITEM> {
+		implements KInvoiceService<INVOICE,INVOICE_ITEM,CART,CART_ITEM> {
 
 	private static Logger logger = LoggerFactory.getLogger(KAbstractInvoiceService.class);
     
@@ -31,6 +35,8 @@ public abstract class KAbstractInvoiceService<INVOICE extends KInvoice,
 	protected abstract INVOICE getNewInvoiceObject();
     
 	protected abstract INVOICE_ITEM getNewInvoiceItemObject();
+    
+	protected abstract <S extends KAccountService<ACCOUNT>> S getAccountService();
     
 	protected abstract <S extends KCartService<CART>> S getCartService();
     
@@ -151,6 +157,58 @@ public abstract class KAbstractInvoiceService<INVOICE extends KInvoice,
             item.setSubscriptionEndDate(cartItem.getSubscriptionEndDate());
             item = getInvoiceItemService().add(item);
         }
+
+        return invoice;
+    }
+    
+    @Override
+    public INVOICE createInvoice(Long appId, Long accountId, List<INVOICE_ITEM> itemList) {
+        Date now = new Date();
+        //String invoiceNo = sequence.getHexNo("invoiceNo", 9);
+        String invoiceNo = KFlake.getId();
+        
+        ACCOUNT account = getAccountService().fetchById(accountId);
+        
+        BigDecimal zero = new BigDecimal(0);
+
+        // first create an empty invoice
+        INVOICE invoice = getNewInvoiceObject();
+        invoice.setAppId(appId);
+        invoice.setUserId(account.getOwnerId());
+        invoice.setAccountId(account.getId());
+        invoice.setCurrencyId(KCurrency.USD.getId());
+        invoice.setInvoiceNo(invoiceNo);
+        invoice.setSubtotal(zero);
+        invoice.setTax(zero);
+        invoice.setShipping(zero);
+        invoice.setDiscount(zero);
+        invoice.setTotal(zero);
+        invoice.setAmountDue(zero);
+        invoice.setNotes(null);
+        invoice.setPaid(false);
+        invoice.setClosed(false);
+        invoice.setPaidDate(null);
+        invoice.setDueDate(now);
+        invoice.setInvoiceDate(now);
+        invoice.setCreatedDate(now);
+
+        invoice = add(invoice);
+        Long invoiceId = invoice.getId();
+
+        BigDecimal total = new BigDecimal(0);
+        
+        for (INVOICE_ITEM item : itemList) {
+            item.setInvoiceId(invoiceId);
+            item.setCreatedDate(now);
+            
+            item = getInvoiceItemService().update(item);
+            
+            total = total.add(item.getTotal());
+        }
+        
+        invoice.setSubtotal(total);
+        invoice.setTotal(total);
+        invoice = update(invoice);
 
         return invoice;
     }

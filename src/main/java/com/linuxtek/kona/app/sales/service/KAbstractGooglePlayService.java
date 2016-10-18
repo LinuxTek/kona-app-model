@@ -23,6 +23,7 @@ import com.google.api.services.androidpublisher.AndroidPublisherScopes;
 import com.linuxtek.kona.app.sales.entity.KCart;
 import com.linuxtek.kona.app.sales.entity.KCartItem;
 import com.linuxtek.kona.app.sales.entity.KInvoice;
+import com.linuxtek.kona.app.sales.entity.KInvoiceItem;
 import com.linuxtek.kona.app.sales.entity.KPayment;
 import com.linuxtek.kona.app.sales.entity.KPaymentType;
 import com.linuxtek.kona.app.sales.entity.KProduct;
@@ -35,6 +36,7 @@ public abstract class KAbstractGooglePlayService<
 										   CART_ITEM extends KCartItem,
 										   PAYMENT extends KPayment,
 										   INVOICE extends KInvoice,
+										   INVOICE_ITEM extends KInvoiceItem,
 										   PRODUCT extends KProduct>
 		implements KGooglePlayService<PURCHASE> {
 
@@ -56,7 +58,7 @@ public abstract class KAbstractGooglePlayService<
     
 	protected abstract String getGooglePlayAppName(Long appId);
     
-	protected abstract <S extends KInvoiceService<INVOICE,CART,CART_ITEM>> S getInvoiceService();
+	protected abstract <S extends KInvoiceService<INVOICE,INVOICE_ITEM,CART,CART_ITEM>> S getInvoiceService();
     
 	protected abstract <S extends KProductService<PRODUCT>> S getProductService();
     
