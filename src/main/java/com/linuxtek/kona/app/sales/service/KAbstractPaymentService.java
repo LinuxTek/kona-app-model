@@ -19,7 +19,6 @@ import com.linuxtek.kona.app.sales.entity.KPaymentType;
 import com.linuxtek.kona.data.mybatis.KMyBatisUtil;
 import com.linuxtek.kona.remote.service.KServiceClient;
 import com.linuxtek.kona.stripe.entity.KCharge;
-import com.linuxtek.kona.stripe.entity.KStripeException;
 
 public abstract class KAbstractPaymentService<PAYMENT extends KPayment, 
 										      PAYMENT_EXAMPLE,
