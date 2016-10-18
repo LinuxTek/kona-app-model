@@ -11,6 +11,7 @@
 
 -- --------------------------------------------------------------------------
 
+DROP TABLE IF EXISTS `campaign`;
 CREATE TABLE `campaign` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `uid` varchar(255) NOT NULL,
@@ -19,7 +20,7 @@ CREATE TABLE `campaign` (
   `partner_id` bigint(20) unsigned DEFAULT NULL,
   `name` varchar(255) NOT NULL,
   `display_name` varchar(255) DEFAULT NULL,
-  `description` varchar(512) DEFAULT NULL,
+  `description` varchar(4000) DEFAULT NULL,
   `enabled` tinyint(1) NOT NULL DEFAULT '1',
   `created_date` datetime(6) NOT NULL,
   `start_date` datetime(6) DEFAULT NULL,
@@ -39,6 +40,7 @@ CREATE TABLE `campaign` (
 
 -- --------------------------------------------------------------------------
 
+DROP TABLE IF EXISTS `campaign_channel`;
 CREATE TABLE `campaign_channel` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `uid` varchar(255) NOT NULL,
@@ -74,6 +76,7 @@ CREATE TABLE `campaign_channel` (
 
 -- --------------------------------------------------------------------------
 
+DROP TABLE IF EXISTS `campaign_event`;
 CREATE TABLE `campaign_event` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `uid` varchar(255) NOT NULL,
@@ -105,6 +108,7 @@ CREATE TABLE `campaign_event` (
 
 
 
+DROP TABLE IF EXISTS `campaign_type`;
 CREATE TABLE `campaign_type` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
@@ -117,6 +121,7 @@ CREATE TABLE `campaign_type` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 
+DROP TABLE IF EXISTS `cart`;
 CREATE TABLE `cart` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `app_id` bigint(20) unsigned NOT NULL,
@@ -130,8 +135,8 @@ CREATE TABLE `cart` (
   `browser` varchar(512) DEFAULT NULL,
   `latitude` double DEFAULT NULL,
   `longitude` double DEFAULT NULL,
-  `description` varchar(255) DEFAULT NULL,
-  `notes` varchar(255) DEFAULT NULL,
+  `description` varchar(4000) DEFAULT NULL,
+  `notes` varchar(2000) DEFAULT NULL,
   `default_card_last4` varchar(4) DEFAULT NULL,
   `subtotal` decimal(10,2) DEFAULT NULL,
   `discount` decimal(10,2) DEFAULT NULL,
@@ -162,14 +167,15 @@ CREATE TABLE `cart` (
 
 
 
+DROP TABLE IF EXISTS `cart_item`;
 CREATE TABLE `cart_item` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `cart_id` bigint(20) unsigned NOT NULL,
   `product_id` bigint(20) unsigned DEFAULT NULL,
   `promo_id` bigint(20) unsigned DEFAULT NULL,
   `quantity` int(11) NOT NULL DEFAULT '1',
-  `description` varchar(1024) DEFAULT NULL,
-  `discount_description` varchar(1024) DEFAULT NULL,
+  `description` varchar(4000) DEFAULT NULL,
+  `discount_description` varchar(4000) DEFAULT NULL,
   `unit_price` decimal(10,2) DEFAULT NULL,
   `setup_fee` decimal(10,2) DEFAULT NULL,
   `subtotal` decimal(10,2) DEFAULT NULL,
@@ -191,6 +197,7 @@ CREATE TABLE `cart_item` (
 
 
 
+DROP TABLE IF EXISTS `currency`;
 CREATE TABLE `currency` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(64) NOT NULL,
@@ -207,6 +214,7 @@ CREATE TABLE `currency` (
 
 
 
+DROP TABLE IF EXISTS `invoice`;
 CREATE TABLE `invoice` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `app_id` bigint(20) unsigned NOT NULL,
@@ -237,8 +245,8 @@ CREATE TABLE `invoice` (
   `last_payment_attempt_date` datetime(6) DEFAULT NULL,
   `next_payment_attempt_date` datetime(6) DEFAULT NULL,
   `payment_card_last4` varchar(4) DEFAULT NULL,
-  `payment_ref` varchar(255) DEFAULT NULL,
-  `notes` varchar(255) DEFAULT NULL,
+  `payment_ref` varchar(512) DEFAULT NULL,
+  `notes` varchar(4000) DEFAULT NULL,
   `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`),
@@ -255,13 +263,14 @@ CREATE TABLE `invoice` (
 
 
 
+DROP TABLE IF EXISTS `invoice_item`;
 CREATE TABLE `invoice_item` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `invoice_id` bigint(20) unsigned NOT NULL,
   `product_id` bigint(20) unsigned DEFAULT NULL,
   `promo_id` bigint(20) unsigned DEFAULT NULL,
-  `description` varchar(1024) DEFAULT NULL,
-  `discount_description` varchar(1024) DEFAULT NULL,
+  `description` varchar(4000) DEFAULT NULL,
+  `discount_description` varchar(4000) DEFAULT NULL,
   `unit_price` decimal(10,2) DEFAULT NULL,
   `setup_fee` decimal(10,2) DEFAULT NULL,
   `quantity` int(11) NOT NULL DEFAULT '1',
@@ -285,13 +294,14 @@ CREATE TABLE `invoice_item` (
 
 
 
+DROP TABLE IF EXISTS `partner`;
 CREATE TABLE `partner` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `uid` varchar(255) NOT NULL,
   `parent_id` bigint(20) unsigned DEFAULT NULL,
   `name` varchar(255) NOT NULL,
   `display_name` varchar(255) NOT NULL,
-  `description` varchar(2000) DEFAULT NULL,
+  `description` varchar(4000) DEFAULT NULL,
   `url` varchar(255) DEFAULT NULL,
   `logo_url` varchar(255) DEFAULT NULL,
   `facebook_url` varchar(255) DEFAULT NULL,
@@ -322,6 +332,7 @@ CREATE TABLE `partner` (
 
 -- --------------------------------------------------------------------------
 
+DROP TABLE IF EXISTS `payment`;
 CREATE TABLE `payment` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `app_id` bigint(20) unsigned NOT NULL,
@@ -342,9 +353,9 @@ CREATE TABLE `payment` (
   `card_last4` varchar(4) DEFAULT NULL,
   `amount` decimal(10,2) DEFAULT NULL,
   `amount_refunded` decimal(10,2) DEFAULT NULL,
-  `processor_ref` varchar(255) DEFAULT NULL,
+  `processor_ref` varchar(512) DEFAULT NULL, -- unique key determines max size here
   `processor_receipt` text,
-  `processor_error` varchar(255) DEFAULT NULL,
+  `processor_error` varchar(2000) DEFAULT NULL,
   `processor_fee` decimal(10,2) DEFAULT NULL,
   `paid` tinyint(1) NOT NULL DEFAULT '0',
   `refunded` tinyint(1) NOT NULL DEFAULT '0',
@@ -380,6 +391,7 @@ CREATE TABLE `payment` (
 
 -- --------------------------------------------------------------------------
 
+DROP TABLE IF EXISTS `payment_status`;
 CREATE TABLE `payment_status` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(32) NOT NULL,
@@ -393,6 +405,7 @@ CREATE TABLE `payment_status` (
 
 -- --------------------------------------------------------------------------
 
+DROP TABLE IF EXISTS `payment_type`;
 CREATE TABLE `payment_type` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(32) NOT NULL,
@@ -407,6 +420,7 @@ CREATE TABLE `payment_type` (
 
 -- --------------------------------------------------------------------------
 
+DROP TABLE IF EXISTS `pre_order`;
 CREATE TABLE `pre_order` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `uid` varchar(255) NOT NULL,
@@ -421,10 +435,10 @@ CREATE TABLE `pre_order` (
   `reconciled` tinyint(1) NOT NULL DEFAULT '0',
   `proxy_payment` tinyint(1) NOT NULL DEFAULT '0',
   `processor` enum('stripe') DEFAULT NULL,
-  `payment_description` varchar(255) DEFAULT NULL,
+  `payment_description` varchar(4000) DEFAULT NULL,
   `payment_token` varchar(255) DEFAULT NULL,
   `payment_card_last4` varchar(255) DEFAULT NULL,
-  `payment_ref` varchar(255) DEFAULT NULL,
+  `payment_ref` varchar(512) DEFAULT NULL,
   `first_name` varchar(255) DEFAULT NULL,
   `last_name` varchar(255) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
@@ -461,13 +475,14 @@ CREATE TABLE `pre_order` (
 
 -- --------------------------------------------------------------------------
 
+DROP TABLE IF EXISTS `promo`;
 CREATE TABLE `promo` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `app_id` bigint(20) unsigned NOT NULL,
   `product_id` bigint(20) unsigned NOT NULL,
   `name` varchar(255) NOT NULL,
   `display_name` varchar(255) DEFAULT NULL,
-  `description` varchar(255) DEFAULT NULL,
+  `description` varchar(4000) DEFAULT NULL,
   `enabled` tinyint(1) NOT NULL DEFAULT '0',
   `visible` tinyint(1) NOT NULL DEFAULT '0',
   `signup_default` tinyint(1) NOT NULL DEFAULT '0',
@@ -496,6 +511,7 @@ CREATE TABLE `promo` (
 
 -- --------------------------------------------------------------------------
 
+DROP TABLE IF EXISTS `promo_page`;
 CREATE TABLE `promo_page` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `app_id` bigint(20) unsigned DEFAULT NULL,
@@ -533,6 +549,7 @@ CREATE TABLE `promo_page` (
 
 -- --------------------------------------------------------------------------
 
+DROP TABLE IF EXISTS `sales_lead`;
 CREATE TABLE `sales_lead` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `uid` varchar(255) NOT NULL,
@@ -571,13 +588,14 @@ CREATE TABLE `sales_lead` (
 
 -- --------------------------------------------------------------------------
 
+DROP TABLE IF EXISTS `product`;
 CREATE TABLE `product` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `app_id` bigint(20) unsigned NOT NULL,
   `name` varchar(255) NOT NULL,
   `display_name` varchar(255) DEFAULT NULL,
   `display_order` int(11) unsigned DEFAULT NULL,
-  `description` varchar(255) DEFAULT NULL,
+  `description` varchar(4000) DEFAULT NULL,
   `price` decimal(10,2) DEFAULT NULL,
   `setup_fee` decimal(10,2) DEFAULT NULL,
   `trial_days` int(11) DEFAULT NULL,
@@ -597,6 +615,7 @@ CREATE TABLE `product` (
 
 -- --------------------------------------------------------------------------
 
+DROP TABLE IF EXISTS `purchase`;
 CREATE TABLE `purchase` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `parent_id` bigint(20) unsigned DEFAULT NULL,

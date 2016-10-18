@@ -170,7 +170,7 @@ public abstract class KAbstractCommerceService<
             	KPaymentStatus status = 
             			KPaymentStatus.getInstance(payment.getStatusId());
             	if (status != KPaymentStatus.SUCCESS || !payment.isPaid()) {
-            		getInvoiceService().closeInvoice(invoice, false, null, null, null);
+            		getInvoiceService().closeInvoice(invoice, false, null, null, null, null);
             	}
             }
             
@@ -194,7 +194,8 @@ public abstract class KAbstractCommerceService<
             	payment = processorCharge(invoice, cardToken, client);
             } else {
                 BigDecimal paidAmount = new BigDecimal(0);
-            	getInvoiceService().closeInvoice(invoice, true, paidAmount, "INTERNAL", null);
+                String notes = "Invoice paid internally. User not directly charged.";
+            	getInvoiceService().closeInvoice(invoice, true, paidAmount, "INTERNAL", null, notes);
                 
             	//FIXME: assume for now that if payment is not required
             	// it is because of a promoCode
@@ -344,7 +345,7 @@ public abstract class KAbstractCommerceService<
             paid = true;
     	}
 
-    	getInvoiceService().closeInvoice(invoice, paid, paidAmount, processorRef, null);
+    	getInvoiceService().closeInvoice(invoice, paid, paidAmount, processorRef, null, null);
 
     	Long promoId = getPromoIdByInvoice(invoice);
         Date now = new Date();
@@ -725,7 +726,8 @@ public abstract class KAbstractCommerceService<
         for (INVOICE invoice : invoiceList) {
             Integer attemptCount = invoice.getPaymentAttemptCount();
             if (attemptCount != null && attemptCount >= 3) {
-            	getInvoiceService().closeInvoice(invoice, false, null, null, null);
+                String notes = "Max payment attempts reached";
+            	getInvoiceService().closeInvoice(invoice, false, null, null, null, notes);
 				getSystemService().alert("Failed Invoice", KClassUtil.toJson(invoice));
             	continue;
             }
@@ -752,7 +754,8 @@ public abstract class KAbstractCommerceService<
             // make sure account is still active
             ACCOUNT account = getAccountService().fetchById(invoice.getAccountId());
             if (account.getRetiredDate() != null) {
-            	getInvoiceService().closeInvoice(invoice, false, null, null, null);
+                String notes = "User account is not active";
+            	getInvoiceService().closeInvoice(invoice, false, null, null, null, notes);
 				getSystemService().alert("Failed Invoice: account has been retired", KClassUtil.toJson(invoice));
             	continue;
             }

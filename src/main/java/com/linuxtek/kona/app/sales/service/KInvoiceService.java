@@ -37,7 +37,7 @@ public interface KInvoiceService<INVOICE extends KInvoice,
 	public void updateInvoice(INVOICE invoice);
     
 	public void closeInvoice(INVOICE invoice, boolean paid, BigDecimal amount,
-			String paymentRef, String cardLast4);
+			String paymentRef, String cardLast4, String notes);
 
 
 }

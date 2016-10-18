@@ -252,8 +252,8 @@ public abstract class KAbstractInvoiceService<INVOICE extends KInvoice,
 	// ----------------------------------------------------------------------------
     
     @Override 
-    public void closeInvoice(INVOICE invoice, boolean paid, 
-    		BigDecimal amount, String paymentRef, String cardLast4) {
+    public void closeInvoice(INVOICE invoice, boolean paid, BigDecimal amount, 
+    		String paymentRef, String cardLast4, String notes) {
     	Date now = new Date();
         Date paidDate = null;
         if (paid) paidDate = now;
@@ -265,6 +265,16 @@ public abstract class KAbstractInvoiceService<INVOICE extends KInvoice,
         invoice.setPaid(paid);
         invoice.setPaidDate(paidDate);
         invoice.setAmountPaid(amount);
+        
+        String currentNotes = invoice.getNotes();
+        if (currentNotes != null) {
+        	currentNotes += "\n" + notes;
+        } else {
+        	currentNotes = notes;
+        }
+        
+        invoice.setNotes(notes);
+        
         update(invoice);
     }
 }

@@ -91,11 +91,19 @@ public abstract class KAbstractStripeService<ACCOUNT extends KAccount,
     @Override
 	public ACCOUNT updateAccountStripeUidByCardToken(Long appId, ACCOUNT account, String cardToken)  {
         USER user = getUserService().fetchById(account.getOwnerId());
+        
         String email = user.getEmail();
         String description = user.getUsername();
-    	KCustomer customer = addCustomer(appId, email, description, cardToken);
-    	account.setStripeUid(customer.getId());
-    	return getAccountService().update(account);
+        
+        if (account.getStripeUid() == null) {
+        	KCustomer customer = addCustomer(appId, email, description, cardToken);
+        	account.setStripeUid(customer.getId());
+            getAccountService().update(account);
+        } else {
+        	addPrimaryCard(appId, account, cardToken);
+        }
+        
+    	return account;
 	}
     
 	// ----------------------------------------------------------------------------
@@ -134,6 +142,14 @@ public abstract class KAbstractStripeService<ACCOUNT extends KAccount,
     
     // ----------------------------------------------------------------------
 
+    /*
+     * Passing source will create a new source object, make it the new customer default source, and delete 
+     * the old customer default if one exists. If you want to add additional sources instead of replacing 
+     * the existing default, use the card creation API. Whenever you attach a card to a customer, Stripe 
+     * will automatically validate the card.
+     * 
+     * https://stripe.com/docs/api/java#update_customer
+     */
     @Override
     public KCard addPrimaryCard(Long appId, ACCOUNT account, String cardToken) {
         String stripeUid = account.getStripeUid();
@@ -163,8 +179,14 @@ public abstract class KAbstractStripeService<ACCOUNT extends KAccount,
     
     @Override 
     public KCard getPrimaryCardByUserId(Long appId, Long userId) {
-        if (userId == null) return null;
+        
+        if (userId == null) {
+        	logger.warn("getPrimaryCardByUserId: userId is null");
+        	return null;
+        }
+        
         ACCOUNT account = getAccountByUserId(userId);
+        
         return getPrimaryCard(appId, account);
     }
     
@@ -172,9 +194,18 @@ public abstract class KAbstractStripeService<ACCOUNT extends KAccount,
     
     @Override
     public KCard getPrimaryCard(Long appId, ACCOUNT account) {
-        if (account == null) return null;
+        if (account == null) {
+        	logger.warn("getPrimaryCard: account is null");
+        	return null;
+        }
+        
         String stripeUid = account.getStripeUid();
-        if (stripeUid == null) return null;
+        
+        if (stripeUid == null) {
+        	logger.warn("getPrimaryCard: stripeUid is null");
+        	return null;
+        }
+        
     	return fetchCustomerActiveCard(appId, stripeUid);
     }
     
@@ -182,10 +213,21 @@ public abstract class KAbstractStripeService<ACCOUNT extends KAccount,
     
     @Override 
     public String getPrimaryCardLast4ByUserId(Long appId, Long userId) {
-        if (userId == null) return null;
+        
+        if (userId == null) {
+            logger.warn("getPrimaryCardLast4ByUserId: userId is null");
+        	return null;
+        }
+        
     	KCard card = getPrimaryCardByUserId(appId, userId);
-        if (card == null) return null;
+        
+        if (card == null) {
+            logger.debug("getPrimaryCardLast4ByUserId: card is null");
+        	return null;
+        }
+        
         return card.getLast4();
+        
     }
     
     // ----------------------------------------------------------------------

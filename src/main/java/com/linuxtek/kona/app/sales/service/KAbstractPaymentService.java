@@ -159,7 +159,7 @@ public abstract class KAbstractPaymentService<PAYMENT extends KPayment,
             invoice.setAmountPaid(amountPaid);
             invoiceService.update(invoice);
             */
-            getInvoiceService().closeInvoice(invoice, true, amountPaid, paymentRef, cardLast4);
+            getInvoiceService().closeInvoice(invoice, true, amountPaid, paymentRef, cardLast4, null);
             
             payment.setPaidDate(now);
         } else {
