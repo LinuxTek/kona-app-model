@@ -121,7 +121,7 @@ public abstract class KAbstractCommerceService<
     
     @Override
     public PAYMENT charge(CART cart, String cardToken, Boolean setDefaultCard, 
-            String paymentOption, KServiceClient client) throws KStripeException {
+            String paymentOption, KServiceClient client) {
             // paymentOption: defaultCard | newCard
             // we always charge the default (active) card associated
             // with the customer.  The only situation we need to account
@@ -152,9 +152,9 @@ public abstract class KAbstractCommerceService<
     // is immediately closed so a payment retry does not occur.  The assumption
     // is that carts are charged for live payments and invoices are charged
     // for recurring payments.
-    public PAYMENT charge(CART cart, String cardToken, KServiceClient client) throws KStripeException {
+    public PAYMENT charge(CART cart, String cardToken, KServiceClient client) {
             if (cart == null) {
-                throw new IllegalStateException("Cart is empty");
+                throw new KPaymentException("Cart is empty");
             }
             
             boolean paymentRequired = false;
@@ -180,16 +180,14 @@ public abstract class KAbstractCommerceService<
 	// ----------------------------------------------------------------------------
     
     @Override
-    public PAYMENT charge(INVOICE invoice, KServiceClient client)
-    		throws KStripeException {
+    public PAYMENT charge(INVOICE invoice, KServiceClient client) {
         return charge(invoice, null, true, client);
     }
     
 	// ----------------------------------------------------------------------------
  
     @Override
-    public PAYMENT charge(INVOICE invoice, String cardToken, 
-    		boolean paymentRequired, KServiceClient client) throws KStripeException {
+    public PAYMENT charge(INVOICE invoice, String cardToken, boolean paymentRequired, KServiceClient client) {
             PAYMENT payment = null;
             
             if (paymentRequired) {
@@ -436,23 +434,23 @@ public abstract class KAbstractCommerceService<
     /*
     @Override
     private PAYMENT chargeCustomer(String cardToken, INVOICE invoice)
-    		throws KStripeException {
+    		throws KPaymentException {
         ACCOUNT account = getAccount(invoice.getAccountId());
 
         if (account == null) {
-            throw new IllegalStateException(
+            throw new KPaymentException(
                 "Account not found for invoice: " + toString(invoice));
         }
         
         // see if we have a stripeUid for this customer
         if (cardToken == null && account.getStripeUid() == null) {
-            throw new IllegalStateException(
+            throw new KPaymentException(
                 "StripeUid is null for accountId: " + account.getId());
         }
         
         BigDecimal total = invoice.getAmountDue();
         if (total == null || total.compareTo(new BigDecimal(0))<=0) {
-            throw new IllegalStateException(
+            throw new KPaymentException(
             		"Invoice amount due is null or negative: " + total);
         }
         
@@ -549,9 +547,10 @@ public abstract class KAbstractCommerceService<
         	payment = getPaymentService().createPayment(KPaymentType.CARD, cardToken,
         			invoice, chargeItem, client);
         } catch (KStripeException e) {
+            KPaymentException ex = new KPaymentException(e.getMessage(), e);
             // FIXME: parse exception and properly set PaymentStatus
             payment = getPaymentService().createPayment(KPaymentType.CARD, cardToken, 
-            		invoice, e, client);
+            		invoice, ex, client);
         }
         
         return payment;
@@ -834,11 +833,11 @@ public abstract class KAbstractCommerceService<
     		String notes, KServiceClient client) {
         
         if (productId == null) {
-            throw new IllegalArgumentException("Payment.inAppPurchase: productId is null.");
+            throw new KPaymentException("Payment.inAppPurchase: productId is null.");
         }
         
         if (paidAmount == null) {
-            throw new IllegalArgumentException("Payment.inAppPurchase: paidAmount is null.");
+            throw new KPaymentException("Payment.inAppPurchase: paidAmount is null.");
         }
         
         paidAmount = paidAmount.setScale(2, BigDecimal.ROUND_HALF_UP);
@@ -851,18 +850,18 @@ public abstract class KAbstractCommerceService<
         		if (payment.getAmount().compareTo(paidAmount) != 0) {
         			getSystemService().alert("InAppPurchase Error: Payment amount mismatch", "Paid amount: " + paidAmount 
         					+ "\n\nExisting Payment: " + payment.toString());
-        			throw new IllegalStateException("InAppPurchase Error: Payment amount mismatch");
+        			throw new KPaymentException("InAppPurchase Error: Payment amount mismatch");
         		}
         		
         		if (payment.getInvoiceId() == null) {
         			getSystemService().alert("InAppPurchase Error: Invoice not found for Payment", payment.toString());
-        			throw new IllegalStateException("InAppPurchase Error: Invoice not found for Payment");
+        			throw new KPaymentException("InAppPurchase Error: Invoice not found for Payment");
         		}
         		
         		if (!payment.getUserId().equals(userId)) {
         			getSystemService().alert("InAppPurchase Error: Payment user mismatch", "User ID: " + userId 
         					+ "\n\nExisting Payment: " + payment.toString());
-        			throw new IllegalStateException("InAppPurchase Error: Payment user mismatch");
+        			throw new KPaymentException("InAppPurchase Error: Payment user mismatch");
         		}
         		
         		INVOICE invoice = getInvoiceService().fetchById(payment.getInvoiceId());
@@ -877,7 +876,7 @@ public abstract class KAbstractCommerceService<
         		if (!foundItem) {
         			getSystemService().alert("InAppPurchase Error: Product item not found for payment", "Product ID: " + productId 
         					+ "\n\nExisting Invoice Items: " + KClassUtil.toJson(items));
-        			throw new IllegalStateException("InAppPurchase Error: product item not found for payment");
+        			throw new KPaymentException("InAppPurchase Error: product item not found for payment");
         		}
         		
         		return payment;

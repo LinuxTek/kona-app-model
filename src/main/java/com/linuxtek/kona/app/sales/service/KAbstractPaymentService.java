@@ -97,9 +97,10 @@ public abstract class KAbstractPaymentService<PAYMENT extends KPayment,
     
     @Override
     public PAYMENT createPayment(KPaymentType type, String cardToken,
-    		INVOICE invoice, KStripeException ex, KServiceClient client) {
+    		INVOICE invoice, KPaymentException ex, KServiceClient client) {
         
         String error = ex.getMessage();
+        
         return createPayment(type, KPaymentStatus.PROCESSOR_ERROR, 
         		cardToken, invoice, null, error, client);
     }

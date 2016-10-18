@@ -10,7 +10,6 @@ import com.linuxtek.kona.data.service.KDataService;
 import com.linuxtek.kona.remote.service.KService;
 import com.linuxtek.kona.remote.service.KServiceClient;
 import com.linuxtek.kona.stripe.entity.KCharge;
-import com.linuxtek.kona.stripe.entity.KStripeException;
 
 public interface KPaymentService<PAYMENT extends KPayment, INVOICE extends KInvoice> 
         extends KService, KDataService<PAYMENT> {
@@ -28,7 +27,7 @@ public interface KPaymentService<PAYMENT extends KPayment, INVOICE extends KInvo
 			INVOICE invoice, KCharge chargeItem, KServiceClient client);
 	
 	public PAYMENT createPayment(KPaymentType type, String cardToken, 
-			INVOICE invoice, KStripeException ex, KServiceClient client);
+			INVOICE invoice, KPaymentException ex, KServiceClient client);
 	
 	public PAYMENT createPayment(KPaymentType type, KPaymentStatus status, String cardToken, 
 			INVOICE invoice, KCharge chargeItem, String paymentError, KServiceClient client);

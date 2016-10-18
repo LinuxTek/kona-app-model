@@ -8,8 +8,6 @@ import com.linuxtek.kona.app.sales.entity.KInvoice;
 import com.linuxtek.kona.app.sales.entity.KPayment;
 import com.linuxtek.kona.remote.service.KService;
 import com.linuxtek.kona.remote.service.KServiceClient;
-import com.linuxtek.kona.stripe.entity.KStripeException;
-
 
 public interface KCommerceService<PAYMENT extends KPayment,
 								  ACCOUNT extends KAccount,
@@ -22,18 +20,18 @@ public interface KCommerceService<PAYMENT extends KPayment,
 	// ----------------------------------------------------------------------
     
 	public PAYMENT charge(CART cart, String cardToken, Boolean setDefaultCard,
-			String paymentOption, KServiceClient client) throws KStripeException;
+			String paymentOption, KServiceClient client);
 
 	// NOTE, if a payment fails while charging a cart, the generated invoice
 	// is immediately closed so a payment retry does not occur.  The assumption
 	// is that carts are charged for live payments and invoices are charged
 	// for recurring payments.
-	public PAYMENT charge(CART cart, String cardToken, KServiceClient client) throws KStripeException;
+	public PAYMENT charge(CART cart, String cardToken, KServiceClient client);
 
-	public PAYMENT charge(INVOICE invoice, KServiceClient client) throws KStripeException;
+	public PAYMENT charge(INVOICE invoice, KServiceClient client);
 
 	public PAYMENT charge(INVOICE invoice, String cardToken,
-			boolean paymentRequired, KServiceClient client) throws KStripeException;
+			boolean paymentRequired, KServiceClient client);
 	
 	public PAYMENT externalCharge(CART cart, Long paymentTypeId, BigDecimal paidAmount,
 			String processorRef, BigDecimal processorFee, KServiceClient client);
