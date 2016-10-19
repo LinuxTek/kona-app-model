@@ -175,6 +175,10 @@ public abstract class KAbstractEmailService<EMAIL extends KEmail,
 		mailer.setCc(cc);
 		mailer.setBcc(bcc);
 		mailer.setSubject(subject);
+        
+		if (body == null) {
+			body = "";
+		}
 		
 		if (html) {
 			mailer.setHtmlBody(body);
@@ -194,7 +198,7 @@ public abstract class KAbstractEmailService<EMAIL extends KEmail,
 				+ "\ncc: " + cc
 				+ "\nbcc: " + bcc
 				+ "\nhtml: " + html
-				+ "\nbody: " + body.substring(1, 100);
+				+ "\nbody: " + (body.length() > 100 ? body.substring(1, 100) : body);
 
 		logger.debug("sendEmail: message properties:" + email);
 
