@@ -6,7 +6,7 @@ set @accountDisplayName = 'System';
 -- ----------------------- 
 -- Create account record
 -- ----------------------- 
-insert into account(
+insert into core__account(
     id,
     uid,
     owner_id,
@@ -45,7 +45,7 @@ set @roles = 1; -- SYSTEM Role
 set @statusId = 100; -- ENABLED
 
 
-insert into user(
+insert into core__user(
     id, 
     uid, 
     type_id, 

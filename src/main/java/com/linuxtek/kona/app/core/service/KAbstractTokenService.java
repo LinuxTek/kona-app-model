@@ -128,9 +128,12 @@ public abstract class KAbstractTokenService<T extends KToken,EXAMPLE>
 		Map<String,Object> filter = KMyBatisUtil.createFilter("userId", userId);
 		filter.put("clientId", clientId);
 		filter.put("active", true);
-		String[] sortOrder = { "token.last_updated desc" };
 
-		T token = KMyBatisUtil.fetchOne(fetchByCriteria(0, 99999, sortOrder, filter, false));
+        // FIXME: Hardcoding table and column names here is dangerous
+        // Also not needed since fetchOne will fail if multiple tokens are retrieved
+		//String[] sortOrder = { "core__token.last_updated DESC" };
+
+		T token = KMyBatisUtil.fetchOne(fetchByCriteria(0, 99999, null, filter, false));
 
 		// for testing, set isTokenValid(token, false)
 		// for production always set isTokenValid(token, true)

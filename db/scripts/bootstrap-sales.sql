@@ -11,8 +11,7 @@
 
 -- --------------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `campaign`;
-CREATE TABLE `campaign` (
+CREATE TABLE `sales__campaign` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `uid` varchar(255) NOT NULL,
   `app_id` bigint(20) unsigned NOT NULL,
@@ -26,22 +25,35 @@ CREATE TABLE `campaign` (
   `start_date` datetime(6) DEFAULT NULL,
   `end_date` datetime(6) DEFAULT NULL,
   `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
   PRIMARY KEY (`id`),
+
   UNIQUE KEY `id` (`id`),
-  UNIQUE KEY `ux_campaign_name` (`name`),
-  UNIQUE KEY `ux_campaign_uid` (`uid`),
-  KEY `ix_campaign_app` (`app_id`),
-  KEY `ix_campaign_promo` (`promo_id`),
-  KEY `ix_campaign_partner` (`partner_id`),
-  CONSTRAINT `fk_campaign_app` FOREIGN KEY (`app_id`) REFERENCES `app` (`id`),
-  CONSTRAINT `fk_campaign_partner` FOREIGN KEY (`partner_id`) REFERENCES `partner` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_campaign_promo` FOREIGN KEY (`promo_id`) REFERENCES `promo` (`id`) ON DELETE CASCADE
+
+  UNIQUE KEY `ux_sales__campaign_name` (`name`),
+
+  UNIQUE KEY `ux_sales__campaign_uid` (`uid`),
+
+  KEY `ix_sales__campaign_app` (`app_id`),
+
+  KEY `ix_sales__campaign_promo` (`promo_id`),
+
+  KEY `ix_sales__campaign_partner` (`partner_id`),
+
+  CONSTRAINT `fk_sales__campaign_app` FOREIGN KEY (`app_id`) 
+        REFERENCES `core__app` (`id`),
+
+  CONSTRAINT `fk_sales__campaign_partner` FOREIGN KEY (`partner_id`) 
+        REFERENCES `sales__partner` (`id`) ON DELETE CASCADE,
+
+  CONSTRAINT `fk_sales__campaign_promo` FOREIGN KEY (`promo_id`) 
+        REFERENCES `sales__promo` (`id`) ON DELETE CASCADE
+
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 -- --------------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `campaign_channel`;
-CREATE TABLE `campaign_channel` (
+CREATE TABLE `sales__campaign_channel` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `uid` varchar(255) NOT NULL,
   `campaign_id` bigint(20) unsigned NOT NULL,
@@ -61,23 +73,36 @@ CREATE TABLE `campaign_channel` (
   `start_date` datetime(6) DEFAULT NULL,
   `end_date` datetime(6) DEFAULT NULL,
   `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
   PRIMARY KEY (`id`),
+
   UNIQUE KEY `id` (`id`),
-  UNIQUE KEY `ux_campaign_channel_uid` (`uid`),
-  UNIQUE KEY `ux_campaign_channel_name` (`campaign_id`,`name`),
-  UNIQUE KEY `ux_campaign_channel_campaign_type_name` (`campaign_id`,`type_id`,`name`),
-  UNIQUE KEY `ux_campaign_channel_sms_number` (`sms_number`),
-  UNIQUE KEY `ux_campaign_channel_name_url_path` (`name`,`url_path`),
-  KEY `ix_campaign_channel_campaign` (`campaign_id`),
-  KEY `ix_campaign_channel_type` (`type_id`),
-  CONSTRAINT `fk_campaign_channel_campaign` FOREIGN KEY (`campaign_id`) REFERENCES `campaign` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_campaign_channel_type` FOREIGN KEY (`type_id`) REFERENCES `campaign_type` (`id`) ON UPDATE CASCADE
+
+  UNIQUE KEY `ux_sales__campaign_channel_uid` (`uid`),
+
+  UNIQUE KEY `ux_sales__campaign_channel_name` (`campaign_id`,`name`),
+
+  UNIQUE KEY `ux_sales__campaign_channel_campaign_type_name` (`campaign_id`,`type_id`,`name`),
+
+  UNIQUE KEY `ux_sales__campaign_channel_sms_number` (`sms_number`),
+
+  UNIQUE KEY `ux_sales__campaign_channel_name_url_path` (`name`,`url_path`),
+
+  KEY `ix_sales__campaign_channel_campaign` (`campaign_id`),
+
+  KEY `ix_sales__campaign_channel_type` (`type_id`),
+
+  CONSTRAINT `fk_sales__campaign_channel_campaign` FOREIGN KEY (`campaign_id`) 
+        REFERENCES `sales__campaign` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+
+  CONSTRAINT `fk_sales__campaign_channel_type` FOREIGN KEY (`type_id`) 
+        REFERENCES `sales__campaign_type` (`id`) ON UPDATE CASCADE
+
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 -- --------------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `campaign_event`;
-CREATE TABLE `campaign_event` (
+CREATE TABLE `sales__campaign_event` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `uid` varchar(255) NOT NULL,
   `campaign_id` bigint(20) unsigned NOT NULL,
@@ -95,34 +120,51 @@ CREATE TABLE `campaign_event` (
   `longitude` double DEFAULT NULL,
   `created_date` datetime(6) NOT NULL,
   `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
   PRIMARY KEY (`id`),
+
   UNIQUE KEY `id` (`id`),
-  UNIQUE KEY `ux_campaign_event_uid` (`uid`),
-  KEY `ix_campaign_event_campaign` (`campaign_id`),
-  KEY `ix_campaign_event_channel` (`channel_id`),
-  KEY `ix_campaign_event_user` (`user_id`),
-  CONSTRAINT `fk_campaign_event_campaign` FOREIGN KEY (`campaign_id`) REFERENCES `campaign` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_campaign_event_channel` FOREIGN KEY (`channel_id`) REFERENCES `campaign_channel` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_campaign_event_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
+
+  UNIQUE KEY `ux_sales__campaign_event_uid` (`uid`),
+
+  KEY `ix_sales__campaign_event_campaign` (`campaign_id`),
+
+  KEY `ix_sales__campaign_event_channel` (`channel_id`),
+
+  KEY `ix_sales__campaign_event_user` (`user_id`),
+
+  CONSTRAINT `fk_sales__campaign_event_campaign` FOREIGN KEY (`campaign_id`) 
+        REFERENCES `sales__campaign` (`id`) ON DELETE CASCADE,
+
+  CONSTRAINT `fk_sales__campaign_event_channel` FOREIGN KEY (`channel_id`) 
+        REFERENCES `sales__campaign_channel` (`id`) ON DELETE CASCADE,
+
+  CONSTRAINT `fk_sales__campaign_event_user` FOREIGN KEY (`user_id`) 
+        REFERENCES `core__user` (`id`) ON DELETE CASCADE
+
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 
+-- --------------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `campaign_type`;
-CREATE TABLE `campaign_type` (
+CREATE TABLE `sales__campaign_type` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `display_name` varchar(255) DEFAULT NULL,
   `created_date` datetime(6) NOT NULL,
   `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
   PRIMARY KEY (`id`),
+
   UNIQUE KEY `id` (`id`),
-  UNIQUE KEY `ux_campaign_type_name` (`name`)
+
+  UNIQUE KEY `ux_sales__campaign_type_name` (`name`)
+
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
+-- --------------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `cart`;
-CREATE TABLE `cart` (
+CREATE TABLE `sales__cart` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `app_id` bigint(20) unsigned NOT NULL,
   `user_id` bigint(20) unsigned DEFAULT NULL,
@@ -151,24 +193,42 @@ CREATE TABLE `cart` (
   `checked_out_date` datetime(6) DEFAULT NULL,
   `invoiced_date` datetime(6) DEFAULT NULL,
   `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
   PRIMARY KEY (`id`),
+
   UNIQUE KEY `id` (`id`),
-  KEY `ix_cart_app` (`app_id`),
-  KEY `ix_cart_user` (`user_id`),
-  KEY `ix_cart_account` (`account_id`),
-  KEY `ix_cart_invoice` (`invoice_id`),
-  KEY `ix_cart_currency` (`currency_id`),
-  CONSTRAINT `fk_cart_account` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_cart_app` FOREIGN KEY (`app_id`) REFERENCES `app` (`id`),
-  CONSTRAINT `fk_cart_currency` FOREIGN KEY (`currency_id`) REFERENCES `currency` (`id`) ON DELETE SET NULL,
-  CONSTRAINT `fk_cart_invoice` FOREIGN KEY (`invoice_id`) REFERENCES `invoice` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_cart_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
+
+  KEY `ix_sales__cart_app` (`app_id`),
+
+  KEY `ix_sales__cart_user` (`user_id`),
+
+  KEY `ix_sales__cart_account` (`account_id`),
+
+  KEY `ix_sales__cart_invoice` (`invoice_id`),
+
+  KEY `ix_sales__cart_currency` (`currency_id`),
+
+  CONSTRAINT `fk_sales__cart_account` FOREIGN KEY (`account_id`) 
+        REFERENCES `core__account` (`id`) ON DELETE CASCADE,
+
+  CONSTRAINT `fk_sales__cart_app` FOREIGN KEY (`app_id`) 
+        REFERENCES `core__app` (`id`),
+
+  CONSTRAINT `fk_sales__cart_currency` FOREIGN KEY (`currency_id`) 
+        REFERENCES `core__currency` (`id`) ON DELETE SET NULL,
+
+  CONSTRAINT `fk_sales__cart_invoice` FOREIGN KEY (`invoice_id`) 
+        REFERENCES `sales__invoice` (`id`) ON DELETE CASCADE,
+
+  CONSTRAINT `fk_sales__cart_user` FOREIGN KEY (`user_id`) 
+        REFERENCES `core__user` (`id`) ON DELETE CASCADE
+
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 
+-- --------------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `cart_item`;
-CREATE TABLE `cart_item` (
+CREATE TABLE `sales__cart_item` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `cart_id` bigint(20) unsigned NOT NULL,
   `product_id` bigint(20) unsigned DEFAULT NULL,
@@ -185,20 +245,33 @@ CREATE TABLE `cart_item` (
   `subscription_start_date` datetime(6) DEFAULT NULL,
   `subscription_end_date` datetime(6) DEFAULT NULL,
   `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
   PRIMARY KEY (`id`),
+
   UNIQUE KEY `id` (`id`),
-  KEY `ix_cart_item_cart` (`cart_id`),
-  KEY `ix_cart_item_product` (`product_id`),
-  KEY `ix_cart_item_promo` (`promo_id`),
-  CONSTRAINT `fk_cart_item_cart` FOREIGN KEY (`cart_id`) REFERENCES `cart` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_cart_item_promo` FOREIGN KEY (`promo_id`) REFERENCES `promo` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_cart_item_product` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`) ON DELETE CASCADE
+
+  KEY `ix_sales__cart_item_cart` (`cart_id`),
+
+  KEY `ix_sales__cart_item_product` (`product_id`),
+
+  KEY `ix_sales__cart_item_promo` (`promo_id`),
+
+  CONSTRAINT `fk_sales__cart_item_cart` FOREIGN KEY (`cart_id`) 
+        REFERENCES `sales__cart` (`id`) ON DELETE CASCADE,
+
+  CONSTRAINT `fk_sales__cart_item_promo` FOREIGN KEY (`promo_id`) 
+        REFERENCES `sales__promo` (`id`) ON DELETE CASCADE,
+
+  CONSTRAINT `fk_sales__cart_item_product` FOREIGN KEY (`product_id`) 
+        REFERENCES `sales__product` (`id`) ON DELETE CASCADE
+
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 
+-- --------------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `currency`;
-CREATE TABLE `currency` (
+
+CREATE TABLE `sales__currency` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(64) NOT NULL,
   `symbol` varchar(4) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
@@ -207,15 +280,19 @@ CREATE TABLE `currency` (
   `subdivison` varchar(64) DEFAULT NULL,
   `regime` varchar(64) DEFAULT NULL,
   `locale` varchar(8) DEFAULT NULL,
+
   PRIMARY KEY (`id`),
+
   UNIQUE KEY `id` (`id`),
-  UNIQUE KEY `ix_currency_iso_code` (`iso_code`)
+
+  UNIQUE KEY `ix_sales__currency_iso_code` (`iso_code`)
+
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 
+-- --------------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `invoice`;
-CREATE TABLE `invoice` (
+CREATE TABLE `sales__invoice` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `app_id` bigint(20) unsigned NOT NULL,
   `user_id` bigint(20) unsigned NOT NULL,
@@ -248,23 +325,40 @@ CREATE TABLE `invoice` (
   `payment_ref` varchar(512) DEFAULT NULL,
   `notes` varchar(4000) DEFAULT NULL,
   `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
   PRIMARY KEY (`id`),
+
   UNIQUE KEY `id` (`id`),
-  UNIQUE KEY `ux_invoice_invoice_no` (`invoice_no`),
-  KEY `ix_invoice_app` (`app_id`),
-  KEY `ix_invoice_user` (`user_id`),
-  KEY `ix_invoice_account` (`account_id`),
-  KEY `ix_invoice_currency` (`currency_id`),
-  CONSTRAINT `fk_invoice_account` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_invoice_app` FOREIGN KEY (`app_id`) REFERENCES `app` (`id`),
-  CONSTRAINT `fk_invoice_currency` FOREIGN KEY (`currency_id`) REFERENCES `currency` (`id`) ON DELETE SET NULL,
-  CONSTRAINT `fk_invoice_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
+
+  UNIQUE KEY `ux_sales__invoice_invoice_no` (`invoice_no`),
+
+  KEY `ix_sales__invoice_app` (`app_id`),
+
+  KEY `ix_sales__invoice_user` (`user_id`),
+
+  KEY `ix_sales__invoice_account` (`account_id`),
+
+  KEY `ix_sales__invoice_currency` (`currency_id`),
+
+  CONSTRAINT `fk_sales__invoice_account` FOREIGN KEY (`account_id`) 
+        REFERENCES `core__account` (`id`) ON DELETE CASCADE,
+
+  CONSTRAINT `fk_invoice_app` FOREIGN KEY (`app_id`) 
+        REFERENCES `core__app` (`id`),
+
+  CONSTRAINT `fk_invoice_currency` FOREIGN KEY (`currency_id`) 
+        REFERENCES `sales__currency` (`id`) ON DELETE SET NULL,
+
+  CONSTRAINT `fk_invoice_user` FOREIGN KEY (`user_id`) 
+        REFERENCES `core__user` (`id`) ON DELETE CASCADE
+
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 
+-- --------------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `invoice_item`;
-CREATE TABLE `invoice_item` (
+
+CREATE TABLE `sales__invoice_item` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `invoice_id` bigint(20) unsigned NOT NULL,
   `product_id` bigint(20) unsigned DEFAULT NULL,
@@ -282,20 +376,31 @@ CREATE TABLE `invoice_item` (
   `created_date` datetime(6) NOT NULL,
   `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
+
   UNIQUE KEY `id` (`id`),
-  KEY `ix_invoice_item_invoice` (`invoice_id`),
-  KEY `ix_invoice_product` (`product_id`),
-  KEY `fk_invoice_item_promo` (`promo_id`),
-  CONSTRAINT `fk_invoice_item_invoice` FOREIGN KEY (`invoice_id`) REFERENCES `invoice` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_invoice_item_promo` FOREIGN KEY (`promo_id`) REFERENCES `promo` (`id`) ON DELETE SET NULL,
-  CONSTRAINT `fk_invoice_item_product` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`)
+
+  KEY `ix_sales__invoice_item_invoice` (`invoice_id`),
+
+  KEY `ix_sales__invoice_product` (`product_id`),
+
+  KEY `fk_sales__invoice_item_promo` (`promo_id`),
+
+  CONSTRAINT `fk_sales__invoice_item_invoice` FOREIGN KEY (`invoice_id`) 
+        REFERENCES `sales__invoice` (`id`) ON DELETE CASCADE,
+
+  CONSTRAINT `fk_sales__invoice_item_promo` FOREIGN KEY (`promo_id`) 
+        REFERENCES `sales__promo` (`id`) ON DELETE SET NULL,
+
+  CONSTRAINT `fk_sales__invoice_item_product` FOREIGN KEY (`product_id`) 
+        REFERENCES `sales__product` (`id`)
+
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 
+-- --------------------------------------------------------------------------
 
 
-DROP TABLE IF EXISTS `partner`;
-CREATE TABLE `partner` (
+CREATE TABLE `sales__partner` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `uid` varchar(255) NOT NULL,
   `parent_id` bigint(20) unsigned DEFAULT NULL,
@@ -323,17 +428,23 @@ CREATE TABLE `partner` (
   `created_date` datetime(6) NOT NULL,
   `retired_date` datetime(6) DEFAULT NULL,
   `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
   PRIMARY KEY (`id`),
-  UNIQUE KEY `ux_partner_uid` (`uid`),
-  UNIQUE KEY `ux_partner_name` (`name`),
-  KEY `ix_partner_parent` (`parent_id`),
-  CONSTRAINT `fk_partner_parent` FOREIGN KEY (`parent_id`) REFERENCES `partner` (`id`) ON DELETE CASCADE
+
+  UNIQUE KEY `ux_sales__partner_uid` (`uid`),
+
+  UNIQUE KEY `ux_sales__partner_name` (`name`),
+
+  KEY `ix_sales__partner_parent` (`parent_id`),
+
+  CONSTRAINT `fk_sales__partner_parent` FOREIGN KEY (`parent_id`) 
+        REFERENCES `sales__partner` (`id`) ON DELETE CASCADE
+
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 -- --------------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `payment`;
-CREATE TABLE `payment` (
+CREATE TABLE `sales__payment` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `app_id` bigint(20) unsigned NOT NULL,
   `type_id` bigint(20) unsigned DEFAULT NULL,
@@ -367,61 +478,94 @@ CREATE TABLE `payment` (
   `refunded_date` datetime(6) DEFAULT NULL,
   `failed_date` datetime(6) DEFAULT NULL,
   `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
   PRIMARY KEY (`id`),
+
   UNIQUE KEY `id` (`id`),
-  UNIQUE KEY `ux_payment_processor_ref` (`processor_ref`),
-  KEY `ix_payment_app` (`app_id`),
-  KEY `ix_payment_type` (`type_id`),
-  KEY `ix_payment_status` (`status_id`),
-  KEY `ix_payment_currency` (`currency_id`),
-  KEY `ix_payment_user` (`user_id`),
-  KEY `ix_payment_account` (`account_id`),
-  KEY `ix_payment_invoice` (`invoice_id`),
-  KEY `ix_payment_promo` (`promo_id`),
-  CONSTRAINT `fk_payment_account` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_payment_app` FOREIGN KEY (`app_id`) REFERENCES `app` (`id`),
-  CONSTRAINT `fk_payment_currency` FOREIGN KEY (`currency_id`) REFERENCES `currency` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_payment_invoice` FOREIGN KEY (`invoice_id`) REFERENCES `invoice` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_payment_promo` FOREIGN KEY (`promo_id`) REFERENCES `promo` (`id`) ON DELETE SET NULL,
-  CONSTRAINT `fk_payment_status` FOREIGN KEY (`status_id`) REFERENCES `payment_status` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_payment_type` FOREIGN KEY (`type_id`) REFERENCES `payment_type` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_payment_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
+
+  UNIQUE KEY `ux_sales__payment_processor_ref` (`processor_ref`),
+
+  KEY `ix_sales__payment_app` (`app_id`),
+
+  KEY `ix_sales__payment_type` (`type_id`),
+
+  KEY `ix_sales__payment_status` (`status_id`),
+
+  KEY `ix_sales__payment_currency` (`currency_id`),
+
+  KEY `ix_sales__payment_user` (`user_id`),
+
+  KEY `ix_sales__payment_account` (`account_id`),
+
+  KEY `ix_sales__payment_invoice` (`invoice_id`),
+
+  KEY `ix_sales__payment_promo` (`promo_id`),
+
+  CONSTRAINT `fk_sales__payment_account` FOREIGN KEY (`account_id`) 
+        REFERENCES `core__account` (`id`) ON DELETE CASCADE,
+
+  CONSTRAINT `fk_sales__payment_app` FOREIGN KEY (`app_id`) 
+        REFERENCES `core__app` (`id`),
+
+  CONSTRAINT `fk_sales__payment_currency` FOREIGN KEY (`currency_id`) 
+        REFERENCES `sales__currency` (`id`) ON DELETE CASCADE,
+
+  CONSTRAINT `fk_sales__payment_invoice` FOREIGN KEY (`invoice_id`) 
+        REFERENCES `sales__invoice` (`id`) ON DELETE CASCADE,
+
+  CONSTRAINT `fk_sales__payment_promo` FOREIGN KEY (`promo_id`) 
+        REFERENCES `sales__promo` (`id`) ON DELETE SET NULL,
+
+  CONSTRAINT `fk_sales__payment_status` FOREIGN KEY (`status_id`) 
+        REFERENCES `sales__payment_status` (`id`) ON DELETE CASCADE,
+
+  CONSTRAINT `fk_sales__payment_type` FOREIGN KEY (`type_id`) 
+        REFERENCES `sales__payment_type` (`id`) ON DELETE CASCADE,
+
+  CONSTRAINT `fk_sales__payment_user` FOREIGN KEY (`user_id`) 
+        REFERENCES `core__user` (`id`) ON DELETE CASCADE
+
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 
 -- --------------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `payment_status`;
-CREATE TABLE `payment_status` (
+CREATE TABLE `sales__payment_status` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(32) NOT NULL,
   `display_name` varchar(128) DEFAULT NULL,
   `created_date` datetime(6) NOT NULL,
   `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
   PRIMARY KEY (`id`),
+
   UNIQUE KEY `id` (`id`),
-  UNIQUE KEY `ux_payment_status_name` (`name`)
+
+  UNIQUE KEY `ux_sales__payment_status_name` (`name`)
+
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 -- --------------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `payment_type`;
-CREATE TABLE `payment_type` (
+CREATE TABLE `sales__payment_type` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(32) NOT NULL,
   `display_name` varchar(128) DEFAULT NULL,
   `created_date` datetime(6) NOT NULL,
   `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
   PRIMARY KEY (`id`),
+
   UNIQUE KEY `id` (`id`),
-  UNIQUE KEY `ux_payment_type_name` (`name`)
+
+  UNIQUE KEY `ux_sales__payment_type_name` (`name`)
+
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 
 -- --------------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `pre_order`;
-CREATE TABLE `pre_order` (
+CREATE TABLE `sales__pre_order` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `uid` varchar(255) NOT NULL,
   `app_id` bigint(20) unsigned DEFAULT NULL,
@@ -455,28 +599,49 @@ CREATE TABLE `pre_order` (
   `created_date` datetime(6) NOT NULL,
   `shipped_date` datetime(6) DEFAULT NULL,
   `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
   PRIMARY KEY (`id`),
+
   UNIQUE KEY `id` (`id`),
-  UNIQUE KEY `ux_pre_order_uid` (`uid`),
-  KEY `ix_pre_order_referred_by` (`referred_by_user_id`),
-  KEY `ix_pre_order_app` (`app_id`),
-  KEY `ix_pre_order_partner` (`partner_id`),
-  KEY `ix_pre_order_ref_app` (`ref_app_id`),
-  KEY `ix_pre_order_payment` (`payment_id`),
-  KEY `ix_pre_order_campaign` (`campaign_id`),
-  CONSTRAINT `fk_pre_order_app` FOREIGN KEY (`app_id`) REFERENCES `app` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `fk_pre_order_campaign` FOREIGN KEY (`campaign_id`) REFERENCES `campaign` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `fk_pre_order_partner` FOREIGN KEY (`partner_id`) REFERENCES `partner` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `fk_pre_order_payment` FOREIGN KEY (`payment_id`) REFERENCES `payment` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `fk_pre_order_ref_app` FOREIGN KEY (`ref_app_id`) REFERENCES `app` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `fk_pre_order_referred_by` FOREIGN KEY (`referred_by_user_id`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+
+  UNIQUE KEY `ux_sales__pre_order_uid` (`uid`),
+
+  KEY `ix_sales__pre_order_referred_by` (`referred_by_user_id`),
+
+  KEY `ix_sales__pre_order_app` (`app_id`),
+
+  KEY `ix_sales__pre_order_partner` (`partner_id`),
+
+  KEY `ix_sales__pre_order_ref_app` (`ref_app_id`),
+
+  KEY `ix_sales__pre_order_payment` (`payment_id`),
+
+  KEY `ix_sales__pre_order_campaign` (`campaign_id`),
+
+  CONSTRAINT `fk_sales__pre_order_app` FOREIGN KEY (`app_id`) 
+        REFERENCES `core__app` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+
+  CONSTRAINT `fk_sales__pre_order_campaign` FOREIGN KEY (`campaign_id`) 
+        REFERENCES `sales__campaign` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+
+  CONSTRAINT `fk_sales__pre_order_partner` FOREIGN KEY (`partner_id`) 
+        REFERENCES `sales__partner` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+
+  CONSTRAINT `fk_sales__pre_order_payment` FOREIGN KEY (`payment_id`) 
+        REFERENCES `sales__payment` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+
+  CONSTRAINT `fk_sales__pre_order_ref_app` FOREIGN KEY (`ref_app_id`) 
+        REFERENCES `core__app` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+
+  CONSTRAINT `fk_sales__pre_order_referred_by` FOREIGN KEY (`referred_by_user_id`) 
+        REFERENCES `core__user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 
 -- --------------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `promo`;
-CREATE TABLE `promo` (
+CREATE TABLE `sales__promo` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `app_id` bigint(20) unsigned NOT NULL,
   `product_id` bigint(20) unsigned NOT NULL,
@@ -499,20 +664,29 @@ CREATE TABLE `promo` (
   `subscription_days` int(11) DEFAULT NULL,
   `validation_rule` varchar(255) DEFAULT NULL,
   `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
   PRIMARY KEY (`id`),
+
   UNIQUE KEY `id` (`id`),
-  UNIQUE KEY `ix_promo_name` (`name`),
-  KEY `ix_promo_app` (`app_id`),
-  KEY `ix_promo_product` (`product_id`),
-  CONSTRAINT `fk_promo_app` FOREIGN KEY (`app_id`) REFERENCES `app` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT `fk_promo_product` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
+
+  UNIQUE KEY `ix_sales__promo_name` (`name`),
+
+  KEY `ix_sales__promo_app` (`app_id`),
+
+  KEY `ix_sales__promo_product` (`product_id`),
+
+  CONSTRAINT `fk_sales__promo_app` FOREIGN KEY (`app_id`) 
+        REFERENCES `core__app` (`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+
+  CONSTRAINT `fk_sales__promo_product` FOREIGN KEY (`product_id`) 
+        REFERENCES `sales__product` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
+
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 
 -- --------------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `promo_page`;
-CREATE TABLE `promo_page` (
+CREATE TABLE `sales__promo_page` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `app_id` bigint(20) unsigned DEFAULT NULL,
   `promo_id` bigint(20) unsigned DEFAULT NULL,
@@ -533,24 +707,40 @@ CREATE TABLE `promo_page` (
   `created_date` datetime(6) NOT NULL,
   `expired_date` datetime(6) DEFAULT NULL,
   `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
   PRIMARY KEY (`id`),
+
   UNIQUE KEY `id` (`id`),
-  UNIQUE KEY `ux_promo_page_phone_number` (`phone_number`),
-  UNIQUE KEY `ux_promo_page_path_name` (`path`,`name`),
-  KEY `ix_promo_page_app` (`app_id`),
-  KEY `ix_promo_page_promo` (`promo_id`),
-  KEY `ix_promo_page_partner` (`partner_id`),
-  KEY `ix_promo_page_campaign` (`campaign_id`),
-  CONSTRAINT `fk_promo_page_app` FOREIGN KEY (`app_id`) REFERENCES `app` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `fk_promo_page_campaign` FOREIGN KEY (`campaign_id`) REFERENCES `campaign` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `fk_promo_page_partner` FOREIGN KEY (`partner_id`) REFERENCES `partner` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `fk_promo_page_promo` FOREIGN KEY (`promo_id`) REFERENCES `promo` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+
+  UNIQUE KEY `ux_sales__promo_page_phone_number` (`phone_number`),
+
+  UNIQUE KEY `ux_sales__promo_page_path_name` (`path`,`name`),
+
+  KEY `ix_sales__promo_page_app` (`app_id`),
+
+  KEY `ix_sales__promo_page_promo` (`promo_id`),
+
+  KEY `ix_sales__promo_page_partner` (`partner_id`),
+
+  KEY `ix_sales__promo_page_campaign` (`campaign_id`),
+
+  CONSTRAINT `fk_sales__promo_page_app` FOREIGN KEY (`app_id`) 
+        REFERENCES `core__app` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+
+  CONSTRAINT `fk_sales__promo_page_campaign` FOREIGN KEY (`campaign_id`) 
+        REFERENCES `sales__campaign` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+
+  CONSTRAINT `fk_sales__promo_page_partner` FOREIGN KEY (`partner_id`) 
+        REFERENCES `sales__partner` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+
+  CONSTRAINT `fk_sales__promo_page_promo` FOREIGN KEY (`promo_id`) 
+        REFERENCES `sales__promo` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 -- --------------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `sales_lead`;
-CREATE TABLE `sales_lead` (
+CREATE TABLE `sales__sales_lead` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `uid` varchar(255) NOT NULL,
   `app_id` bigint(20) unsigned DEFAULT NULL,
@@ -571,25 +761,40 @@ CREATE TABLE `sales_lead` (
   `browser` varchar(512) DEFAULT NULL,
   `created_date` datetime(6) NOT NULL,
   `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
   PRIMARY KEY (`id`),
+
   UNIQUE KEY `id` (`id`),
-  UNIQUE KEY `ux_sales_lead_uid` (`uid`),
-  KEY `ix_sales_lead_referred_by` (`referred_by_user_id`),
-  KEY `ix_sales_lead_app` (`app_id`),
-  KEY `ix_sales_lead_ref_app` (`ref_app_id`),
-  KEY `ix_sales_lead_campaign` (`campaign_id`),
-  CONSTRAINT `fk_sales_lead_app` FOREIGN KEY (`app_id`) REFERENCES `app` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `fk_sales_lead_campaign` FOREIGN KEY (`campaign_id`) REFERENCES `campaign` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `fk_sales_lead_ref_app` FOREIGN KEY (`ref_app_id`) REFERENCES `app` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `fk_sales_lead_referred_by` FOREIGN KEY (`referred_by_user_id`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+
+  UNIQUE KEY `ux_sales__sales_lead_uid` (`uid`),
+
+  KEY `ix_sales__sales_lead_referred_by` (`referred_by_user_id`),
+
+  KEY `ix_sales__sales_lead_app` (`app_id`),
+
+  KEY `ix_sales__sales_lead_ref_app` (`ref_app_id`),
+
+  KEY `ix_sales__sales_lead_campaign` (`campaign_id`),
+
+  CONSTRAINT `fk_sales__sales_lead_app` FOREIGN KEY (`app_id`) 
+        REFERENCES `core__app` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+
+  CONSTRAINT `fk_sales__sales_lead_campaign` FOREIGN KEY (`campaign_id`) 
+        REFERENCES `sales__campaign` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+
+  CONSTRAINT `fk_sales__sales_lead_ref_app` FOREIGN KEY (`ref_app_id`) 
+        REFERENCES `core__app` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+
+  CONSTRAINT `fk_sales__sales_lead_referred_by` FOREIGN KEY (`referred_by_user_id`) 
+        REFERENCES `core__user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 
 
 -- --------------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `product`;
-CREATE TABLE `product` (
+CREATE TABLE `sales__product` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `app_id` bigint(20) unsigned NOT NULL,
   `name` varchar(255) NOT NULL,
@@ -606,17 +811,23 @@ CREATE TABLE `product` (
   `active` tinyint(1) NOT NULL DEFAULT '0',
   `created_date` datetime(6) NOT NULL,
   `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
   PRIMARY KEY (`id`),
+
   UNIQUE KEY `id` (`id`),
-  UNIQUE KEY `ux_product_app_name` (`app_id`,`name`),
-  KEY `ix_product_name` (`name`),
-  CONSTRAINT `fk_product_app` FOREIGN KEY (`app_id`) REFERENCES `app` (`id`) ON UPDATE CASCADE
+
+  UNIQUE KEY `ux_sales__product_app_name` (`app_id`,`name`),
+
+  KEY `ix_sales__product_name` (`name`),
+
+  CONSTRAINT `fk_sales__product_app` FOREIGN KEY (`app_id`) 
+        REFERENCES `core__app` (`id`) ON UPDATE CASCADE
+
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 -- --------------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `purchase`;
-CREATE TABLE `purchase` (
+CREATE TABLE `sales__purchase` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `parent_id` bigint(20) unsigned DEFAULT NULL,
   `account_id` bigint(20) unsigned NOT NULL,
@@ -634,27 +845,59 @@ CREATE TABLE `purchase` (
   `created_date` datetime(6) NOT NULL,
   `expiration_date` datetime(6) DEFAULT NULL,
   `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
   PRIMARY KEY (`id`),
-  UNIQUE KEY `ux_purchase` (`account_id`,`product_id`),
-  KEY `ix_purchase_parent` (`parent_id`),
-  KEY `ix_purchase_user` (`user_id`),
-  KEY `ix_purchase_product` (`product_id`),
-  KEY `ix_purchase_app` (`app_id`),
-  KEY `ix_purchase_promo` (`promo_id`),
-  KEY `ix_purchase_partner` (`partner_id`),
-  KEY `ix_purchase_campaign` (`campaign_id`),
-  KEY `ix_purchase_payment_type` (`payment_type_id`),
-  KEY `ix_purchase_invoice` (`invoice_no`),
-  CONSTRAINT `fk_purchase_account` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_purchase_app` FOREIGN KEY (`app_id`) REFERENCES `app` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_purchase_campaign` FOREIGN KEY (`campaign_id`) REFERENCES `campaign` (`id`),
-  CONSTRAINT `fk_purchase_invoice` FOREIGN KEY (`invoice_no`) REFERENCES `invoice` (`invoice_no`),
-  CONSTRAINT `fk_purchase_parent` FOREIGN KEY (`parent_id`) REFERENCES `purchase` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `fk_purchase_partner` FOREIGN KEY (`partner_id`) REFERENCES `partner` (`id`),
-  CONSTRAINT `fk_purchase_payment_type` FOREIGN KEY (`payment_type_id`) REFERENCES `payment_type` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `fk_purchase_promo` FOREIGN KEY (`promo_id`) REFERENCES `promo` (`id`),
-  CONSTRAINT `fk_purchase_product` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_purchase_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
+
+  UNIQUE KEY `ux_sales__purchase` (`account_id`,`product_id`),
+
+  KEY `ix_sales__purchase_parent` (`parent_id`),
+
+  KEY `ix_sales__purchase_user` (`user_id`),
+
+  KEY `ix_sales__purchase_product` (`product_id`),
+
+  KEY `ix_sales__purchase_app` (`app_id`),
+
+  KEY `ix_sales__purchase_promo` (`promo_id`),
+
+  KEY `ix_sales__purchase_partner` (`partner_id`),
+
+  KEY `ix_sales__purchase_campaign` (`campaign_id`),
+
+  KEY `ix_sales__purchase_payment_type` (`payment_type_id`),
+
+  KEY `ix_sales__purchase_invoice` (`invoice_no`),
+
+  CONSTRAINT `fk_sales__purchase_account` FOREIGN KEY (`account_id`) 
+        REFERENCES `core__account` (`id`) ON DELETE CASCADE,
+
+  CONSTRAINT `fk_sales__purchase_app` FOREIGN KEY (`app_id`) 
+        REFERENCES `core__app` (`id`) ON DELETE CASCADE,
+
+  CONSTRAINT `fk_sales__purchase_campaign` FOREIGN KEY (`campaign_id`) 
+        REFERENCES `sales__campaign` (`id`),
+
+  CONSTRAINT `fk_sales__purchase_invoice` FOREIGN KEY (`invoice_no`) 
+        REFERENCES `sales__invoice` (`invoice_no`),
+
+  CONSTRAINT `fk_sales__purchase_parent` FOREIGN KEY (`parent_id`) 
+        REFERENCES `sales__purchase` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+
+  CONSTRAINT `fk_sales__purchase_partner` FOREIGN KEY (`partner_id`) 
+        REFERENCES `sales__partner` (`id`),
+
+  CONSTRAINT `fk_sales__purchase_payment_type` FOREIGN KEY (`payment_type_id`) 
+        REFERENCES `sales__payment_type` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+
+  CONSTRAINT `fk_sales__purchase_promo` FOREIGN KEY (`promo_id`) 
+        REFERENCES `sales__promo` (`id`),
+
+  CONSTRAINT `fk_sales__purchase_product` FOREIGN KEY (`product_id`) 
+        REFERENCES `sales__product` (`id`) ON DELETE CASCADE,
+
+  CONSTRAINT `fk_sales__purchase_user` FOREIGN KEY (`user_id`) 
+        REFERENCES `core__user` (`id`) ON DELETE CASCADE
+
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 -- --------------------------------------------------------------------------

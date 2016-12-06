@@ -7,8 +7,8 @@ import java.util.Map;
 
 import com.linuxtek.kona.app.core.entity.KApp;
 import com.linuxtek.kona.app.core.entity.KUser;
-import com.linuxtek.kona.app.messaging.service.KEmailException;
-import com.linuxtek.kona.app.messaging.service.KSmsException;
+import com.linuxtek.kona.app.comm.service.KEmailException;
+import com.linuxtek.kona.app.comm.service.KSmsException;
 import com.linuxtek.kona.remote.service.KService;
 
 public interface KSystemService<APP extends KApp, USER extends KUser> extends KService {

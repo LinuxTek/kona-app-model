@@ -32,8 +32,12 @@ public abstract class KAbstractApiVersionService<A extends KApiVersion,EXAMPLE>
     @Override
     public A fetchLatest() {
         Map<String,Object> filter = null;
-        String[] sortOrder = { "api_version.published_date" };
+
+        // FIXME: do not hard code table or column anmes
+        String[] sortOrder = { "published_date" };
+
         List<A> result = fetchByCriteria(0, 99999, sortOrder, filter, false);
+
         return result.get(result.size() - 1);
     }
     
