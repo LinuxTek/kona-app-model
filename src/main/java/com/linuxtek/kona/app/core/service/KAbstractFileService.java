@@ -249,6 +249,33 @@ public abstract class KAbstractFileService<F extends KFile,EXAMPLE,U extends KUs
 		}
 		return publicUrl;
 	}   
+    
+	
+	// ----------------------------------------------------------------------------
+    
+    // Removing this 
+    /*
+	@Override
+	public String toServerLocalPath(String publicPath) {
+		String localBasePath = getLocalBasePath();
+		
+		if (!localBasePath.endsWith(("/"))) {
+			localBasePath += "/";
+		}
+        
+		Map<String,Object> filter = KMyBatisUtil.createFilter("urlPath", publicPath);
+        
+		F file = KMyBatisUtil.fetchOne(fetchByCriteria(0, 99999, null, filter, false));
+
+		if (file == null) {
+			throw new IllegalArgumentException("File not found for path: " + publicPath);
+		}
+		
+		String fullPath = localBasePath + file.getLocalPath();
+        
+        return fullPath;
+	}
+    */
 	
 	// ----------------------------------------------------------------------------
 

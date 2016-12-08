@@ -32,4 +32,14 @@ public interface KFileService<F extends KFile> extends KService, KDataService<F>
 
     public String toAbsoluteUrl(String publicPath);
     
+    /*
+     * Get the path of this file resource on the local server.
+     * 
+     * Use with care.  Provided for rare cases when knowledge of file path on the local server is required.
+     * 
+     * @param publicPath
+     * @return
+    public String toServerLocalPath(String publicPath);
+     */
+    
 }
