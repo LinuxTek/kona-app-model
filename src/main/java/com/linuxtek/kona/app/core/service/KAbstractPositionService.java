@@ -39,7 +39,7 @@ public abstract class KAbstractPositionService<T extends KPosition, EXAMPLE, F e
 			position.setCreatedDate(new Date());
 		}
 
-		position.setLastUpdated(new Date());
+		position.setUpdatedDate(new Date());
 		
 		if (position.getSampleNo() == null) {
 			position.setSampleNo(position.getTimestamp());

@@ -32,7 +32,7 @@ public abstract class KAbstractSettingService<S extends KSetting,EXAMPLE>
 	   	 if (setting.getCreatedDate() == null) {
     		 setting.setCreatedDate(new Date());
     	 }
-         setting.setLastUpdated(new Date());
+         setting.setUpdatedDate(new Date());
 	}
 	
 	// ----------------------------------------------------------------------------

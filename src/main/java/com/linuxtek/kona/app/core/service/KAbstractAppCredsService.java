@@ -58,6 +58,6 @@ public abstract class KAbstractAppCredsService<AC extends KAppCreds,EXAMPLE,T ex
 			appCreds.setCreatedDate(new Date());
 		}
     	
-    	appCreds.setLastUpdated(new Date());
+    	appCreds.setUpdatedDate(new Date());
 	}
 }

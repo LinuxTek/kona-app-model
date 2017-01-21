@@ -219,6 +219,6 @@ public interface KUser extends KEntityObject {
     /**
      * The date this user record was last updated.
      */
-    public Date getLastUpdated();
-    public void setLastUpdated(Date lastUpdated);
+    public Date getUpdatedDate();
+    public void setUpdatedDate(Date updatedDate);
 }

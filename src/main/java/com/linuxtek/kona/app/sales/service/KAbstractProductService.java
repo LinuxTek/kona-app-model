@@ -26,7 +26,7 @@ public abstract class KAbstractProductService<PRODUCT extends KProduct,
         	product.setCreatedDate(new Date());
         }
         
-        product.setLastUpdated(new Date());
+        product.setUpdatedDate(new Date());
     }
     
 	// ----------------------------------------------------------------------------

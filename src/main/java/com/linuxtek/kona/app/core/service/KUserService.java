@@ -44,7 +44,7 @@ public interface KUserService<U extends KUser> extends KService, KDataService<U>
     public U fetchByAccessToken(String accessToken, boolean validateToken);
     
 	public U retire(U user);
-	
+    
 	public List<U> fetchByAccountId(Long accountId);
 	
 	public List<U> fetchProximate(Double latitude, Double longitude, Double radius);

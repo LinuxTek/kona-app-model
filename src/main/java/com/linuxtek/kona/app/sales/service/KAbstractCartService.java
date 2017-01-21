@@ -48,7 +48,7 @@ public abstract class KAbstractCartService<CART extends KCart,
         	cart.setCreatedDate(new Date());
         }
         
-        cart.setLastUpdated(new Date());
+        cart.setUpdatedDate(new Date());
     }
     
 	// ----------------------------------------------------------------------------

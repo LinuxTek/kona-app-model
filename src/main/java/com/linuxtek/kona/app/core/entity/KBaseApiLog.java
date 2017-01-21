@@ -27,7 +27,7 @@ public class KBaseApiLog implements KApiLog {
     private Double latitude;
     private Double longitude;
     private Date createdDate;
-    private Date lastUpdated;
+    private Date updatedDate;
 
  
     @Override
@@ -211,14 +211,14 @@ public class KBaseApiLog implements KApiLog {
 
    
     @Override
-	public Date getLastUpdated() {
-        return lastUpdated;
+	public Date getUpdatedDate() {
+        return updatedDate;
     }
 
    
     @Override
-	public void setLastUpdated(Date lastUpdated) {
-        this.lastUpdated = lastUpdated;
+	public void setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
     }
 
   
@@ -244,7 +244,7 @@ public class KBaseApiLog implements KApiLog {
         sb.append(", latitude=").append(latitude);
         sb.append(", longitude=").append(longitude);
         sb.append(", createdDate=").append(createdDate);
-        sb.append(", lastUpdated=").append(lastUpdated);
+        sb.append(", updatedDate=").append(updatedDate);
         sb.append("]");
         return sb.toString();
     }

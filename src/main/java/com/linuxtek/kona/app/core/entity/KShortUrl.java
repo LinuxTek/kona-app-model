@@ -62,8 +62,8 @@ public interface KShortUrl extends KEntityObject {
 
 	void setExpiredDate(Date expiredDate);
 
-	Date getLastUpdated();
+	Date getUpdatedDate();
 
-	void setLastUpdated(Date lastUpdated);
+	void setUpdatedDate(Date updatedDate);
 
 }

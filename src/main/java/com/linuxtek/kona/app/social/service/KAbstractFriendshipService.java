@@ -44,7 +44,7 @@ public abstract class KAbstractFriendshipService<FRIENDSHIP extends KFriendship,
 			friendship.setCreatedDate(new Date());
 		}
 		
-		friendship.setLastUpdated(new Date());
+		friendship.setUpdatedDate(new Date());
 		
 		if (friendship.getUid() == null) {
 			friendship.setUid(uuid());

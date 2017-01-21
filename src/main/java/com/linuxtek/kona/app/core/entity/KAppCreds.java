@@ -45,12 +45,28 @@ public interface KAppCreds extends KEntityObject {
 
 	void setEnabled(boolean enabled);
 
+    /**
+     * 
+     * @return access token timeout in seconds
+     */
 	Integer getAccessTokenTimeout();
 
+    /**
+     * 
+     * @param accessTokenTimeout timeout in seconds
+     */
 	void setAccessTokenTimeout(Integer accessTokenTimeout);
 
+    /**
+     * 
+     * @return refresh token timeout in seconds
+     */
 	Integer getRefreshTokenTimeout();
 
+    /**
+     * 
+     * @param refreshTokenTimeout timeout in seconds
+     */
 	void setRefreshTokenTimeout(Integer refreshTokenTimeout);
 
 	Date getCreatedDate();
@@ -61,8 +77,8 @@ public interface KAppCreds extends KEntityObject {
 
 	void setRetiredDate(Date retiredDate);
 
-	Date getLastUpdated();
+	Date getUpdatedDate();
 
-	void setLastUpdated(Date lastUpdated);
+	void setUpdatedDate(Date updatedDate);
 
 }

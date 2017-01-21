@@ -36,7 +36,7 @@ public abstract class KAbstractPushNotificationService<T extends KPushNotificati
 			pushNotification.setCreatedDate(new Date());
 		}
 
-		pushNotification.setLastUpdated(new Date());
+		pushNotification.setUpdatedDate(new Date());
 	}
 
 	// ----------------------------------------------------------------------------

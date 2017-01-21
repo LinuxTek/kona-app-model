@@ -115,7 +115,7 @@ public interface KEmailAddress extends KEntityObject {
 
 	void setCreatedDate(Date createdDate);
 
-	Date getLastUpdated();
+	Date getUpdatedDate();
 
-	void setLastUpdated(Date lastUpdated);
+	void setUpdatedDate(Date updatedDate);
 }

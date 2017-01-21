@@ -11,7 +11,7 @@ public class KBaseAppConfig implements KAppConfig {
     private String name;
     private String value;
     private Date createdDate;
-    private Date lastUpdated;
+    private Date updatedDate;
 
     @Override
 	public Long getId() {
@@ -74,13 +74,13 @@ public class KBaseAppConfig implements KAppConfig {
     }
 
     @Override
-	public Date getLastUpdated() {
-        return lastUpdated;
+	public Date getUpdatedDate() {
+        return updatedDate;
     }
 
     @Override
-	public void setLastUpdated(Date lastUpdated) {
-        this.lastUpdated = lastUpdated;
+	public void setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
     }
 
     @Override
@@ -95,7 +95,7 @@ public class KBaseAppConfig implements KAppConfig {
         sb.append(", name=").append(name);
         sb.append(", value=").append(value);
         sb.append(", createdDate=").append(createdDate);
-        sb.append(", lastUpdated=").append(lastUpdated);
+        sb.append(", updatedDate=").append(updatedDate);
         sb.append("]");
         return sb.toString();
     }

@@ -17,7 +17,7 @@ public class KBasePushNotificationMessage implements KPushNotificationMessage {
     private byte[] devices;
     private Integer deviceCount;
     private Date createdDate;
-    private Date lastUpdated;
+    private Date updatedDate;
 
     @Override
 	public Long getId() {
@@ -130,13 +130,13 @@ public class KBasePushNotificationMessage implements KPushNotificationMessage {
     }
 
     @Override
-	public Date getLastUpdated() {
-        return lastUpdated;
+	public Date getUpdatedDate() {
+        return updatedDate;
     }
 
     @Override
-	public void setLastUpdated(Date lastUpdated) {
-        this.lastUpdated = lastUpdated;
+	public void setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
     }
 
     @Override
@@ -166,7 +166,7 @@ public class KBasePushNotificationMessage implements KPushNotificationMessage {
         sb.append(", filter=").append(filter);
         sb.append(", deviceCount=").append(deviceCount);
         sb.append(", createdDate=").append(createdDate);
-        sb.append(", lastUpdated=").append(lastUpdated);
+        sb.append(", updatedDate=").append(updatedDate);
         sb.append(", devices=").append(devices);
         sb.append("]");
         return sb.toString();

@@ -54,7 +54,7 @@ public abstract class KAbstractPaymentService<PAYMENT extends KPayment,
         	payment.setCreatedDate(new Date());
         }
         
-        payment.setLastUpdated(new Date());
+        payment.setUpdatedDate(new Date());
     }
     
 	// ----------------------------------------------------------------------------

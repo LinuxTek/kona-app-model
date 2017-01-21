@@ -108,7 +108,7 @@ public class KBaseCampaign implements KCampaign {
      *
      * @mbggenerated Thu Apr 07 17:04:20 MDT 2016
      */
-    private Date lastUpdated;
+    private Date updatedDate;
 
     /* (non-Javadoc)
 	 * @see com.linuxtek.kona.app.sales.entity.KCampaign#getId()
@@ -303,19 +303,19 @@ public class KBaseCampaign implements KCampaign {
     }
 
     /* (non-Javadoc)
-	 * @see com.linuxtek.kona.app.sales.entity.KCampaign#getLastUpdated()
+	 * @see com.linuxtek.kona.app.sales.entity.KCampaign#getUpdatedDate()
 	 */
     @Override
-	public Date getLastUpdated() {
-        return lastUpdated;
+	public Date getUpdatedDate() {
+        return updatedDate;
     }
 
     /* (non-Javadoc)
-	 * @see com.linuxtek.kona.app.sales.entity.KCampaign#setLastUpdated(java.util.Date)
+	 * @see com.linuxtek.kona.app.sales.entity.KCampaign#setUpdatedDate(java.util.Date)
 	 */
     @Override
-	public void setLastUpdated(Date lastUpdated) {
-        this.lastUpdated = lastUpdated;
+	public void setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
     }
 
     /**
@@ -342,7 +342,7 @@ public class KBaseCampaign implements KCampaign {
         sb.append(", createdDate=").append(createdDate);
         sb.append(", startDate=").append(startDate);
         sb.append(", endDate=").append(endDate);
-        sb.append(", lastUpdated=").append(lastUpdated);
+        sb.append(", updatedDate=").append(updatedDate);
         sb.append("]");
         return sb.toString();
     }

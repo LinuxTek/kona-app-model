@@ -30,7 +30,7 @@ public class KBaseEmailAddress implements KEmailAddress {
     private Date bouncedDate;
     private Date complainedDate;
     private Date createdDate;
-    private Date lastUpdated;
+    private Date updatedDate;
 
     private static final long serialVersionUID = 1L;
 
@@ -305,13 +305,13 @@ public class KBaseEmailAddress implements KEmailAddress {
     }
 
     @Override
-	public Date getLastUpdated() {
-        return lastUpdated;
+	public Date getUpdatedDate() {
+        return updatedDate;
     }
 
     @Override
-	public void setLastUpdated(Date lastUpdated) {
-        this.lastUpdated = lastUpdated;
+	public void setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
     }
 
 	@Override
@@ -347,7 +347,7 @@ public class KBaseEmailAddress implements KEmailAddress {
         sb.append(", bouncedDate=").append(bouncedDate);
         sb.append(", complainedDate=").append(complainedDate);
         sb.append(", createdDate=").append(createdDate);
-        sb.append(", lastUpdated=").append(lastUpdated);
+        sb.append(", updatedDate=").append(updatedDate);
         sb.append("]");
         return sb.toString();
     }

@@ -33,9 +33,9 @@ CREATE TABLE `comm__email` (
   `click_count` int(11) NOT NULL DEFAULT '0',
   `print_count` int(11) NOT NULL DEFAULT '0',
   `forward_count` int(11) NOT NULL DEFAULT '0',
-  `created_date` datetime(6) NOT NULL,
   `sent_date` datetime(6) NOT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
 
   PRIMARY KEY (`id`),
 
@@ -99,8 +99,8 @@ CREATE TABLE `comm__email_address` (
   `opted_out_date` datetime(6) DEFAULT NULL,
   `bounced_date` datetime(6) DEFAULT NULL,
   `complained_date` datetime(6) DEFAULT NULL,
-  `created_date` datetime(6) NOT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
 
   PRIMARY KEY (`id`),
 
@@ -127,8 +127,8 @@ CREATE TABLE `comm__email_event` (
   `hostname` varchar(255) DEFAULT NULL,
   `browser` varchar(512) DEFAULT NULL,
   `event_date` datetime(6) NOT NULL,
-  `created_date` datetime(6) NOT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
 
   PRIMARY KEY (`id`),
 
@@ -151,7 +151,7 @@ CREATE TABLE `comm__email_event_type` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(64) DEFAULT NULL,
   `display_name` varchar(128) DEFAULT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
 
   PRIMARY KEY (`id`)
 
@@ -164,8 +164,8 @@ CREATE TABLE `comm__email_group` (
   `uid` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
   `display_name` varchar(255) NOT NULL,
-  `created_date` datetime(6) NOT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
 
   PRIMARY KEY (`id`),
 
@@ -182,8 +182,8 @@ CREATE TABLE `comm__email_group_address` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `group_id` bigint(20) unsigned NOT NULL,
   `address_id` bigint(20) unsigned NOT NULL,
-  `created_date` datetime(6) NOT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
 
   PRIMARY KEY (`id`),
 
@@ -214,8 +214,8 @@ CREATE TABLE `comm__push_notification_device` (
   `push_endpoint` varchar(1024) DEFAULT NULL,
   `sandbox` tinyint(1) NOT NULL DEFAULT '0',
   `enabled` tinyint(1) NOT NULL DEFAULT '0',
-  `created_date` datetime(6) NOT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
 
   PRIMARY KEY (`id`),
 
@@ -253,8 +253,8 @@ CREATE TABLE `comm__push_notification` (
   `push_server_secret` varchar(2048) DEFAULT NULL,
   `push_endpoint` varchar(1024) DEFAULT NULL,
   `sandbox` tinyint(1) NOT NULL DEFAULT '0',
-  `created_date` datetime(6) NOT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
 
   PRIMARY KEY (`id`),
 
@@ -281,8 +281,8 @@ CREATE TABLE `comm__push_notification_message` (
   `filter` varchar(2000) DEFAULT NULL,
   `devices` blob DEFAULT NULL,
   `device_count` int(11) unsigned NOT NULL,
-  `created_date` datetime(6) NOT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
 
   PRIMARY KEY (`id`),
 

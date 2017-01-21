@@ -52,7 +52,7 @@ public abstract class KAbstractInvoiceService<INVOICE extends KInvoice,
         	invoice.setCreatedDate(new Date());
         }
         
-        invoice.setLastUpdated(new Date());
+        invoice.setUpdatedDate(new Date());
     }
     
 	// ----------------------------------------------------------------------------

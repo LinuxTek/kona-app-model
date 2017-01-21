@@ -27,7 +27,7 @@ public class KBaseApp implements KApp {
     private boolean enabled;
     private Date createdDate;
     private Date retiredDate;
-    private Date lastUpdated;
+    private Date updatedDate;
     
 
     @Override
@@ -191,13 +191,13 @@ public class KBaseApp implements KApp {
     }
 
     @Override
-	public Date getLastUpdated() {
-        return lastUpdated;
+	public Date getUpdatedDate() {
+        return updatedDate;
     }
 
     @Override
-	public void setLastUpdated(Date lastUpdated) {
-        this.lastUpdated = lastUpdated;
+	public void setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
     }
 
     
@@ -223,7 +223,7 @@ public class KBaseApp implements KApp {
         sb.append(", enabled=").append(enabled);
         sb.append(", createdDate=").append(createdDate);
         sb.append(", retiredDate=").append(retiredDate);
-        sb.append(", lastUpdated=").append(lastUpdated);
+        sb.append(", updatedDate=").append(updatedDate);
         sb.append("]");
         return sb.toString();
     }

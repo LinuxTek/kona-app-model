@@ -159,6 +159,6 @@ public interface KToken extends KEntityObject {
     /** 
      * Date this token record was last updated.
      */
-    public Date getLastUpdated();
-    public void setLastUpdated(Date lastUpdated);
+    public Date getUpdatedDate();
+    public void setUpdatedDate(Date updatedDate);
 }

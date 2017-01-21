@@ -164,7 +164,7 @@ public class KBaseSalesLead implements KSalesLead {
      *
      * @mbggenerated Thu Apr 07 17:04:20 MDT 2016
      */
-    private Date lastUpdated;
+    private Date updatedDate;
 
     /* (non-Javadoc)
 	 * @see com.linuxtek.kona.app.sales.entity.KSalesLead#getId()
@@ -471,19 +471,19 @@ public class KBaseSalesLead implements KSalesLead {
     }
 
     /* (non-Javadoc)
-	 * @see com.linuxtek.kona.app.sales.entity.KSalesLead#getLastUpdated()
+	 * @see com.linuxtek.kona.app.sales.entity.KSalesLead#getUpdatedDate()
 	 */
     @Override
-	public Date getLastUpdated() {
-        return lastUpdated;
+	public Date getUpdatedDate() {
+        return updatedDate;
     }
 
     /* (non-Javadoc)
-	 * @see com.linuxtek.kona.app.sales.entity.KSalesLead#setLastUpdated(java.util.Date)
+	 * @see com.linuxtek.kona.app.sales.entity.KSalesLead#setUpdatedDate(java.util.Date)
 	 */
     @Override
-	public void setLastUpdated(Date lastUpdated) {
-        this.lastUpdated = lastUpdated;
+	public void setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
     }
 
     /**
@@ -517,7 +517,7 @@ public class KBaseSalesLead implements KSalesLead {
         sb.append(", hostname=").append(hostname);
         sb.append(", browser=").append(browser);
         sb.append(", createdDate=").append(createdDate);
-        sb.append(", lastUpdated=").append(lastUpdated);
+        sb.append(", updatedDate=").append(updatedDate);
         sb.append("]");
         return sb.toString();
     }

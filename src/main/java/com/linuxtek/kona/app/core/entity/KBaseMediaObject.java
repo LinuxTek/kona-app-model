@@ -31,7 +31,7 @@ public class KBaseMediaObject implements KMediaObject {
 	private Integer width;
 	private Long size;
 
-	private Date lastUpdated;
+	private Date updatedDate;
 
 	private Date createdDate;
 
@@ -238,14 +238,14 @@ public class KBaseMediaObject implements KMediaObject {
 	}
 
 	@Override
-	public Date getLastUpdated() {
-		return lastUpdated;
+	public Date getUpdatedDate() {
+		return updatedDate;
 	}
 
 
 	@Override
-	public void setLastUpdated(Date lastUpdated) {
-		this.lastUpdated = lastUpdated;
+	public void setUpdatedDate(Date updatedDate) {
+		this.updatedDate = updatedDate;
 	}
 
 

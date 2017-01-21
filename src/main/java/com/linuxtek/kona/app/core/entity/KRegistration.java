@@ -77,6 +77,6 @@ public interface KRegistration extends KEntityObject {
     public Date getRetiredDate();
     public void setRetiredDate(Date retiredDate);
 
-    public Date getLastUpdated();
-    public void setLastUpdated(Date lastUpdated);
+    public Date getUpdatedDate();
+    public void setUpdatedDate(Date updatedDate);
 }

@@ -60,7 +60,7 @@ public abstract class KAbstractPushNotificationMessageService<T extends KPushNot
 			pushNotificationMessage.setCreatedDate(new Date());
 		}
 
-		pushNotificationMessage.setLastUpdated(new Date());
+		pushNotificationMessage.setUpdatedDate(new Date());
 	}
 
 	// ----------------------------------------------------------------------------

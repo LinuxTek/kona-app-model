@@ -45,7 +45,7 @@ public class KBaseUserMedia extends KBaseMediaObject implements KUserMedia {
         sb.append(", resizeable=").append(isResizeable());
         sb.append(", primaryPhoto=").append(primaryPhoto);
         sb.append(", createdDate=").append(getCreatedDate());
-        sb.append(", lastUpdated=").append(getLastUpdated());
+        sb.append(", updatedDate=").append(getUpdatedDate());
         sb.append("]");
         return sb.toString();
     }

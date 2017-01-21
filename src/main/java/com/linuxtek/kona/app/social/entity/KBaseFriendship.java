@@ -14,7 +14,7 @@ public class KBaseFriendship implements KFriendship {
     private Long circleId;
     private boolean friendshipRequested;
     private Date createdDate;
-    private Date lastUpdated;
+    private Date updatedDate;
 
     private static final long serialVersionUID = 1L;
 
@@ -99,13 +99,13 @@ public class KBaseFriendship implements KFriendship {
     }
 
     @Override
-	public Date getLastUpdated() {
-        return lastUpdated;
+	public Date getUpdatedDate() {
+        return updatedDate;
     }
 
     @Override
-	public void setLastUpdated(Date lastUpdated) {
-        this.lastUpdated = lastUpdated;
+	public void setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
     }
 
     @Override
@@ -121,7 +121,7 @@ public class KBaseFriendship implements KFriendship {
         sb.append(", statusId=").append(statusId);
         sb.append(", circleId=").append(circleId);
         sb.append(", createdDate=").append(createdDate);
-        sb.append(", lastUpdated=").append(lastUpdated);
+        sb.append(", updatedDate=").append(updatedDate);
         sb.append("]");
         return sb.toString();
     }

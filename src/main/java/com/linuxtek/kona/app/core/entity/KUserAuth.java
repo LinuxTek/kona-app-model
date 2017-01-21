@@ -52,7 +52,7 @@ public interface KUserAuth extends KEntityObject {
     public Date getCreatedDate();
     public void setCreatedDate(Date createdDate);
     
-    public Date getLastUpdated();
-    public void setLastUpdated(Date lastUpdated);
+    public Date getUpdatedDate();
+    public void setUpdatedDate(Date updatedDate);
 
 }

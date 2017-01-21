@@ -52,7 +52,7 @@ implements KShortUrlService<T> {
 			shortUrl.setCreatedDate(new Date());
 		}
 
-		shortUrl.setLastUpdated(new Date());
+		shortUrl.setUpdatedDate(new Date());
 	}
 
 	// ----------------------------------------------------------------------------
@@ -160,7 +160,7 @@ implements KShortUrlService<T> {
             shortUrl.setScript(script);
         	shortUrl.setEnabled(true);
         	shortUrl.setCreatedDate(now);
-        	shortUrl.setLastUpdated(now);
+        	shortUrl.setUpdatedDate(now);
             
             shortUrl = add(shortUrl);
         }

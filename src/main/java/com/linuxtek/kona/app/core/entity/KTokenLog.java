@@ -35,6 +35,6 @@ public interface KTokenLog extends KEntityObject {
     public String getRequestUrl();
     public void setRequestUrl(String requestUrl);
 
-    public Date getLastUpdated();
-    public void setLastUpdated(Date lastUpdated);
+    public Date getUpdatedDate();
+    public void setUpdatedDate(Date updatedDate);
 }

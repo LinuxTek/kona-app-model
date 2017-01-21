@@ -31,7 +31,7 @@ public class KBaseToken implements KToken {
     private Date retiredDate;
     private Date accessExpirationDate;
     private Date refreshExpirationDate;
-    private Date lastUpdated;
+    private Date updatedDate;
 
     @Override
     public Long getId() {
@@ -215,13 +215,13 @@ public class KBaseToken implements KToken {
     }
 
     @Override
-    public Date getLastUpdated() {
-        return lastUpdated;
+    public Date getUpdatedDate() {
+        return updatedDate;
     }
 
     @Override
-    public void setLastUpdated(Date lastUpdated) {
-        this.lastUpdated = lastUpdated;
+    public void setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
     }
     
     @Override

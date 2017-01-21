@@ -6,7 +6,7 @@ import com.linuxtek.kona.data.entity.KEnumObject;
 import com.linuxtek.kona.data.entity.KEnumUtil;
 
 
-public enum KAppInvitationType implements KEnumObject {
+public enum KInvitationType implements KEnumObject {
     // ---------------------------------------------------------------
 
     JOIN(100L, "Join"),
@@ -19,11 +19,11 @@ public enum KAppInvitationType implements KEnumObject {
     private String displayName;
     private boolean enabled = true;
 
-    private KAppInvitationType(Long id) {
+    private KInvitationType(Long id) {
         this(id, null);
     }
 
-    private KAppInvitationType(Long id, String displayName) {
+    private KInvitationType(Long id, String displayName) {
         this.id = id;
         this.displayName = displayName;
     }
@@ -52,19 +52,19 @@ public enum KAppInvitationType implements KEnumObject {
 
     // ---------------------------------------------------------------
 
-    public static KAppInvitationType getInstance(Long id) {
-        return KEnumUtil.getInstance(KAppInvitationType.class, id);
+    public static KInvitationType getInstance(Long id) {
+        return KEnumUtil.getInstance(KInvitationType.class, id);
     }
 
-    public static KAppInvitationType getInstance(String name) {
-        return KEnumUtil.getInstance(KAppInvitationType.class, name);
+    public static KInvitationType getInstance(String name) {
+        return KEnumUtil.getInstance(KInvitationType.class, name);
     }
 
     public static LinkedHashMap<Long,String> getMap() {
-        return KEnumUtil.getMap(KAppInvitationType.class);
+        return KEnumUtil.getMap(KInvitationType.class);
     }
 
     public static LinkedHashMap<String,String> getStringMap() {
-        return KEnumUtil.getStringMap(KAppInvitationType.class);
+        return KEnumUtil.getStringMap(KInvitationType.class);
     }
 }

@@ -33,7 +33,7 @@ public class KBaseRegistration implements KRegistration {
     private Date remindedDate;
     private Date registeredDate;
     private Date retiredDate;
-    private Date lastUpdated;
+    private Date updatedDate;
 
     private static final long serialVersionUID = 1L;
 
@@ -220,13 +220,13 @@ public class KBaseRegistration implements KRegistration {
     }
 
     @Override
-    public Date getLastUpdated() {
-        return lastUpdated;
+    public Date getUpdatedDate() {
+        return updatedDate;
     }
 
     @Override
-    public void setLastUpdated(Date lastUpdated) {
-        this.lastUpdated = lastUpdated;
+    public void setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
     }
     
     
@@ -307,7 +307,7 @@ public class KBaseRegistration implements KRegistration {
         sb.append(", remindedDate=").append(remindedDate);
         sb.append(", registeredDate=").append(registeredDate);
         sb.append(", retiredDate=").append(retiredDate);
-        sb.append(", lastUpdated=").append(lastUpdated);
+        sb.append(", updatedDate=").append(updatedDate);
         sb.append("]");
         return sb.toString();
     }

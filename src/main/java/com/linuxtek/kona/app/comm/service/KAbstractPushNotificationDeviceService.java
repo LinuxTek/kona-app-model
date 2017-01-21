@@ -40,7 +40,7 @@ public abstract class KAbstractPushNotificationDeviceService<T extends KPushNoti
 			pushDevice.setCreatedDate(new Date());
 		}
     	
-    	pushDevice.setLastUpdated(new Date());
+    	pushDevice.setUpdatedDate(new Date());
 	}
     
 	// ----------------------------------------------------------------------------

@@ -170,6 +170,6 @@ public abstract class KAbstractAppService<A extends KApp,EXAMPLE,AC extends KApp
 			app.setCreatedDate(new Date());
 		}
     	
-    	app.setLastUpdated(new Date());
+    	app.setUpdatedDate(new Date());
 	}
 }

@@ -28,7 +28,7 @@ public abstract class KAbstractRemoteServiceService<REMOTE_SERVICE extends KRemo
 			remoteService.setCreatedDate(new Date());
 		}
 
-		remoteService.setLastUpdated(new Date());
+		remoteService.setUpdatedDate(new Date());
 
 		if (remoteService.getDisplayName() != null) {
 			String name = KInflector.getInstance().slug(remoteService.getDisplayName());

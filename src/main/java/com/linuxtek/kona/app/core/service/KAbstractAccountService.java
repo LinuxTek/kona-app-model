@@ -50,7 +50,7 @@ public abstract class KAbstractAccountService<A extends KAccount,EXAMPLE,U exten
 			account.setDisplayName(account.getUid());
 		}
 		
-		account.setLastUpdated(new Date());
+		account.setUpdatedDate(new Date());
 
 		String name = KInflector.getInstance().slug(account.getDisplayName());
 		account.setName(name);

@@ -50,7 +50,7 @@ public abstract class KAbstractRegistrationService<R extends KRegistration, EXAM
 			registration.setCreatedDate(new Date());
 		}
     	
-    	registration.setLastUpdated(new Date());
+    	registration.setUpdatedDate(new Date());
 	}
 	
 	// ----------------------------------------------------------------------------

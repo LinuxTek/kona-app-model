@@ -40,7 +40,7 @@ public abstract class KAbstractRedirectService<REDIRECT extends KRedirect,
 			redirect.setCreatedDate(new Date());
 		}
 
-		redirect.setLastUpdated(new Date());
+		redirect.setUpdatedDate(new Date());
 	}
 
 	// ----------------------------------------------------------------------------

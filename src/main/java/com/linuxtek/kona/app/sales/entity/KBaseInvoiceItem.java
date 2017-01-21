@@ -133,7 +133,7 @@ public class KBaseInvoiceItem implements KInvoiceItem {
      *
      * @mbggenerated Thu Apr 07 17:04:20 MDT 2016
      */
-    private Date lastUpdated;
+    private Date updatedDate;
 
     /* (non-Javadoc)
 	 * @see com.linuxtek.kona.app.sales.entity.KInvoiceItem#getId()
@@ -376,19 +376,19 @@ public class KBaseInvoiceItem implements KInvoiceItem {
     }
 
     /* (non-Javadoc)
-	 * @see com.linuxtek.kona.app.sales.entity.KInvoiceItem#getLastUpdated()
+	 * @see com.linuxtek.kona.app.sales.entity.KInvoiceItem#getUpdatedDate()
 	 */
     @Override
-	public Date getLastUpdated() {
-        return lastUpdated;
+	public Date getUpdatedDate() {
+        return updatedDate;
     }
 
     /* (non-Javadoc)
-	 * @see com.linuxtek.kona.app.sales.entity.KInvoiceItem#setLastUpdated(java.util.Date)
+	 * @see com.linuxtek.kona.app.sales.entity.KInvoiceItem#setUpdatedDate(java.util.Date)
 	 */
     @Override
-	public void setLastUpdated(Date lastUpdated) {
-        this.lastUpdated = lastUpdated;
+	public void setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
     }
 
     /**
@@ -418,7 +418,7 @@ public class KBaseInvoiceItem implements KInvoiceItem {
         sb.append(", subscriptionStartDate=").append(subscriptionStartDate);
         sb.append(", subscriptionEndDate=").append(subscriptionEndDate);
         sb.append(", createdDate=").append(createdDate);
-        sb.append(", lastUpdated=").append(lastUpdated);
+        sb.append(", updatedDate=").append(updatedDate);
         sb.append("]");
         return sb.toString();
     }

@@ -32,9 +32,9 @@ CREATE TABLE `core__account` (
   `enabled` tinyint(1) NOT NULL DEFAULT '0',
   `active` tinyint(1) NOT NULL DEFAULT '0',
   `verified` tinyint(1) NOT NULL DEFAULT '0',
-  `created_date` datetime(6) NOT NULL,
   `retired_date` datetime(6) DEFAULT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
 
   PRIMARY KEY (`id`),
 
@@ -67,8 +67,8 @@ CREATE TABLE `core__api_log` (
   `browser` varchar(512) DEFAULT NULL,
   `latitude` double DEFAULT NULL,
   `longitude` double DEFAULT NULL,
-  `created_date` datetime(6) NOT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
 
   PRIMARY KEY (`id`),
 
@@ -109,8 +109,8 @@ CREATE TABLE `core__api_version` (
   `description` varchar(2000) DEFAULT NULL,
   `enabled` tinyint(1) NOT NULL DEFAULT '1',
   `published_date` datetime(6) NOT NULL,
-  `created_date` datetime(6) NOT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
 
   PRIMARY KEY (`id`),
 
@@ -135,9 +135,9 @@ CREATE TABLE `core__app` (
   `company_url` varchar(255) DEFAULT NULL,
   `privacy_url` varchar(255) DEFAULT NULL,
   `enabled` tinyint(1) NOT NULL DEFAULT '1',
-  `created_date` datetime(6) NOT NULL,
   `retired_date` datetime(6) DEFAULT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
 
   PRIMARY KEY (`id`),
 
@@ -172,8 +172,8 @@ CREATE TABLE `core__app_config` (
   `env` enum('dev','qa','beta','sandbox','prd') DEFAULT NULL,
   `name` varchar(255) NOT NULL,
   `value` varchar(4000) NOT NULL,
-  `created_date` datetime(6) NOT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
 
   PRIMARY KEY (`id`),
 
@@ -200,11 +200,11 @@ CREATE TABLE `core__app_creds` (
   `redirect_uri` varchar(255) DEFAULT NULL,
   `scope` varchar(255) NOT NULL DEFAULT 'read,write',
   `enabled` tinyint(1) NOT NULL DEFAULT '1',
-  `access_token_timeout` int(11) DEFAULT NULL,
-  `refresh_token_timeout` int(11) DEFAULT NULL,
-  `created_date` datetime(6) NOT NULL,
+  `access_token_timeout` int(11) unsigned DEFAULT NULL, -- seconds / needs to be integer
+  `refresh_token_timeout` int(11) unsigned DEFAULT NULL, -- second / needs to be integer
   `retired_date` datetime(6) DEFAULT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
 
   PRIMARY KEY (`id`),
 
@@ -232,8 +232,8 @@ CREATE TABLE `core__app_type` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
   `display_name` varchar(255) DEFAULT NULL,
-  `created_date` datetime(6) NOT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
   PRIMARY KEY (`id`),
 
   UNIQUE KEY `ux_core__app_type_name` (`name`)
@@ -248,9 +248,9 @@ CREATE TABLE `core__app_user` (
   `app_id` bigint(20) unsigned NOT NULL,
   `token_id` bigint(20) unsigned DEFAULT NULL,
   `app_user_id` varchar(255) DEFAULT NULL,
-  `created_date` datetime(6) NOT NULL,
   `revoked_date` datetime(6) DEFAULT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
 
   PRIMARY KEY (`id`),
 
@@ -284,8 +284,8 @@ CREATE TABLE `core__app_webhook` (
   `events` varchar(2000) DEFAULT NULL,
   `url` varchar(2000) DEFAULT NULL,
   `enabled` tinyint(1) NOT NULL DEFAULT '1',
-  `created_date` datetime(6) NOT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
 
   PRIMARY KEY (`id`),
 
@@ -316,8 +316,8 @@ CREATE TABLE `core__auth_code` (
   `max_use_count` int(11) unsigned NOT NULL DEFAULT '0',
   `expiration_date` datetime(6) DEFAULT NULL,
   `last_accessed_date` datetime(6) DEFAULT NULL,
-  `created_date` datetime(6) NOT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
 
   PRIMARY KEY (`id`),
 
@@ -374,9 +374,9 @@ CREATE TABLE `core__file` (
   `url_path` varchar(255) DEFAULT NULL,
   `thumb_url_path` varchar(255) DEFAULT NULL,
   `upload_time` bigint(20) unsigned DEFAULT NULL,
-  `created_date` datetime(6) NOT NULL,
   `retired_date` datetime(6) DEFAULT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
 
   PRIMARY KEY (`id`),
 
@@ -423,8 +423,8 @@ CREATE TABLE `core__file_access` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
   `display_name` varchar(255) DEFAULT NULL,
-  `created_date` datetime(6) NOT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
 
   PRIMARY KEY (`id`),
 
@@ -440,8 +440,8 @@ CREATE TABLE `core__file_type` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
   `display_name` varchar(255) DEFAULT NULL,
-  `created_date` datetime(6) NOT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
 
   PRIMARY KEY (`id`),
 
@@ -467,10 +467,10 @@ CREATE TABLE `core__redirect` (
   `region` varchar(255) DEFAULT NULL,
   `latitiude` double DEFAULT NULL,
   `longitude` double DEFAULT NULL,
-  `request_date` datetime(6) NOT NULL,
-  `redirect_date` datetime(6) NOT NULL,
-  `created_date` datetime(6) NOT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  `requested_date` datetime(6) NOT NULL,
+  `redirected_date` datetime(6) NOT NULL,
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
 
   PRIMARY KEY (`id`),
 
@@ -510,12 +510,12 @@ CREATE TABLE `core__registration` (
   `email_pending` tinyint(1) NOT NULL DEFAULT '0',
   `mobile_verified` tinyint(1) NOT NULL DEFAULT '0',
   `mobile_pending` tinyint(1) NOT NULL DEFAULT '0',
-  `created_date` datetime(6) NOT NULL,
   `reminded_date` datetime(6) DEFAULT NULL,
   `registered_date` datetime(6) DEFAULT NULL,
   `deactivated_date` datetime(6) DEFAULT NULL,
   `deleted_date` datetime(6) DEFAULT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
 
   PRIMARY KEY (`id`),
 
@@ -561,8 +561,8 @@ CREATE TABLE `core__remote_service` (
   `uid` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
   `display_name` varchar(255) DEFAULT NULL,
-  `created_date` datetime(6) NOT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
 
   PRIMARY KEY (`id`),
 
@@ -587,8 +587,8 @@ CREATE TABLE `core__remote_service_app_creds` (
   `redirect_uri` varchar(1024) DEFAULT NULL,
   `namespace` varchar(255) DEFAULT NULL,
   `region` varchar(255) DEFAULT NULL,
-  `created_date` datetime(6) NOT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
 
   PRIMARY KEY (`id`),
 
@@ -624,8 +624,8 @@ CREATE TABLE `core__remote_service_user_creds` (
   `token_secret` varchar(1024) DEFAULT NULL,
   `expire_date` datetime(6) DEFAULT NULL,
   `connected_date` datetime(6) DEFAULT NULL,
-  `created_date` datetime(6) NOT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
 
   PRIMARY KEY (`id`),
 
@@ -666,8 +666,8 @@ CREATE TABLE `core__setting` (
   `name` varchar(255) NOT NULL,
   `value` varchar(4000) NOT NULL,
   `overwrite_global` tinyint(1) NOT NULL DEFAULT '0',
-  `created_date` datetime(6) NOT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
 
   PRIMARY KEY (`id`),
 
@@ -699,9 +699,9 @@ CREATE TABLE `core__short_url` (
   `description` varchar(2000) DEFAULT NULL,
   `script` tinyint(1) NOT NULL DEFAULT '0',
   `enabled` tinyint(1) NOT NULL DEFAULT '0',
-  `created_date` datetime(6) NOT NULL,
   `expired_date` datetime(6) DEFAULT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
 
   PRIMARY KEY (`id`),
 
@@ -759,11 +759,11 @@ CREATE TABLE `core__token` (
   `login_date` datetime(6) NOT NULL,
   `last_login_date` datetime(6) DEFAULT NULL,
   `logout_date` datetime(6) DEFAULT NULL,
-  `created_date` datetime(6) NOT NULL,
-  `retired_date` datetime(6) DEFAULT NULL,
   `access_expiration_date` datetime(6) DEFAULT NULL,
   `refresh_expiration_date` datetime(6) DEFAULT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  `retired_date` datetime(6) DEFAULT NULL,
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
 
   PRIMARY KEY (`id`),
 
@@ -804,8 +804,8 @@ CREATE TABLE `core__token_type` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `display_name` varchar(255) NOT NULL,
-  `created_date` datetime(6) NOT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
 
   PRIMARY KEY (`id`),
 
@@ -830,6 +830,7 @@ CREATE TABLE `core__user` (
   `username` varchar(255) NOT NULL,
   `email` varchar(255) DEFAULT NULL,
   `mobile_number` varchar(255) DEFAULT NULL,
+  `photo_url` varchar(255) DEFAULT NULL, 
   `first_name` varchar(255) DEFAULT NULL,
   `last_name` varchar(255) DEFAULT NULL,
   `display_name` varchar(255) DEFAULT NULL,
@@ -842,11 +843,9 @@ CREATE TABLE `core__user` (
   `floor` int(11) unsigned DEFAULT NULL,
   `coords` geometry DEFAULT NULL,
   `active` tinyint(1) NOT NULL DEFAULT '0',
-  `created_date` datetime(6) NOT NULL,
   `retired_date` datetime(6) DEFAULT NULL,
-  `login_date` datetime(6) DEFAULT NULL,
-  `last_login_date` datetime(6) DEFAULT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
 
   PRIMARY KEY (`id`),
 
@@ -892,14 +891,14 @@ CREATE TABLE `core__user` (
 CREATE TABLE `core__user_auth` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) unsigned NOT NULL,
-  `password` varchar(255) NOT NULL,
+  `password` varchar(255) DEFAULT NULL,
   `pin` varchar(255) DEFAULT NULL,
   `question1` varchar(255) DEFAULT NULL,
   `answer1` varchar(255) DEFAULT NULL,
   `question2` varchar(255) DEFAULT NULL,
   `answer2` varchar(255) DEFAULT NULL,
-  `created_date` datetime(6) NOT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ,
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
 
   PRIMARY KEY (`id`),
 
@@ -927,8 +926,8 @@ CREATE TABLE `core__user_media` (
   `description` varchar(255) DEFAULT NULL,
   `enabled` tinyint(1) NOT NULL DEFAULT '0',
   `primary_photo` tinyint(1) NOT NULL DEFAULT '0',
-  `created_date` datetime(6) NOT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
 
   PRIMARY KEY (`id`),
 
@@ -953,8 +952,8 @@ CREATE TABLE `core__user_presence` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
   `display_name` varchar(255) DEFAULT NULL,
-  `created_date` datetime(6) NOT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
 
   PRIMARY KEY (`id`),
 
@@ -969,8 +968,8 @@ CREATE TABLE `core__user_role` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
   `display_name` varchar(255) DEFAULT NULL,
-  `created_date` datetime(6) NOT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
 
   PRIMARY KEY (`id`),
 
@@ -985,8 +984,8 @@ CREATE TABLE `core__user_status` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
   `display_name` varchar(255) DEFAULT NULL,
-  `created_date` datetime(6) NOT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
 
   PRIMARY KEY (`id`),
 
@@ -1000,8 +999,8 @@ CREATE TABLE `core__user_type` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
   `display_name` varchar(255) DEFAULT NULL,
-  `created_date` datetime(6) NOT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
 
   PRIMARY KEY (`id`),
 
@@ -1016,8 +1015,8 @@ CREATE TABLE `core__auth_code_type` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL, 
   `display_name` varchar(255) DEFAULT NULL,
-  `created_date` datetime(6) NOT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
 
   PRIMARY KEY (`id`),
 
@@ -1032,8 +1031,8 @@ CREATE TABLE `core__entity_name_rule` (
   `pattern` varchar(255) DEFAULT NULL,
   `black_listed` tinyint(1) NOT NULL DEFAULT '0',
   `reserved` tinyint(1) NOT NULL DEFAULT '0',
-  `created_date` datetime(6) NOT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
 
   PRIMARY KEY (`id`),
 
@@ -1048,12 +1047,13 @@ CREATE TABLE `core__position` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `app_id` bigint(20) unsigned NOT NULL,
   `user_id` bigint(20) unsigned NOT NULL,
-  `sample_no` bigint(20) unsigned NOT NULL,
+  `sample_no` bigint(20) unsigned DEFAULT NULL,
   `network` varchar(255) DEFAULT NULL,
   `battery` int(11) DEFAULT NULL,
   `latitude` double DEFAULT NULL,
   `longitude` double DEFAULT NULL,
-  `floor` int(11) unsigned DEFAULT NULL,
+  `indoor_floor` int(11) unsigned DEFAULT NULL,
+  `indoor_detail` varchar(2000) DEFAULT NULL,
   `altitude` double DEFAULT NULL,
   `accuracy` double DEFAULT NULL,
   `altitude_accuracy` double DEFAULT NULL,
@@ -1063,8 +1063,8 @@ CREATE TABLE `core__position` (
   `error_code` varchar(255) DEFAULT NULL,
   `error_msg` varchar(255) DEFAULT NULL,
   `error_date` datetime DEFAULT NULL,
-  `created_date` datetime(6) NOT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
 
   PRIMARY KEY (`id`),
 
@@ -1079,6 +1079,79 @@ CREATE TABLE `core__position` (
 
   CONSTRAINT `fk_core__position_user` FOREIGN KEY (`user_id`) 
         REFERENCES `core__user` (`id`) ON DELETE CASCADE
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+
+
+
+-- --------------------------------------------------------------------------
+
+CREATE TABLE `core__notification_channel` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  `display_name` varchar(255) DEFAULT NULL,
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+
+  PRIMARY KEY (`id`),
+
+  UNIQUE KEY `ux_core__notification_channel_name` (`name`)
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+
+
+-- --------------------------------------------------------------------------
+
+CREATE TABLE `core__notification` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `uid` varchar(255) NOT NULL,
+  `user_id` bigint(20) unsigned NOT NULL,
+  `event` text default NULL,
+  `event_date` datetime(6) default NULL,
+  `last_viewed_date` datetime(6) default NULL,
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+
+  PRIMARY KEY (`id`),
+
+  UNIQUE KEY `id` (`id`),
+
+  UNIQUE `ux_core__notification_uid` (`uid`),
+
+  KEY `ix_core__notification_user` (`user_id`),
+
+  CONSTRAINT `fk_core__notification_user` FOREIGN KEY (`user_id`)
+        REFERENCES `core__user` (`id`) ON DELETE CASCADE
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+
+-- --------------------------------------------------------------------------
+
+CREATE TABLE `core__notification_delivery` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `notification_id` bigint(20) unsigned NOT NULL,
+  `channel_id` bigint(20) unsigned NOT NULL,
+  `code` varchar(255) NOT NULL,
+  `delivered_date` datetime(6) default NULL,
+  `viewed_date` datetime(6) default NULL,
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+
+  PRIMARY KEY (`id`),
+
+  UNIQUE KEY `id` (`id`),
+
+  UNIQUE `ux_core__notification_delivery_code` (`code`),
+
+  KEY `ux_core__notification_delivery_notification` (`notification_id`),
+
+  KEY `ix_core__notification_delivery_channel` (`channel_id`),
+
+  CONSTRAINT `fk_core__notification_delivery_channel` FOREIGN KEY (`channel_id`)
+        REFERENCES `core__notification_channel` (`id`) ON DELETE RESTRICT,
+
+  CONSTRAINT `fk_core__notification_delivery_notification` FOREIGN KEY (`notification_id`)
+        REFERENCES `core__notification` (`id`) ON DELETE CASCADE
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 

@@ -53,7 +53,7 @@ public abstract class KAbstractEmailAddressService<EMAIL_ADDRESS extends KEmailA
 			emailAddress.setCreatedDate(new Date());
 		}
 		
-		emailAddress.setLastUpdated(new Date());
+		emailAddress.setUpdatedDate(new Date());
 		
 		if (emailAddress.getUid() == null) {
 			emailAddress.setUid(uuid());

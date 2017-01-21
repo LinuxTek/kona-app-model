@@ -6,13 +6,14 @@ import com.linuxtek.kona.data.entity.KEnumObject;
 import com.linuxtek.kona.data.entity.KEnumUtil;
 
 
-public enum KAppInvitationStatus implements KEnumObject {
+public enum KInvitationChannel implements KEnumObject {
     // ---------------------------------------------------------------
 
-    PENDING(100L, "Pending"),
-    ACCEPTED(200L, "Accepted"),
-    DECLINED(300L, "Declined"),
-    IGNORED(400L, "Ignored");
+    IN_APP(100L, "In App"),
+    EMAIL(200L, "Email"),
+    SMS(300L, "Sms"),
+    TWITTER(400L, "Twitter"),
+    FACEBOOK(500L, "Facebook");
 
     // ---------------------------------------------------------------
     
@@ -21,11 +22,11 @@ public enum KAppInvitationStatus implements KEnumObject {
     private String displayName;
     private boolean enabled = true;
 
-    private KAppInvitationStatus(Long id) {
+    private KInvitationChannel(Long id) {
         this(id, null);
     }
 
-    private KAppInvitationStatus(Long id, String displayName) {
+    private KInvitationChannel(Long id, String displayName) {
         this.id = id;
         this.displayName = displayName;
     }
@@ -54,19 +55,19 @@ public enum KAppInvitationStatus implements KEnumObject {
 
     // ---------------------------------------------------------------
 
-    public static KAppInvitationStatus getInstance(Long id) {
-        return KEnumUtil.getInstance(KAppInvitationStatus.class, id);
+    public static KInvitationChannel getInstance(Long id) {
+        return KEnumUtil.getInstance(KInvitationChannel.class, id);
     }
 
-    public static KAppInvitationStatus getInstance(String name) {
-        return KEnumUtil.getInstance(KAppInvitationStatus.class, name);
+    public static KInvitationChannel getInstance(String name) {
+        return KEnumUtil.getInstance(KInvitationChannel.class, name);
     } 
 
     public static LinkedHashMap<Long,String> getMap() {
-        return KEnumUtil.getMap(KAppInvitationStatus.class);
+        return KEnumUtil.getMap(KInvitationChannel.class);
     }
 
     public static LinkedHashMap<String,String> getStringMap() {
-        return KEnumUtil.getStringMap(KAppInvitationStatus.class);
+        return KEnumUtil.getStringMap(KInvitationChannel.class);
     }
 }

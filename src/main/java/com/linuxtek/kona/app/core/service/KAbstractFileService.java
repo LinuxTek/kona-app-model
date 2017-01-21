@@ -66,7 +66,7 @@ public abstract class KAbstractFileService<F extends KFile,EXAMPLE,U extends KUs
 			file.setUid(generateUid());
 		}
 
-		file.setLastUpdated(new Date());
+		file.setUpdatedDate(new Date());
 	}
 
 	// ----------------------------------------------------------------------------

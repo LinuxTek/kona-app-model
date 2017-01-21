@@ -14,7 +14,7 @@ public class KBaseTokenLog implements KTokenLog {
     private Double longitude;
     private String browser;
     private String requestUrl;
-    private Date lastUpdated;
+    private Date updatedDate;
 
     @Override
     public Long getId() {
@@ -88,13 +88,13 @@ public class KBaseTokenLog implements KTokenLog {
 
 
     @Override
-    public Date getLastUpdated() {
-        return lastUpdated;
+    public Date getUpdatedDate() {
+        return updatedDate;
     }
 
     @Override
-    public void setLastUpdated(Date lastUpdated) {
-        this.lastUpdated = lastUpdated;
+    public void setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
     }
 
     @Override

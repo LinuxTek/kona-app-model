@@ -24,7 +24,7 @@ public class KBaseEmail implements KEmail {
     private Integer forwardCount;
     private Date createdDate;
     private Date sentDate;
-    private Date lastUpdated;
+    private Date updatedDate;
 
     private static final long serialVersionUID = 1L;
 
@@ -239,13 +239,13 @@ public class KBaseEmail implements KEmail {
     }
 
     @Override
-	public Date getLastUpdated() {
-        return lastUpdated;
+	public Date getUpdatedDate() {
+        return updatedDate;
     }
 
     @Override
-	public void setLastUpdated(Date lastUpdated) {
-        this.lastUpdated = lastUpdated;
+	public void setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
     }
 
     @Override
@@ -275,7 +275,7 @@ public class KBaseEmail implements KEmail {
         sb.append(", forwardCount=").append(forwardCount);
         sb.append(", createdDate=").append(createdDate);
         sb.append(", sentDate=").append(sentDate);
-        sb.append(", lastUpdated=").append(lastUpdated);
+        sb.append(", updatedDate=").append(updatedDate);
         sb.append("]");
         return sb.toString();
     }

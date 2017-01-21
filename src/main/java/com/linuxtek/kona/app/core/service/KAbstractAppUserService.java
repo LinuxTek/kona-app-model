@@ -31,7 +31,7 @@ implements KAppUserService<T> {
 			appUser.setCreatedDate(new Date());
 		}
 
-		appUser.setLastUpdated(new Date());
+		appUser.setUpdatedDate(new Date());
 	}
 
 	// ----------------------------------------------------------------------------

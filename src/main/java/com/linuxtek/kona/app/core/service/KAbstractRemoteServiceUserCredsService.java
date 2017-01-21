@@ -28,7 +28,7 @@ public abstract class KAbstractRemoteServiceUserCredsService<REMOTE_SERVICE_USER
 			remoteServiceUserCreds.setCreatedDate(new Date());
 		}
 
-		remoteServiceUserCreds.setLastUpdated(new Date());
+		remoteServiceUserCreds.setUpdatedDate(new Date());
 	}
 
 	// ----------------------------------------------------------------------------

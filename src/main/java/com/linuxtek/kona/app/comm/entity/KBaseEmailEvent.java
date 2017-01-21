@@ -12,7 +12,7 @@ public class KBaseEmailEvent implements KEmailEvent {
     private String browser;
     private Date eventDate;
     private Date createdDate;
-    private Date lastUpdated;
+    private Date updatedDate;
 
     private static final long serialVersionUID = 1L;
 
@@ -107,13 +107,13 @@ public class KBaseEmailEvent implements KEmailEvent {
     }
 
     @Override
-	public Date getLastUpdated() {
-        return lastUpdated;
+	public Date getUpdatedDate() {
+        return updatedDate;
     }
 
     @Override
-	public void setLastUpdated(Date lastUpdated) {
-        this.lastUpdated = lastUpdated;
+	public void setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
     }
 
     @Override
@@ -131,7 +131,7 @@ public class KBaseEmailEvent implements KEmailEvent {
         sb.append(", browser=").append(browser);
         sb.append(", eventDate=").append(eventDate);
         sb.append(", createdDate=").append(createdDate);
-        sb.append(", lastUpdated=").append(lastUpdated);
+        sb.append(", updatedDate=").append(updatedDate);
         sb.append("]");
         return sb.toString();
     }

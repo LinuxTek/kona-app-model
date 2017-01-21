@@ -85,3 +85,9 @@ VALUES
 
 -- --------------------------------------------------------------------------
 
+INSERT INTO `app__notification_channel`
+VALUES
+    (100,'IN_APP','In-App',now(),now()),
+    (200,'EMAIL','Email',now(),now()),
+    (300,'SMS','SMS',now(),now()),
+    (400,'PUSH','Push Notification',now(),now());

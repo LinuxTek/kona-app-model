@@ -34,8 +34,8 @@ public interface KAppUser extends KEntityObject {
 
 	void setRevokedDate(Date revokedDate);
 
-	Date getLastUpdated();
+	Date getUpdatedDate();
 
-	void setLastUpdated(Date lastUpdated);
+	void setUpdatedDate(Date updatedDate);
 
 }

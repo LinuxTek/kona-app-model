@@ -24,7 +24,7 @@ public class KBaseFile implements KFile {
     private Long uploadTime;
 	private Date createdDate;
 	private Date retiredDate;
-	private Date lastUpdated;
+	private Date updatedDate;
 
     // --------------------------------------------------
     
@@ -269,12 +269,12 @@ public class KBaseFile implements KFile {
     // --------------------------------------------------
 
     @Override
-    public Date getLastUpdated() {
-        return (lastUpdated);
+    public Date getUpdatedDate() {
+        return (updatedDate);
     }
 
     @Override
-    public void setLastUpdated(Date lastUpdated) {
-        this.lastUpdated = lastUpdated;
+    public void setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
     }
 }

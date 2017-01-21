@@ -14,7 +14,7 @@ public class KBaseAppWebhook implements KAppWebhook {
     private String url;
     private boolean enabled;
     private Date createdDate;
-    private Date lastUpdated;
+    private Date updatedDate;
 
     @Override
 	public Long getId() {
@@ -107,13 +107,13 @@ public class KBaseAppWebhook implements KAppWebhook {
     }
 
     @Override
-	public Date getLastUpdated() {
-        return lastUpdated;
+	public Date getUpdatedDate() {
+        return updatedDate;
     }
 
     @Override
-	public void setLastUpdated(Date lastUpdated) {
-        this.lastUpdated = lastUpdated;
+	public void setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
     }
 
     @Override
@@ -128,7 +128,7 @@ public class KBaseAppWebhook implements KAppWebhook {
         sb.append(", url=").append(url);
         sb.append(", enabled=").append(enabled);
         sb.append(", createdDate=").append(createdDate);
-        sb.append(", lastUpdated=").append(lastUpdated);
+        sb.append(", updatedDate=").append(updatedDate);
         sb.append("]");
         return sb.toString();
     }

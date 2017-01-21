@@ -22,7 +22,7 @@ public class KBaseAccount implements KAccount {
     private boolean verified;
     private Date createdDate;
     private Date retiredDate;
-    private Date lastUpdated;
+    private Date updatedDate;
     
 	public Long getId() {
 		return id;
@@ -91,10 +91,10 @@ public class KBaseAccount implements KAccount {
 	public void setRetiredDate(Date retiredDate) {
 		this.retiredDate = retiredDate;
 	}
-	public Date getLastUpdated() {
-		return lastUpdated;
+	public Date getUpdatedDate() {
+		return updatedDate;
 	}
-	public void setLastUpdated(Date lastUpdated) {
-		this.lastUpdated = lastUpdated;
+	public void setUpdatedDate(Date updatedDate) {
+		this.updatedDate = updatedDate;
 	}
 }

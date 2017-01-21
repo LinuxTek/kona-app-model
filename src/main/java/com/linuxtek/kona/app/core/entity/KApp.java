@@ -67,6 +67,6 @@ public interface KApp extends KEntityObject {
 	Date getRetiredDate();
 	void setRetiredDate(Date retiredDate);
 
-	Date getLastUpdated();
-	void setLastUpdated(Date lastUpdated);
+	Date getUpdatedDate();
+	void setUpdatedDate(Date updatedDate);
 }

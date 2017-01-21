@@ -38,7 +38,7 @@ public abstract class KAbstractMediaObjectService<T extends KMediaObject, EXAMPL
 			media.setCreatedDate(new Date());
 		}
 
-		media.setLastUpdated(new Date());
+		media.setUpdatedDate(new Date());
 
 		if (media.getUid() == null) {
 			media.setUid(uuid());

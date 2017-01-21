@@ -74,6 +74,6 @@ public interface KMediaObject extends KEntityObject {
 	Date getCreatedDate();
 	void setCreatedDate(Date createdDate);
 
-	Date getLastUpdated();
-	void setLastUpdated(Date lastUpdated);
+	Date getUpdatedDate();
+	void setUpdatedDate(Date updatedDate);
 }

@@ -43,7 +43,7 @@ implements KAppWebhookService<A> {
 			appWebhook.setDisplayName(appWebhook.getUid());
 		}
 		
-		appWebhook.setLastUpdated(new Date());
+		appWebhook.setUpdatedDate(new Date());
 
 		String name = KInflector.getInstance().slug(appWebhook.getDisplayName());
 		appWebhook.setName(name);

@@ -38,9 +38,13 @@ public interface KPosition extends KEntityObject {
 
 	void setLongitude(Double longitude);
 
-	Integer getFloor();
+	Integer getIndoorFloor();
 
-	void setFloor(Integer floor);
+	void setIndoorFloor(Integer indoorFloor);
+
+	String getIndoorDetail();
+
+	void setIndoorDetail(String indoorDetail);
 
 	Double getAltitude();
 
@@ -82,8 +86,8 @@ public interface KPosition extends KEntityObject {
 
 	void setCreatedDate(Date createdDate);
 
-	Date getLastUpdated();
+	Date getUpdatedDate();
 
-	void setLastUpdated(Date lastUpdated);
+	void setUpdatedDate(Date updatedDate);
 
 }

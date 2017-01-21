@@ -21,10 +21,10 @@ CREATE TABLE `sales__campaign` (
   `display_name` varchar(255) DEFAULT NULL,
   `description` varchar(4000) DEFAULT NULL,
   `enabled` tinyint(1) NOT NULL DEFAULT '1',
-  `created_date` datetime(6) NOT NULL,
   `start_date` datetime(6) DEFAULT NULL,
   `end_date` datetime(6) DEFAULT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
   PRIMARY KEY (`id`),
 
@@ -69,10 +69,10 @@ CREATE TABLE `sales__campaign_channel` (
   `image_url` varchar(255) DEFAULT NULL,
   `main_content` varchar(2000) DEFAULT NULL,
   `conversion_content` varchar(2000) DEFAULT NULL,
-  `created_date` datetime(6) NOT NULL,
   `start_date` datetime(6) DEFAULT NULL,
   `end_date` datetime(6) DEFAULT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
   PRIMARY KEY (`id`),
 
@@ -118,8 +118,8 @@ CREATE TABLE `sales__campaign_event` (
   `browser` varchar(512) DEFAULT NULL,
   `latitude` double DEFAULT NULL,
   `longitude` double DEFAULT NULL,
-  `created_date` datetime(6) NOT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
   PRIMARY KEY (`id`),
 
@@ -151,8 +151,8 @@ CREATE TABLE `sales__campaign_type` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `display_name` varchar(255) DEFAULT NULL,
-  `created_date` datetime(6) NOT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
   PRIMARY KEY (`id`),
 
@@ -188,11 +188,11 @@ CREATE TABLE `sales__cart` (
   `checked_out` tinyint(1) NOT NULL DEFAULT '0',
   `invoiced` tinyint(1) NOT NULL DEFAULT '0',
   `expired` tinyint(1) NOT NULL DEFAULT '0',
-  `created_date` datetime(6) NOT NULL,
-  `expired_date` datetime(6) DEFAULT NULL,
   `checked_out_date` datetime(6) DEFAULT NULL,
   `invoiced_date` datetime(6) DEFAULT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `expired_date` datetime(6) DEFAULT NULL, -- date cart was externally expired
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
   PRIMARY KEY (`id`),
 
@@ -241,10 +241,10 @@ CREATE TABLE `sales__cart_item` (
   `subtotal` decimal(10,2) DEFAULT NULL,
   `discount` decimal(10,2) DEFAULT NULL,
   `total` decimal(10,2) DEFAULT NULL,
-  `created_date` datetime(6) NOT NULL,
   `subscription_start_date` datetime(6) DEFAULT NULL,
   `subscription_end_date` datetime(6) DEFAULT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
   PRIMARY KEY (`id`),
 
@@ -312,7 +312,6 @@ CREATE TABLE `sales__invoice` (
   `closed` tinyint(1) NOT NULL DEFAULT '0',
 --  `subscription_start_date` datetime(6) DEFAULT NULL,
 --  `subscription_end_date` datetime(6) DEFAULT NULL,
-  `created_date` datetime(6) NOT NULL,
   `invoice_date` datetime(6) NOT NULL,
   `due_date` datetime(6) DEFAULT NULL,
   `paid_date` datetime(6) DEFAULT NULL,
@@ -324,7 +323,8 @@ CREATE TABLE `sales__invoice` (
   `payment_card_last4` varchar(4) DEFAULT NULL,
   `payment_ref` varchar(512) DEFAULT NULL,
   `notes` varchar(4000) DEFAULT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
   PRIMARY KEY (`id`),
 
@@ -373,8 +373,8 @@ CREATE TABLE `sales__invoice_item` (
   `total` decimal(10,2) NOT NULL,
   `subscription_start_date` datetime(6) DEFAULT NULL,
   `subscription_end_date` datetime(6) DEFAULT NULL,
-  `created_date` datetime(6) NOT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
 
   UNIQUE KEY `id` (`id`),
@@ -425,9 +425,9 @@ CREATE TABLE `sales__partner` (
   `longitude` double DEFAULT NULL,
   `population` int(11) DEFAULT NULL,
   `enabled` tinyint(1) NOT NULL DEFAULT '0',
-  `created_date` datetime(6) NOT NULL,
   `retired_date` datetime(6) DEFAULT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
   PRIMARY KEY (`id`),
 
@@ -472,12 +472,12 @@ CREATE TABLE `sales__payment` (
   `refunded` tinyint(1) NOT NULL DEFAULT '0',
   `disputed` tinyint(1) NOT NULL DEFAULT '0',
   `failed` tinyint(1) NOT NULL DEFAULT '0',
-  `created_date` datetime(6) NOT NULL,
   `paid_date` datetime(6) DEFAULT NULL,
   `disputed_date` datetime(6) DEFAULT NULL,
   `refunded_date` datetime(6) DEFAULT NULL,
   `failed_date` datetime(6) DEFAULT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
   PRIMARY KEY (`id`),
 
@@ -534,8 +534,8 @@ CREATE TABLE `sales__payment_status` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(32) NOT NULL,
   `display_name` varchar(128) DEFAULT NULL,
-  `created_date` datetime(6) NOT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
   PRIMARY KEY (`id`),
 
@@ -551,8 +551,8 @@ CREATE TABLE `sales__payment_type` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(32) NOT NULL,
   `display_name` varchar(128) DEFAULT NULL,
-  `created_date` datetime(6) NOT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
   PRIMARY KEY (`id`),
 
@@ -596,9 +596,9 @@ CREATE TABLE `sales__pre_order` (
   `notes` varchar(2000) DEFAULT NULL,
   `hostname` varchar(255) DEFAULT NULL,
   `browser` varchar(512) DEFAULT NULL,
-  `created_date` datetime(6) NOT NULL,
   `shipped_date` datetime(6) DEFAULT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
   PRIMARY KEY (`id`),
 
@@ -651,7 +651,6 @@ CREATE TABLE `sales__promo` (
   `enabled` tinyint(1) NOT NULL DEFAULT '0',
   `visible` tinyint(1) NOT NULL DEFAULT '0',
   `signup_default` tinyint(1) NOT NULL DEFAULT '0',
-  `created_date` datetime(6) NOT NULL,
   `start_date` datetime(6) DEFAULT NULL,
   `end_date` datetime(6) DEFAULT NULL,
   `use_count` int(11) DEFAULT NULL,
@@ -663,7 +662,8 @@ CREATE TABLE `sales__promo` (
   `trial_days` int(11) DEFAULT NULL,
   `subscription_days` int(11) DEFAULT NULL,
   `validation_rule` varchar(255) DEFAULT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
   PRIMARY KEY (`id`),
 
@@ -704,9 +704,9 @@ CREATE TABLE `sales__promo_page` (
   `google_tracking_id` varchar(255) DEFAULT NULL,
   `enabled` tinyint(1) NOT NULL DEFAULT '0',
   `root` tinyint(1) NOT NULL DEFAULT '0',
-  `created_date` datetime(6) NOT NULL,
   `expired_date` datetime(6) DEFAULT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
   PRIMARY KEY (`id`),
 
@@ -759,8 +759,8 @@ CREATE TABLE `sales__sales_lead` (
   `interests` varchar(255) DEFAULT NULL,
   `hostname` varchar(255) DEFAULT NULL,
   `browser` varchar(512) DEFAULT NULL,
-  `created_date` datetime(6) NOT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
   PRIMARY KEY (`id`),
 
@@ -809,8 +809,8 @@ CREATE TABLE `sales__product` (
   `support_type` enum('Email','Priority') DEFAULT NULL,
   -- `default_plan` tinyint(1) DEFAULT NULL,
   `active` tinyint(1) NOT NULL DEFAULT '0',
-  `created_date` datetime(6) NOT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
   PRIMARY KEY (`id`),
 
@@ -842,9 +842,9 @@ CREATE TABLE `sales__purchase` (
   `invoice_no` varchar(255) DEFAULT NULL,
   `auto_renew` tinyint(1) NOT NULL DEFAULT '0',
   `enabled` tinyint(1) NOT NULL DEFAULT '0',
-  `created_date` datetime(6) NOT NULL,
   `expiration_date` datetime(6) DEFAULT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
   PRIMARY KEY (`id`),
 

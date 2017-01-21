@@ -22,7 +22,7 @@ public class KBaseAuthCode implements KAuthCode {
     private Date expirationDate;
     private Date lastAccessedDate;
     private Date createdDate;
-    private Date lastUpdated;
+    private Date updatedDate;
     
     @Override
 	public Long getId() {
@@ -135,13 +135,13 @@ public class KBaseAuthCode implements KAuthCode {
     }
 
     @Override
-	public Date getLastUpdated() {
-        return lastUpdated;
+	public Date getUpdatedDate() {
+        return updatedDate;
     }
 
     @Override
-	public void setLastUpdated(Date lastUpdated) {
-        this.lastUpdated = lastUpdated;
+	public void setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
     }
 
     @Override
@@ -160,7 +160,7 @@ public class KBaseAuthCode implements KAuthCode {
         sb.append(", expirationDate=").append(expirationDate);
         sb.append(", lastAccessedDate=").append(lastAccessedDate);
         sb.append(", createdDate=").append(createdDate);
-        sb.append(", lastUpdated=").append(lastUpdated);
+        sb.append(", updatedDate=").append(updatedDate);
         sb.append("]");
         return sb.toString();
     }

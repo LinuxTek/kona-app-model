@@ -91,8 +91,8 @@ public interface KEmail extends KEntityObject {
 
 	void setSentDate(Date sentDate);
 
-	Date getLastUpdated();
+	Date getUpdatedDate();
 
-	void setLastUpdated(Date lastUpdated);
+	void setUpdatedDate(Date updatedDate);
 
 }

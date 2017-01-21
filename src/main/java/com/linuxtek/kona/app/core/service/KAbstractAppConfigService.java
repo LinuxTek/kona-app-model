@@ -28,7 +28,7 @@ implements KAppConfigService<T> {
 			appConfig.setCreatedDate(new Date());
 		}
 
-		appConfig.setLastUpdated(new Date());
+		appConfig.setUpdatedDate(new Date());
 	}
 
 	// ----------------------------------------------------------------------------

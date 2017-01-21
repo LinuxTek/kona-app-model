@@ -48,7 +48,7 @@ public abstract class KAbstractPurchaseService<PURCHASE extends KPurchase,
 			purchase.setCreatedDate(new Date());
 		}
         
-		purchase.setLastUpdated(new Date());
+		purchase.setUpdatedDate(new Date());
 	}
     
 	// ----------------------------------------------------------------------------

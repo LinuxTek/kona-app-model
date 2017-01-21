@@ -19,7 +19,8 @@ public class KBasePosition implements KPosition {
     private Integer battery;
     private Double latitude;
     private Double longitude;
-    private Integer floor;
+    private Integer indoorFloor;
+    private String indoorDetail;
     private Double altitude;
     private Double accuracy;
     private Double altitudeAccuracy;
@@ -30,7 +31,7 @@ public class KBasePosition implements KPosition {
     private String errorMessage;
     private Date errorDate;
     private Date createdDate;
-    private Date lastUpdated;
+    private Date updatedDate;
 
     @Override
 	public Long getId() {
@@ -113,13 +114,23 @@ public class KBasePosition implements KPosition {
     }
 
     @Override
-	public Integer getFloor() {
-        return floor;
+	public Integer getIndoorFloor() {
+        return indoorFloor;
     }
 
     @Override
-	public void setFloor(Integer floor) {
-        this.floor = floor;
+	public void setIndoorFloor(Integer indoorFloor) {
+        this.indoorFloor = indoorFloor;
+    }
+    
+    @Override
+	public String getIndoorDetail() {
+        return indoorDetail;
+    }
+    
+    @Override
+	public void setIndoorDetail(String indoorDetail) {
+        this.indoorDetail = indoorDetail;
     }
 
     @Override
@@ -223,13 +234,13 @@ public class KBasePosition implements KPosition {
     }
     
     @Override
-	public Date getLastUpdated() {
-        return lastUpdated;
+	public Date getUpdatedDate() {
+        return updatedDate;
     }
     
     @Override
-	public void setLastUpdated(Date lastUpdated) {
-        this.lastUpdated = lastUpdated;
+	public void setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
     }
     
 
@@ -247,7 +258,8 @@ public class KBasePosition implements KPosition {
         sb.append(", battery=").append(battery);
         sb.append(", latitude=").append(latitude);
         sb.append(", longitude=").append(longitude);
-        sb.append(", floor=").append(floor);
+        sb.append(", indoorFloor=").append(indoorFloor);
+        sb.append(", indoorDetail=").append(indoorDetail);
         sb.append(", altitude=").append(altitude);
         sb.append(", accuracy=").append(accuracy);
         sb.append(", altitudeAccuracy=").append(altitudeAccuracy);
@@ -258,7 +270,7 @@ public class KBasePosition implements KPosition {
         sb.append(", errorMessage=").append(errorMessage);
         sb.append(", errorDate=").append(errorDate);
         sb.append(", createdDate=").append(createdDate);
-        sb.append(", lastUpdated=").append(lastUpdated);
+        sb.append(", updatedDate=").append(updatedDate);
         sb.append("]");
         return sb.toString();
     }

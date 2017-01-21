@@ -118,7 +118,7 @@ public abstract class KAbstractEmailService<EMAIL extends KEmail,
 			email.setCreatedDate(new Date());
 		}
 		
-		email.setLastUpdated(new Date());
+		email.setUpdatedDate(new Date());
 
 		if (email.getUid() == null) {
 			email.setUid(uuid());

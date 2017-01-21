@@ -20,7 +20,7 @@ public class KBaseRedirect implements KRedirect {
     private Date requestDate;
     private Date redirectDate;
     private Date createdDate;
-    private Date lastUpdated;
+    private Date updatedDate;
 
     private static final long serialVersionUID = 1L;
 
@@ -195,13 +195,13 @@ public class KBaseRedirect implements KRedirect {
     }
 
     @Override
-	public Date getLastUpdated() {
-        return lastUpdated;
+	public Date getUpdatedDate() {
+        return updatedDate;
     }
 
     @Override
-	public void setLastUpdated(Date lastUpdated) {
-        this.lastUpdated = lastUpdated;
+	public void setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
     }
 
     @Override
@@ -227,7 +227,7 @@ public class KBaseRedirect implements KRedirect {
         sb.append(", requestDate=").append(requestDate);
         sb.append(", redirectDate=").append(redirectDate);
         sb.append(", createdDate=").append(createdDate);
-        sb.append(", lastUpdated=").append(lastUpdated);
+        sb.append(", updatedDate=").append(updatedDate);
         sb.append("]");
         return sb.toString();
     }

@@ -22,8 +22,8 @@ import com.linuxtek.kona.app.core.entity.KUserPresence;
 import com.linuxtek.kona.app.core.entity.KUserRole;
 import com.linuxtek.kona.app.core.entity.KUserStatus;
 import com.linuxtek.kona.app.core.entity.KUserType;
-import com.linuxtek.kona.app.social.entity.KAppInvitation;
-import com.linuxtek.kona.app.social.service.KAppInvitationService;
+import com.linuxtek.kona.app.social.entity.KInvitation;
+import com.linuxtek.kona.app.social.service.KInvitationService;
 import com.linuxtek.kona.app.util.KUtil;
 import com.linuxtek.kona.data.mybatis.KMyBatisUtil;
 import com.linuxtek.kona.remote.service.KServiceClient;
@@ -34,7 +34,7 @@ public abstract class KAbstractUserService<U extends KUser, EXAMPLE,
 										   A extends KAccount, 
 										   AU extends KAppUser, 
 										   R extends KRegistration, 
-										   I extends KAppInvitation, 
+										   I extends KInvitation, 
 										   T extends KToken> 
 		extends KAbstractService<U,EXAMPLE>
 		implements KUserService<U> {
@@ -55,7 +55,7 @@ public abstract class KAbstractUserService<U extends KUser, EXAMPLE,
 	
 	protected abstract <S extends KTokenService<T>> S getTokenService();
 	
-	protected abstract <S extends KAppInvitationService<I>> S getAppInvitationService();
+	protected abstract <S extends KInvitationService<I>> S getInvitationService();
     
 	protected abstract void sendRegisteredUserEmail(Long appId, U user);
 	
@@ -215,7 +215,7 @@ public abstract class KAbstractUserService<U extends KUser, EXAMPLE,
         getAppUserService().create(client.getAppId(), user.getId(), null, null);
         
         // process invitations sent for this user
-        getAppInvitationService().processNewUserInvitations(user.getId());
+        getInvitationService().processNewUserInvitations(user.getId());
 
         sendRegisteredUserEmail(client.getAppId(), user);
         
@@ -375,7 +375,7 @@ public abstract class KAbstractUserService<U extends KUser, EXAMPLE,
 			user.setCreatedDate(new Date());
 		}
 
-		user.setLastUpdated(new Date());
+		user.setUpdatedDate(new Date());
 	}
 	
 	// ----------------------------------------------------------------------------

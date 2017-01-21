@@ -13,7 +13,7 @@ public class KBasePushNotification implements KPushNotification {
     private String pushEndpoint;
     private boolean sandbox;
     private Date createdDate;
-    private Date lastUpdated;
+    private Date updatedDate;
 
     @Override
 	public Long getId() {
@@ -96,13 +96,13 @@ public class KBasePushNotification implements KPushNotification {
     }
 
     @Override
-	public Date getLastUpdated() {
-        return lastUpdated;
+	public Date getUpdatedDate() {
+        return updatedDate;
     }
 
     @Override
-	public void setLastUpdated(Date lastUpdated) {
-        this.lastUpdated = lastUpdated;
+	public void setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
     }
 
     @Override
@@ -119,7 +119,7 @@ public class KBasePushNotification implements KPushNotification {
         sb.append(", pushEndpoint=").append(pushEndpoint);
         sb.append(", sandbox=").append(sandbox);
         sb.append(", createdDate=").append(createdDate);
-        sb.append(", lastUpdated=").append(lastUpdated);
+        sb.append(", updatedDate=").append(updatedDate);
         sb.append("]");
         return sb.toString();
     }

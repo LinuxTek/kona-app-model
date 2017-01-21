@@ -39,7 +39,7 @@ public abstract class KAbstractPromoService<PROMO extends KPromo,
 			promo.setCreatedDate(new Date());
 		}
         
-		promo.setLastUpdated(new Date());
+		promo.setUpdatedDate(new Date());
 	}
     
 	// ----------------------------------------------------------------------------

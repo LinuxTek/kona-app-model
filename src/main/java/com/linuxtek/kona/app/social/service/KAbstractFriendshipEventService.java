@@ -29,7 +29,7 @@ public abstract class KAbstractFriendshipEventService<FRIENDSHIP_EVENT extends K
 			friendshipEvent.setCreatedDate(new Date());
 		}
     	
-    	friendshipEvent.setLastUpdated(new Date());
+    	friendshipEvent.setUpdatedDate(new Date());
 	}
     
 	// ----------------------------------------------------------------------------

@@ -125,7 +125,7 @@ public class KBaseProduct implements KProduct {
      *
      * @mbggenerated Thu Apr 07 17:04:20 MDT 2016
      */
-    private Date lastUpdated;
+    private Date updatedDate;
 
     /* (non-Javadoc)
 	 * @see com.linuxtek.kona.app.sales.entity.KProduct#getId()
@@ -352,19 +352,19 @@ public class KBaseProduct implements KProduct {
     }
 
     /* (non-Javadoc)
-	 * @see com.linuxtek.kona.app.sales.entity.KProduct#getLastUpdated()
+	 * @see com.linuxtek.kona.app.sales.entity.KProduct#getUpdatedDate()
 	 */
     @Override
-	public Date getLastUpdated() {
-        return lastUpdated;
+	public Date getUpdatedDate() {
+        return updatedDate;
     }
 
     /* (non-Javadoc)
-	 * @see com.linuxtek.kona.app.sales.entity.KProduct#setLastUpdated(java.util.Date)
+	 * @see com.linuxtek.kona.app.sales.entity.KProduct#setUpdatedDate(java.util.Date)
 	 */
     @Override
-	public void setLastUpdated(Date lastUpdated) {
-        this.lastUpdated = lastUpdated;
+	public void setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
     }
 
     /**
@@ -393,7 +393,7 @@ public class KBaseProduct implements KProduct {
         sb.append(", supportType=").append(supportType);
         sb.append(", active=").append(active);
         sb.append(", createdDate=").append(createdDate);
-        sb.append(", lastUpdated=").append(lastUpdated);
+        sb.append(", updatedDate=").append(updatedDate);
         sb.append("]");
         return sb.toString();
     }

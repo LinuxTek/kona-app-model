@@ -25,7 +25,7 @@ public class KBaseShortUrl implements KShortUrl {
     private boolean enabled;
     private Date createdDate;
     private Date expiredDate;
-    private Date lastUpdated;
+    private Date updatedDate;
 
     @Override
 	public Long getId() {
@@ -168,13 +168,13 @@ public class KBaseShortUrl implements KShortUrl {
     }
 
     @Override
-	public Date getLastUpdated() {
-        return lastUpdated;
+	public Date getUpdatedDate() {
+        return updatedDate;
     }
 
     @Override
-	public void setLastUpdated(Date lastUpdated) {
-        this.lastUpdated = lastUpdated;
+	public void setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
     }
 
     
@@ -198,7 +198,7 @@ public class KBaseShortUrl implements KShortUrl {
         sb.append(", enabled=").append(enabled);
         sb.append(", createdDate=").append(createdDate);
         sb.append(", expiredDate=").append(expiredDate);
-        sb.append(", lastUpdated=").append(lastUpdated);
+        sb.append(", updatedDate=").append(updatedDate);
         sb.append("]");
         return sb.toString();
     }

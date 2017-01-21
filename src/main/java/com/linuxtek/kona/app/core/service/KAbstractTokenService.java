@@ -196,6 +196,6 @@ public abstract class KAbstractTokenService<T extends KToken,EXAMPLE>
 			token.setCreatedDate(new Date());
 		}
     	
-    	token.setLastUpdated(new Date());
+    	token.setUpdatedDate(new Date());
 	}
 }

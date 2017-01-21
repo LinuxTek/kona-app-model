@@ -30,7 +30,7 @@ implements KEntityNameRuleService<T> {
 			rule.setCreatedDate(new Date());
 		}
     	
-    	rule.setLastUpdated(new Date());
+    	rule.setUpdatedDate(new Date());
 	}
 	
 	// ----------------------------------------------------------------------------

@@ -17,7 +17,7 @@ public class KBaseApiVersion implements KApiVersion {
     private boolean enabled;
     private Date publishedDate;
     private Date createdDate;
-    private Date lastUpdated;
+    private Date updatedDate;
 
 
     @Override
@@ -81,13 +81,13 @@ public class KBaseApiVersion implements KApiVersion {
     }
 
     @Override
-	public Date getLastUpdated() {
-        return lastUpdated;
+	public Date getUpdatedDate() {
+        return updatedDate;
     }
 
     @Override
-	public void setLastUpdated(Date lastUpdated) {
-        this.lastUpdated = lastUpdated;
+	public void setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
     }
 
     @Override
@@ -102,7 +102,7 @@ public class KBaseApiVersion implements KApiVersion {
         sb.append(", enabled=").append(enabled);
         sb.append(", publishedDate=").append(publishedDate);
         sb.append(", createdDate=").append(createdDate);
-        sb.append(", lastUpdated=").append(lastUpdated);
+        sb.append(", updatedDate=").append(updatedDate);
         sb.append("]");
         return sb.toString();
     }

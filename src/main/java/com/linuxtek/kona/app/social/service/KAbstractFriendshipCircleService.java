@@ -29,7 +29,7 @@ public abstract class KAbstractFriendshipCircleService<CIRCLE extends KFriendshi
 			circle.setCreatedDate(new Date());
 		}
 
-		circle.setLastUpdated(new Date());
+		circle.setUpdatedDate(new Date());
 		
 		if (circle.getUid() == null) {
 			circle.setUid(uuid());

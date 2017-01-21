@@ -34,7 +34,7 @@ public abstract class KAbstractInvoiceItemService<INVOICE_ITEM extends KInvoiceI
         	invoiceItem.setCreatedDate(new Date());
         }
         
-        invoiceItem.setLastUpdated(new Date());
+        invoiceItem.setUpdatedDate(new Date());
     }
     
 	// ----------------------------------------------------------------------------

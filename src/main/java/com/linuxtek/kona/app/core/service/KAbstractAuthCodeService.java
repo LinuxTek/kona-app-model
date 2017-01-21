@@ -55,7 +55,7 @@ public abstract class KAbstractAuthCodeService<T extends KAuthCode,EXAMPLE,
 			authCode.setCreatedDate(new Date());
 		}
     	
-    	authCode.setLastUpdated(new Date());
+    	authCode.setUpdatedDate(new Date());
         
 		if (authCode.getMaxUseCount() == null) {
 			authCode.setMaxUseCount(1);

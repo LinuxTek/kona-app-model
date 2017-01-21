@@ -5,7 +5,7 @@ package com.linuxtek.kona.app.social.entity;
 
 import java.util.Date;
 
-public class KBaseAppInvitation implements KAppInvitation {
+public class KBaseInvitation implements KInvitation {
 	private Long id;
     private Long typeId;
     private Long channelId;
@@ -27,7 +27,7 @@ public class KBaseAppInvitation implements KAppInvitation {
     private Date acceptedDate;
     private Date registeredDate;
     private Date createdDate;
-    private Date lastUpdated;
+    private Date updatedDate;
     
 	private static final long serialVersionUID = 1L;
 
@@ -242,13 +242,13 @@ public class KBaseAppInvitation implements KAppInvitation {
     }
 
     @Override
-	public Date getLastUpdated() {
-        return lastUpdated;
+	public Date getUpdatedDate() {
+        return updatedDate;
     }
 
     @Override
-	public void setLastUpdated(Date lastUpdated) {
-        this.lastUpdated = lastUpdated;
+	public void setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
     }
 
     @Override
@@ -278,7 +278,7 @@ public class KBaseAppInvitation implements KAppInvitation {
         sb.append(", acceptedDate=").append(acceptedDate);
         sb.append(", registeredDate=").append(registeredDate);
         sb.append(", createdDate=").append(createdDate);
-        sb.append(", lastUpdated=").append(lastUpdated);
+        sb.append(", updatedDate=").append(updatedDate);
         sb.append("]");
         return sb.toString();
     }

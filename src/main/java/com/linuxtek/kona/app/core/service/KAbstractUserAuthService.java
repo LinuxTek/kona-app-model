@@ -137,6 +137,6 @@ public abstract class KAbstractUserAuthService<UA extends KUserAuth,EXAMPLE,U ex
 			userAuth.setCreatedDate(new Date());
 		}
     	
-    	userAuth.setLastUpdated(new Date());
+    	userAuth.setUpdatedDate(new Date());
 	}
 }

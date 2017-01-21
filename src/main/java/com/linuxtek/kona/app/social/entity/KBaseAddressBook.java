@@ -27,7 +27,7 @@ public class KBaseAddressBook implements KAddressBook {
     private Date invitedDate;
     private Date registeredDate;
     private Date createdDate;
-    private Date lastUpdated;
+    private Date updatedDate;
 
     @Override
 	public Long getId() {
@@ -270,13 +270,13 @@ public class KBaseAddressBook implements KAddressBook {
     }
 
     @Override
-	public Date getLastUpdated() {
-        return lastUpdated;
+	public Date getUpdatedDate() {
+        return updatedDate;
     }
 
     @Override
-	public void setLastUpdated(Date lastUpdated) {
-        this.lastUpdated = lastUpdated;
+	public void setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
     }
 
     @Override
@@ -309,7 +309,7 @@ public class KBaseAddressBook implements KAddressBook {
         sb.append(", invitedDate=").append(invitedDate);
         sb.append(", registeredDate=").append(registeredDate);
         sb.append(", createdDate=").append(createdDate);
-        sb.append(", lastUpdated=").append(lastUpdated);
+        sb.append(", updatedDate=").append(updatedDate);
         sb.append("]");
         return sb.toString();
     }

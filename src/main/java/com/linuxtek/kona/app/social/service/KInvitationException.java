@@ -6,22 +6,22 @@ package com.linuxtek.kona.app.social.service;
 import java.io.Serializable;
 
 /**
- * KAppInvitationException.
+ * KInvitationException.
  */
-public class KAppInvitationException extends RuntimeException implements Serializable {
+public class KInvitationException extends RuntimeException implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	public KAppInvitationException(String message) {
+	public KInvitationException(String message) {
         super(message);
     }
 
 
-    public KAppInvitationException(String message, Throwable cause) {
+    public KInvitationException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public KAppInvitationException(Throwable cause) {
+    public KInvitationException(Throwable cause) {
         super(cause);
     }
 

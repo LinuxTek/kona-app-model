@@ -25,7 +25,7 @@ public abstract class KAbstractEmailGroupAddressService<EMAIL_GROUP_ADDRESS exte
 		if (emailGroupAddress.getCreatedDate() == null) {
 			emailGroupAddress.setCreatedDate(new Date());
 		}
-		emailGroupAddress.setLastUpdated(new Date());
+		emailGroupAddress.setUpdatedDate(new Date());
 	}
 
 	// ----------------------------------------------------------------------

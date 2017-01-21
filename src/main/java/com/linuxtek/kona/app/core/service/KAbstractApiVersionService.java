@@ -48,7 +48,7 @@ public abstract class KAbstractApiVersionService<A extends KApiVersion,EXAMPLE>
 	   	 if (apiVersion.getCreatedDate() == null) {
     		 apiVersion.setCreatedDate(new Date());
     	 }
-         apiVersion.setLastUpdated(new Date());
+         apiVersion.setUpdatedDate(new Date());
 	}
 }
 

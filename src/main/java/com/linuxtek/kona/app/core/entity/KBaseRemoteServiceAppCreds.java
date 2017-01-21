@@ -15,7 +15,7 @@ public class KBaseRemoteServiceAppCreds implements KRemoteServiceAppCreds {
     private String namespace;
     private String region;
     private Date createdDate;
-    private Date lastUpdated;
+    private Date updatedDate;
 
     private static final long serialVersionUID = 1L;
 
@@ -140,13 +140,13 @@ public class KBaseRemoteServiceAppCreds implements KRemoteServiceAppCreds {
     }
 
     @Override
-	public Date getLastUpdated() {
-        return lastUpdated;
+	public Date getUpdatedDate() {
+        return updatedDate;
     }
 
     @Override
-	public void setLastUpdated(Date lastUpdated) {
-        this.lastUpdated = lastUpdated;
+	public void setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
     }
 
     @Override
@@ -167,7 +167,7 @@ public class KBaseRemoteServiceAppCreds implements KRemoteServiceAppCreds {
         sb.append(", namespace=").append(namespace);
         sb.append(", region=").append(region);
         sb.append(", createdDate=").append(createdDate);
-        sb.append(", lastUpdated=").append(lastUpdated);
+        sb.append(", updatedDate=").append(updatedDate);
         sb.append("]");
         return sb.toString();
     }

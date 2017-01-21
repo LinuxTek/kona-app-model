@@ -68,7 +68,7 @@ public abstract class KAbstractApiLogService<A extends KApiLog,EXAMPLE>
     		 apiLog.setCreatedDate(new Date());
     	 }
 	   	 
-         apiLog.setLastUpdated(new Date());
+         apiLog.setUpdatedDate(new Date());
          
          if (apiLog.getUid() == null) {
         	 apiLog.setUid(uuid());

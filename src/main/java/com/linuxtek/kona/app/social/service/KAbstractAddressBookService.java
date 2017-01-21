@@ -121,7 +121,7 @@ public abstract class KAbstractAddressBookService<ADDRESSBOOK extends KAddressBo
     	}
     	
     	if (addressBook.getId() != null) {
-    		addressBook.setLastUpdated(new Date());
+    		addressBook.setUpdatedDate(new Date());
     	}
     	
     	String email = addressBook.getEmail();

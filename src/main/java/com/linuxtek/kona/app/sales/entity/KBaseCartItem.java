@@ -133,7 +133,7 @@ public class KBaseCartItem implements KCartItem {
      *
      * @mbggenerated Thu Apr 07 17:04:20 MDT 2016
      */
-    private Date lastUpdated;
+    private Date updatedDate;
 
     /* (non-Javadoc)
 	 * @see com.linuxtek.kona.app.sales.entity.KCartItem#getId()
@@ -376,19 +376,19 @@ public class KBaseCartItem implements KCartItem {
     }
 
     /* (non-Javadoc)
-	 * @see com.linuxtek.kona.app.sales.entity.KCartItem#getLastUpdated()
+	 * @see com.linuxtek.kona.app.sales.entity.KCartItem#getUpdatedDate()
 	 */
     @Override
-	public Date getLastUpdated() {
-        return lastUpdated;
+	public Date getUpdatedDate() {
+        return updatedDate;
     }
 
     /* (non-Javadoc)
-	 * @see com.linuxtek.kona.app.sales.entity.KCartItem#setLastUpdated(java.util.Date)
+	 * @see com.linuxtek.kona.app.sales.entity.KCartItem#setUpdatedDate(java.util.Date)
 	 */
     @Override
-	public void setLastUpdated(Date lastUpdated) {
-        this.lastUpdated = lastUpdated;
+	public void setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
     }
 
     /**
@@ -418,7 +418,7 @@ public class KBaseCartItem implements KCartItem {
         sb.append(", createdDate=").append(createdDate);
         sb.append(", subscriptionStartDate=").append(subscriptionStartDate);
         sb.append(", subscriptionEndDate=").append(subscriptionEndDate);
-        sb.append(", lastUpdated=").append(lastUpdated);
+        sb.append(", updatedDate=").append(updatedDate);
         sb.append("]");
         return sb.toString();
     }

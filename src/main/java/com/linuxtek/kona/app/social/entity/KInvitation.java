@@ -4,7 +4,7 @@ import java.util.Date;
 
 import com.linuxtek.kona.data.entity.KEntityObject;
 
-public interface KAppInvitation extends KEntityObject {
+public interface KInvitation extends KEntityObject {
 
 	@Override
 	Long getId();
@@ -91,8 +91,8 @@ public interface KAppInvitation extends KEntityObject {
 
 	void setCreatedDate(Date createdDate);
 
-	Date getLastUpdated();
+	Date getUpdatedDate();
 
-	void setLastUpdated(Date lastUpdated);
+	void setUpdatedDate(Date updatedDate);
 
 }

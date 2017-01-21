@@ -8,7 +8,7 @@ public class KBaseEmailGroup implements KEmailGroup {
     private String name;
     private String displayName;
     private Date createdDate;
-    private Date lastUpdated;
+    private Date updatedDate;
 
     private static final long serialVersionUID = 1L;
 
@@ -63,13 +63,13 @@ public class KBaseEmailGroup implements KEmailGroup {
     }
 
     @Override
-	public Date getLastUpdated() {
-        return lastUpdated;
+	public Date getUpdatedDate() {
+        return updatedDate;
     }
 
     @Override
-	public void setLastUpdated(Date lastUpdated) {
-        this.lastUpdated = lastUpdated;
+	public void setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
     }
 
     @Override
@@ -83,7 +83,7 @@ public class KBaseEmailGroup implements KEmailGroup {
         sb.append(", name=").append(name);
         sb.append(", displayName=").append(displayName);
         sb.append(", createdDate=").append(createdDate);
-        sb.append(", lastUpdated=").append(lastUpdated);
+        sb.append(", updatedDate=").append(updatedDate);
         sb.append("]");
         return sb.toString();
     }

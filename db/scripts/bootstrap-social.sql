@@ -19,8 +19,8 @@ CREATE TABLE `social__friendship` (
   `circle_id` bigint(20) unsigned DEFAULT NULL,
   `status_id` bigint(20) unsigned NOT NULL,
   `friendship_requested` tinyint(1) NOT NULL DEFAULT '0',
-  `created_date` datetime(6) NOT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
 
   PRIMARY KEY (`id`),
 
@@ -64,8 +64,8 @@ CREATE TABLE `social__friendship_event` (
   `friend_id` bigint(20) unsigned DEFAULT NULL,
   `event` varchar(2000) DEFAULT NULL,
   `event_date` datetime(6) NOT NULL,
-  `created_date` datetime(6) NOT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
   PRIMARY KEY (`id`),
 
   UNIQUE KEY `id` (`id`),
@@ -99,8 +99,8 @@ CREATE TABLE `social__friendship_event_type` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
   `display_name` varchar(255) DEFAULT NULL,
-  `created_date` datetime(6) NOT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
   PRIMARY KEY (`id`),
 
   UNIQUE KEY `ux_social__friendship_event_type_name` (`name`)
@@ -113,8 +113,8 @@ CREATE TABLE `social__friendship_status` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
   `display_name` varchar(255) DEFAULT NULL,
-  `created_date` datetime(6) NOT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
   PRIMARY KEY (`id`),
 
   UNIQUE KEY `ux_social__friendship_status_name` (`name`)
@@ -131,8 +131,8 @@ CREATE TABLE `social__friendship_circle` (
       `name` varchar(255) NOT NULL,
       `display_name` varchar(255) NOT NULL,
       `default_circle` tinyint(1) NOT NULL DEFAULT '0',
-      `created_date` datetime(6) NOT NULL,
-      `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+      `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+      `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
 
       PRIMARY KEY (`id`),
 
@@ -174,8 +174,8 @@ CREATE TABLE `social__address_book` (
       `mobile_verified` tinyint(1) NOT NULL DEFAULT '0',
       `invited_date` datetime(6) DEFAULT NULL,
       `registered_date` datetime(6) DEFAULT NULL,
-      `created_date` datetime(6) NOT NULL,
-      `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+      `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+      `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
 
       PRIMARY KEY (`id`),
 
@@ -201,51 +201,51 @@ CREATE TABLE `social__address_book` (
 
 -- --------------------------------------------------------------------------
 
-CREATE TABLE `social__app_invitation_channel` (
+CREATE TABLE `social__invitation_channel` (
     `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
     `name` varchar(255) DEFAULT NULL,
     `display_name` varchar(255) DEFAULT NULL,
-    `created_date` datetime(6) NOT NULL,
-    `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+    `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+    `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
     PRIMARY KEY (`id`),
 
-    UNIQUE KEY `ux_social__app_invitation_channel_name` (`name`)
+    UNIQUE KEY `ux_social__invitation_channel_name` (`name`)
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 -- --------------------------------------------------------------------------
 
-CREATE TABLE `social__app_invitation_type` (
+CREATE TABLE `social__invitation_type` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
   `display_name` varchar(255) DEFAULT NULL,
-  `created_date` datetime(6) NOT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
 
   PRIMARY KEY (`id`),
 
-  UNIQUE KEY `ux_social__app_invitation_type_name` (`name`)
+  UNIQUE KEY `ux_social__invitation_type_name` (`name`)
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 -- --------------------------------------------------------------------------
 
-CREATE TABLE `social__app_invitation_status` (
+CREATE TABLE `social__invitation_status` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
   `display_name` varchar(255) DEFAULT NULL,
-  `created_date` datetime(6) NOT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
 
   PRIMARY KEY (`id`),
 
-  UNIQUE KEY `ux_social__app_invitation_status_name` (`name`)
+  UNIQUE KEY `ux_social__invitation_status_name` (`name`)
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 -- --------------------------------------------------------------------------
 
-CREATE TABLE `social__app_invitation` (
+CREATE TABLE `social__invitation` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `type_id` bigint(20) unsigned NOT NULL,
   `channel_id` bigint(20) unsigned NOT NULL,
@@ -266,47 +266,47 @@ CREATE TABLE `social__app_invitation` (
   `ignored_date` datetime(6) DEFAULT NULL,
   `accepted_date` datetime(6) DEFAULT NULL,
   `registered_date` datetime(6) DEFAULT NULL,
-  `created_date` datetime(6) NOT NULL,
-  `last_updated` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
 
   PRIMARY KEY (`id`),
 
   UNIQUE KEY `id` (`id`),
 
-  UNIQUE KEY `ux_social__app_invitation_code` (`invitation_code`),
+  UNIQUE KEY `ux_social__invitation_code` (`invitation_code`),
 
-  KEY `ix_social__app_invitation_email` (`email`),
+  KEY `ix_social__invitation_email` (`email`),
 
-  KEY `ix_social__app_invitation_mobile_number` (`mobile_number`),
+  KEY `ix_social__invitation_mobile_number` (`mobile_number`),
 
-  KEY `ix_social__app_invitation_type` (`type_id`),
+  KEY `ix_social__invitation_type` (`type_id`),
 
-  KEY `ix_social__app_invitation_channel` (`channel_id`),
+  KEY `ix_social__invitation_channel` (`channel_id`),
 
-  KEY `ix_social__app_invitation_status` (`status_id`),
+  KEY `ix_social__invitation_status` (`status_id`),
 
-  KEY `ix_social__app_invitation_user` (`user_id`),
+  KEY `ix_social__invitation_user` (`user_id`),
 
-  KEY `ix_social__app_invitation_address_book` (`address_book_id`),
+  KEY `ix_social__invitation_address_book` (`address_book_id`),
 
-  KEY `ix_social__app_invitation_invitee_user` (`invitee_user_id`),
+  KEY `ix_social__invitation_invitee_user` (`invitee_user_id`),
 
-  CONSTRAINT `fk_social__app_invitation_address_book` FOREIGN KEY (`address_book_id`) 
+  CONSTRAINT `fk_social__invitation_address_book` FOREIGN KEY (`address_book_id`) 
         REFERENCES `social__address_book` (`id`) ON DELETE SET NULL,
 
-  CONSTRAINT `fk_social__app_invitation_channel` FOREIGN KEY (`channel_id`) 
-        REFERENCES `social__app_invitation_channel` (`id`),
+  CONSTRAINT `fk_social__invitation_channel` FOREIGN KEY (`channel_id`) 
+        REFERENCES `social__invitation_channel` (`id`),
 
-  CONSTRAINT `fk_social__app_invitation_invitee_user` FOREIGN KEY (`invitee_user_id`) 
+  CONSTRAINT `fk_social__invitation_invitee_user` FOREIGN KEY (`invitee_user_id`) 
         REFERENCES `core__user` (`id`) ON DELETE SET NULL,
 
-  CONSTRAINT `fk_social__app_invitation_status` FOREIGN KEY (`status_id`) 
-        REFERENCES `social__app_invitation_status` (`id`),
+  CONSTRAINT `fk_social__invitation_status` FOREIGN KEY (`status_id`) 
+        REFERENCES `social__invitation_status` (`id`),
 
-  CONSTRAINT `fk_social__app_invitation_type` FOREIGN KEY (`type_id`) 
-        REFERENCES `social__app_invitation_type` (`id`),
+  CONSTRAINT `fk_social__invitation_type` FOREIGN KEY (`type_id`) 
+        REFERENCES `social__invitation_type` (`id`),
 
-  CONSTRAINT `fk_social__app_invitation_user` FOREIGN KEY (`user_id`) 
+  CONSTRAINT `fk_social__invitation_user` FOREIGN KEY (`user_id`) 
         REFERENCES `core__user` (`id`) ON DELETE CASCADE
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;

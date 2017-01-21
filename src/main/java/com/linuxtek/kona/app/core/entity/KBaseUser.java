@@ -32,7 +32,7 @@ public abstract class KBaseUser implements KUser {
     private Date retiredDate;
     private Date loginDate;
     private Date lastLoginDate;
-    private Date lastUpdated;
+    private Date updatedDate;
 
     public Long getId() {
         return id;
@@ -258,12 +258,12 @@ public abstract class KBaseUser implements KUser {
         this.lastLoginDate = lastLoginDate;
     }
 
-    public Date getLastUpdated() {
-        return lastUpdated;
+    public Date getUpdatedDate() {
+        return updatedDate;
     }
 
-    public void setLastUpdated(Date lastUpdated) {
-        this.lastUpdated = lastUpdated;
+    public void setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
     }
 
 

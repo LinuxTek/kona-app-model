@@ -24,7 +24,7 @@ public class KBaseAppCreds implements KAppCreds {
     private Integer refreshTokenTimeout;
     private Date createdDate;
     private Date retiredDate;
-    private Date lastUpdated;
+    private Date updatedDate;
 
     @Override
 	public Long getId() {
@@ -157,13 +157,13 @@ public class KBaseAppCreds implements KAppCreds {
     }
 
     @Override
-	public Date getLastUpdated() {
-        return lastUpdated;
+	public Date getUpdatedDate() {
+        return updatedDate;
     }
 
     @Override
-	public void setLastUpdated(Date lastUpdated) {
-        this.lastUpdated = lastUpdated;
+	public void setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
     }
 
     @Override
@@ -185,7 +185,7 @@ public class KBaseAppCreds implements KAppCreds {
         sb.append(", refreshTokenTimeout=").append(refreshTokenTimeout);
         sb.append(", createdDate=").append(createdDate);
         sb.append(", retiredDate=").append(retiredDate);
-        sb.append(", lastUpdated=").append(lastUpdated);
+        sb.append(", updatedDate=").append(updatedDate);
         sb.append("]");
         return sb.toString();
     }

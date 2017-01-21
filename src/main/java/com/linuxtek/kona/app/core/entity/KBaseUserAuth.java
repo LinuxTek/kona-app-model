@@ -21,7 +21,7 @@ public class KBaseUserAuth implements KUserAuth {
     private String duressAnswer2;
     
     private Date createdDate;
-    private Date lastUpdated;
+    private Date updatedDate;
     
 
 	@Override
@@ -146,12 +146,12 @@ public class KBaseUserAuth implements KUserAuth {
 	}
 
 	@Override
-	public Date getLastUpdated() {
-		return lastUpdated;
+	public Date getUpdatedDate() {
+		return updatedDate;
 	}
 
 	@Override
-	public void setLastUpdated(Date lastUpdated) {
-		this.lastUpdated = lastUpdated;
+	public void setUpdatedDate(Date updatedDate) {
+		this.updatedDate = updatedDate;
 	}
 }
