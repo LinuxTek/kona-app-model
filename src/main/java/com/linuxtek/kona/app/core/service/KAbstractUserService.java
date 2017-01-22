@@ -397,5 +397,41 @@ public abstract class KAbstractUserService<U extends KUser, EXAMPLE,
 		return registration.isMobileVerified();
 		
 	}
+    
 	
+	// ----------------------------------------------------------------------------
+	
+	@Override
+	public U setMobileNumberVerified(Long userId) {
+		R registration = getRegistrationService().fetchByUserId(userId);
+        
+		if (registration == null) {
+			throw new IllegalArgumentException("Registration not found for userId: " + userId);
+		}
+        
+        
+		registration.setMobileVerified(true);
+        
+		getRegistrationService().update(registration);
+        
+        return fetchById(userId);
+	}
+	
+	// ----------------------------------------------------------------------------
+	
+	@Override
+	public U setEmailVerified(Long userId) {
+		R registration = getRegistrationService().fetchByUserId(userId);
+        
+		if (registration == null) {
+			throw new IllegalArgumentException("Registration not found for userId: " + userId);
+		}
+        
+        
+		registration.setEmailVerified(true);
+        
+		getRegistrationService().update(registration);
+        
+        return fetchById(userId);
+	}
 }

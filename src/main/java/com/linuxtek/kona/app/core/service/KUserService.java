@@ -56,5 +56,9 @@ public interface KUserService<U extends KUser> extends KService, KDataService<U>
 	public boolean isEmailVerified(Long userId);
 
 	public boolean isMobileNumberVerified(Long userId);
+    
+	public U setMobileNumberVerified(Long userId);
+    
+	public U setEmailVerified(Long userId);
 	
 }

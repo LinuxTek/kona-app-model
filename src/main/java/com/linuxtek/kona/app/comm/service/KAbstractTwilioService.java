@@ -1,21 +1,20 @@
 package com.linuxtek.kona.app.comm.service;
 
 
+import java.net.URI;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.linuxtek.kona.util.KClassUtil;
-import com.twilio.sdk.TwilioRestClient;
-import com.twilio.sdk.TwilioRestException;
-import com.twilio.sdk.resource.factory.MessageFactory;
-import com.twilio.sdk.resource.instance.Message;
-
+import com.twilio.Twilio;
+import com.twilio.rest.api.v2010.account.Message;
+import com.twilio.rest.api.v2010.account.MessageCreator;
+import com.twilio.type.PhoneNumber;
 
 public abstract class KAbstractTwilioService {
 
@@ -25,15 +24,17 @@ public abstract class KAbstractTwilioService {
     
 	// ----------------------------------------------------------------------------
     
-    private TwilioRestClient client = null;
+    private boolean initialized = false;
     
-    //private Map<String,Message> statusQueue = new HashMap<String,Message>();
+    private Map<String,Message> statusQueue = new HashMap<String,Message>();
     
     private String messageStatusCallback = null;
     
 	// ----------------------------------------------------------------------------
     
-    protected abstract TwilioRestClient getTwilioClient();
+    protected abstract String getAccountSid();
+    
+    protected abstract String getAuthToken();
     
     protected abstract String getFromPhoneNumber();
     
@@ -43,13 +44,43 @@ public abstract class KAbstractTwilioService {
     
 	// ----------------------------------------------------------------------------
     
-    protected String getFrom(TwilioRestClient client) {
-    	return getFromPhoneNumber();
+    // TODO: Find reference for this
+    protected Integer getMaxMediaCount() {
+    	return 10;
+    }
+    
+    // https://www.twilio.com/docs/api/rest/accepted-mime-types
+    protected Integer getMaxMessageSize() {
+    	return 5*1024*1024;
     }
     
 	// ----------------------------------------------------------------------------
     
-    protected void sendMessage(String to, String body) throws TwilioRestException {
+    protected void init() {
+        if (!initialized) {
+        	Twilio.init(getAccountSid(), getAuthToken());
+            initialized = true;
+        }
+    }
+    
+	// ----------------------------------------------------------------------------
+    
+    protected void sendMessage(String to, String body) {
+        sendMessage(getFromPhoneNumber(), to, body, null);
+    }
+    
+	// ----------------------------------------------------------------------------
+    
+    protected void sendMessage(String to, String body, String mediaUrl) {
+        List<String> urls = new ArrayList<String>();
+        urls.add(mediaUrl);
+        sendMessage(getFromPhoneNumber(), to, body, urls);
+    }
+    
+	// ----------------------------------------------------------------------------
+    
+    protected void sendMessage(String from, String to, String body, List<String> mediaUrls) {
+        init();
     	
         if (to == null) {
             throw new KSmsException("sendMessage: Message 'to' is null");
@@ -72,34 +103,52 @@ public abstract class KAbstractTwilioService {
 
 
         body = body.trim();
+        
         if (body.length() > MAX_MESSAGE_LENGTH) {
             body = body.substring(0, MAX_MESSAGE_LENGTH);
         }
-
-        TwilioRestClient client = getTwilioClient();
-        String from = getFrom(client);
-
-        // Build a filter for the MessageList
-        List<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("From", from));
-        params.add(new BasicNameValuePair("To", to));
-        params.add(new BasicNameValuePair("Body", body));
-        //params.add(new BasicNameValuePair("MediaUrl", "http://www.example.com/hearts.png"));
-
+        
+        MessageCreator creator = Message.creator(
+        		new PhoneNumber(to),
+                new PhoneNumber(from), 
+                body
+        );
+        
+        if (mediaUrls != null && mediaUrls.size() > 0) {
+        	List<URI> uriList = new ArrayList<URI>();
+            
+        	Integer count = mediaUrls.size();
+            
+        	if (count > getMaxMediaCount()) {
+        		count = getMaxMediaCount();
+                logger.info("Media messages truncated to max number: " + count);
+        	}
+            
+            for (int i=0; i < count; i++) {
+            	String mediaUrl = mediaUrls.get(i);
+            	URI uri = URI.create(mediaUrl);
+                uriList.add(uri);
+            }
+            
+            creator.setMediaUrl(uriList);
+        }
+        
         messageStatusCallback = getMessageStatusCallbackUrl();
         
         if (messageStatusCallback != null) {
-            params.add(new BasicNameValuePair("StatusCallback", messageStatusCallback));
+            creator.setStatusCallback(messageStatusCallback);
         }
+        
+        Message message = creator.create();
+ 
 
-        MessageFactory messageFactory = client.getAccount().getMessageFactory();
-        
-        Message message = messageFactory.create(params);
-        
+        //params.add(new BasicNameValuePair("MediaUrl", "http://www.example.com/hearts.png"));
+
+
         logger.debug("Message sent: " + message.getBody() + "\n\nMESSAGE SID: " + message.getSid());
         
         if (messageStatusCallback != null) {
-            //statusQueue.put(message.getSid(), message);
+        	statusQueue.put(message.getSid(), message);
         }
     }
     

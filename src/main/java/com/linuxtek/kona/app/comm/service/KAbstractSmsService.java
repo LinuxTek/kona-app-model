@@ -7,9 +7,6 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.linuxtek.kona.util.KClassUtil;
-import com.twilio.sdk.TwilioRestException;
-
 
 public abstract class KAbstractSmsService extends KAbstractTwilioService implements KSmsService {
 
@@ -18,13 +15,22 @@ public abstract class KAbstractSmsService extends KAbstractTwilioService impleme
 	// ----------------------------------------------------------------------------
 
     @Override
-    public void sendMessage(String to, String body) throws KSmsException {
-        logger.debug("sendMessage:\nto: " + to + "\nbody: " + body);
-        try {
-            super.sendMessage(to, body);
-        } catch(TwilioRestException e) {
-            throw new KSmsException(e);
-        } 
+    public void sendMessage(String to, String body) {
+    	super.sendMessage(to, body);
+    }
+    
+	// ----------------------------------------------------------------------------
+    
+    @Override
+    public void sendMessage(String to, String body, String mediaUrl) {
+        super.sendMessage(to, body, mediaUrl);
+    }
+    
+	// ----------------------------------------------------------------------------
+    
+    @Override
+    public void sendMessage(String from, String to, String body, List<String> mediaUrls) {
+        super.sendMessage(from, to, body, mediaUrls);
     }
     
     
@@ -32,7 +38,7 @@ public abstract class KAbstractSmsService extends KAbstractTwilioService impleme
     
     @Override
     public void processMessageStatus(Map<String,Object> map) {
-        logger.debug("processMessageStatus: got result: " + KClassUtil.toJson(map));
+        super.processMessageStatus(map);
     }
     
 	// ----------------------------------------------------------------------------

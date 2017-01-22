@@ -30,6 +30,7 @@ public abstract class KAbstractRegistrationService<R extends KRegistration, EXAM
 	public R createRegistration(U user, KServiceClient client, Integer signupTime) {
 
 		R reg = getNewObject();
+        
 		reg.setAppId(client.getAppId());
 		reg.setUserId(user.getId());
 		reg.setUsername(user.getUsername());
@@ -39,6 +40,7 @@ public abstract class KAbstractRegistrationService<R extends KRegistration, EXAM
         reg.setDeviceUuid(client.getDeviceUuid());
 		reg.setSignupTime(signupTime);
 		reg.setCreatedDate(new Date());
+        
         return add(reg);
 	}
     
