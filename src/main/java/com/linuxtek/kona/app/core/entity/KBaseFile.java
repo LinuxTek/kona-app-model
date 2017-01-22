@@ -17,6 +17,7 @@ public class KBaseFile implements KFile {
     private boolean hidden;
     private boolean enabled;
     private boolean active;
+    private boolean tempFile;
 	private String srcHostname;
 	private String srcFilename;
     private String localPath;
@@ -180,6 +181,18 @@ public class KBaseFile implements KFile {
     @Override
     public void setActive(boolean active) {
         this.active = active;
+    }
+    
+    // --------------------------------------------------
+
+    @Override
+    public boolean isTempFile() {
+        return (tempFile);
+    }
+
+    @Override
+    public void setTempFile(boolean tempFile) {
+        this.tempFile = tempFile;
     }
     
     // --------------------------------------------------

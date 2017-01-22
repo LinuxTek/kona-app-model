@@ -60,6 +60,19 @@ public interface KFile extends KEntityObject {
      */
     public boolean isActive();
     public void setActive(boolean active);
+    
+    
+    /**
+     * Flag to indicate of this file is a temp file that can be 
+     * automatically disposed when the system is shutdown.
+     * 
+     * Use case: create a public url for an image that needs to be uploaded 
+     * by an external service.  Once the service has finished the transfer, 
+     * the file can be removed.
+     * @return
+     */
+    public boolean isTempFile();
+    public void setTempFile(boolean tempFile);
 
 	public String getSrcHostname();
 	public void setSrcHostname(String srcHostName);

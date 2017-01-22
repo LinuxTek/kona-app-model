@@ -363,6 +363,7 @@ CREATE TABLE `core__file` (
   `hidden` tinyint(1) NOT NULL DEFAULT '0',
   `enabled` tinyint(1) NOT NULL DEFAULT '0',
   `active` tinyint(1) NOT NULL DEFAULT '0',
+  `temp_file` tinyint(1) NOT NULL DEFAULT '0',
   `width` int(11) DEFAULT NULL,
   `height` int(11) DEFAULT NULL,
   `bits_per_pixel` int(11) DEFAULT NULL,
