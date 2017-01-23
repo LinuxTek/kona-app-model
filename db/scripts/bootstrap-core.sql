@@ -483,7 +483,7 @@ CREATE TABLE `core__redirect` (
         REFERENCES `sales__promo` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
 
   CONSTRAINT `fk_core__redirect_short_url` FOREIGN KEY (`short_url_id`) 
-        REFERENCES `sales__short_url` (`id`) ON DELETE CASCADE
+        REFERENCES `core__short_url` (`id`) ON DELETE CASCADE
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
