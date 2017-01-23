@@ -26,6 +26,8 @@ public interface KFileService<F extends KFile> extends KService, KDataService<F>
    
     public List<F> fetchByUserId(Long userId, boolean withData) throws IOException;
     
+    public List<F> fetchTempFiles(boolean withData) throws IOException;
+    
     public List<F> fetchByCriteria(Integer startRow,  Integer resultSize, 
     		String[] sortOrder, Map<String, Object> filterCriteria, 
             boolean distinct, boolean withData) throws IOException;

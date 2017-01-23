@@ -104,6 +104,14 @@ public abstract class KAbstractFileService<F extends KFile,EXAMPLE,U extends KUs
 		Map<String,Object> filter = KMyBatisUtil.createFilter("parentId", parentId);
 		return fetchByCriteria(0, 99999, null, filter, false, withData);
 	}
+    
+	// ----------------------------------------------------------------------------
+
+	@Override
+	public List<F> fetchTempFiles(boolean withData) throws IOException {
+		Map<String,Object> filter = KMyBatisUtil.createFilter("tempFile", true);
+		return fetchByCriteria(0, 99999, null, filter, false, withData);
+	}
 
 	// ----------------------------------------------------------------------------
 
