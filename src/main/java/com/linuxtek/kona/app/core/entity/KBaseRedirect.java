@@ -17,8 +17,8 @@ public class KBaseRedirect implements KRedirect {
     private String region;
     private Double latitiude;
     private Double longitude;
-    private Date requestDate;
-    private Date redirectDate;
+    private Date requestedDate;
+    private Date redirectedDate;
     private Date createdDate;
     private Date updatedDate;
 
@@ -165,23 +165,23 @@ public class KBaseRedirect implements KRedirect {
     }
 
     @Override
-	public Date getRequestDate() {
-        return requestDate;
+	public Date getRequestedDate() {
+        return requestedDate;
     }
 
     @Override
-	public void setRequestDate(Date requestDate) {
-        this.requestDate = requestDate;
+	public void setRequestedDate(Date requestedDate) {
+        this.requestedDate = requestedDate;
     }
 
     @Override
-	public Date getRedirectDate() {
-        return redirectDate;
+	public Date getRedirectedDate() {
+        return redirectedDate;
     }
 
     @Override
-	public void setRedirectDate(Date redirectDate) {
-        this.redirectDate = redirectDate;
+	public void setRedirectedDate(Date redirectedDate) {
+        this.redirectedDate = redirectedDate;
     }
 
     @Override
@@ -224,8 +224,8 @@ public class KBaseRedirect implements KRedirect {
         sb.append(", region=").append(region);
         sb.append(", latitiude=").append(latitiude);
         sb.append(", longitude=").append(longitude);
-        sb.append(", requestDate=").append(requestDate);
-        sb.append(", redirectDate=").append(redirectDate);
+        sb.append(", requestedDate=").append(requestedDate);
+        sb.append(", redirectedDate=").append(redirectedDate);
         sb.append(", createdDate=").append(createdDate);
         sb.append(", updatedDate=").append(updatedDate);
         sb.append("]");

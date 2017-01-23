@@ -62,13 +62,13 @@ public interface KRedirect extends KEntityObject {
 
 	void setLongitude(Double longitude);
 
-	Date getRequestDate();
+	Date getRequestedDate();
 
-	void setRequestDate(Date requestDate);
+	void setRequestedDate(Date requestedDate);
 
-	Date getRedirectDate();
+	Date getRedirectedDate();
 
-	void setRedirectDate(Date redirectDate);
+	void setRedirectedDate(Date redirectedDate);
 
 	Date getCreatedDate();
 
