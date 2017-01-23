@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.linuxtek.kona.app.comm.entity.KEmailAddress;
+import com.linuxtek.kona.app.core.entity.KUser;
 import com.linuxtek.kona.util.KClassUtil;
 import com.linuxtek.kona.util.KDateUtil;
 import com.linuxtek.kona.util.KStringUtil;
@@ -45,10 +46,28 @@ public class KUtil {
         return KClassUtil.toString(obj);
     }
     
-    public static <EMAIL_ADDRESS extends KEmailAddress> String formatFirstName(EMAIL_ADDRESS email) {
+    public static <Email extends KEmailAddress> String emailFirstName(Email email) {
         if (email == null) return "";
         if (email.getFirstName() != null) {
             return email.getFirstName();
+        }
+
+        return "";
+    }
+    
+    public static <User extends KUser> String formatFirstName(User user) {
+        if (user == null) return "";
+        
+        if (user.getFirstName() != null) {
+            return user.getFirstName();
+        }
+        
+        if (user.getUsername() != null) {
+            return user.getUsername();
+        }
+        
+        if (user.getEmail() != null) {
+            return user.getEmail();
         }
 
         return "";
