@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import com.linuxtek.kona.app.core.entity.KApp;
 import com.linuxtek.kona.app.core.entity.KAppCreds;
 import com.linuxtek.kona.data.mybatis.KMyBatisUtil;
+import com.linuxtek.kona.util.KInflector;
 import com.linuxtek.kona.util.KStringUtil;
 
 public abstract class KAbstractAppService<A extends KApp,EXAMPLE,AC extends KAppCreds> 
@@ -171,5 +172,14 @@ public abstract class KAbstractAppService<A extends KApp,EXAMPLE,AC extends KApp
 		}
     	
     	app.setUpdatedDate(new Date());
+        
+    	if (app.getName() == null && app.getDisplayName() != null)  {
+    		String name = KInflector.getInstance().slug(app.getDisplayName());
+            app.setName(name);
+    	}
+        
+    	if (app.getUid() == null) {
+    		app.setUid(uuid());
+    	}
 	}
 }
