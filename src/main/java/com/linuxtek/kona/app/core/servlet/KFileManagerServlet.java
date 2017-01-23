@@ -125,13 +125,13 @@ public class KFileManagerServlet extends HttpServlet {
             filename = file.getName();
         }
 		 */
-
+        
 		try {
 			//KServletUtil.writeObject(resp, file.getContentType(),
 			//    file.getData(), filename, true);
 
 
-			KMultiPartFileSender.fromBytes(file.getData(), file.getContentType())
+			KMultiPartFileSender.fromBytes(file.getData(), file.getContentType(), file.getName())
 			.withRequest(req)
 			.withResponse(resp)
 			.serveResource();

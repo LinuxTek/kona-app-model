@@ -44,7 +44,7 @@ public abstract class KAbstractTwilioService {
     
 	// ----------------------------------------------------------------------------
     
-    // TODO: Find reference for this
+    // https://www.twilio.com/docs/api/rest/sending-messages
     protected Integer getMaxMediaCount() {
     	return 10;
     }
