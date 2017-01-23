@@ -84,8 +84,8 @@ public abstract class KAbstractRedirectService<REDIRECT extends KRedirect,
 	        redirect.setBrowser(KServletUtil.getClientBrowser(req));
 	        redirect.setReferer(KServletUtil.getClientReferer(req));
 	        redirect.setLocale(KServletUtil.getClientLocale(req));
-	        redirect.setRequestDate(now);
-	        redirect.setRedirectDate(now);
+	        redirect.setRequestedDate(now);
+	        redirect.setRedirectedDate(now);
 
 	        redirect = add(redirect);
 	        return redirect;
