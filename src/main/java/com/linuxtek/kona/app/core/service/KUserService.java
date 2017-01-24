@@ -31,7 +31,7 @@ public interface KUserService<U extends KUser> extends KService, KDataService<U>
 	 */
 	public U createGuestUser(KServiceClient client);
 	
-	public U updatePrimaryPhotoUrl(Long userId, String urlPath);
+	public U updatePrimaryPhoto(Long userId, Long photoId, String urlPath);
 
     public U fetchByUid(String uid);
 

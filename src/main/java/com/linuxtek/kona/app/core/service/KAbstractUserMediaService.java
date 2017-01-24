@@ -55,7 +55,7 @@ public abstract class KAbstractUserMediaService<T extends KUserMedia, EXAMPLE, U
         userMedia = update(userMedia);
         
         if (primaryPhoto) {
-        	getUserService().updatePrimaryPhotoUrl(file.getUserId(), file.getUrlPath());
+        	getUserService().updatePrimaryPhoto(file.getUserId(), userMedia.getId(), file.getUrlPath());
         }
         
         return userMedia;

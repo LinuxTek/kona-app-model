@@ -828,10 +828,11 @@ CREATE TABLE `core__user` (
   `account_id` bigint(20) unsigned NOT NULL,
   `status_id` bigint(20) unsigned DEFAULT NULL,
   `presence_id` bigint(20) unsigned DEFAULT NULL,
+  `photo_id` bigint(20) unsigned DEFAULT NULL,
+  `photo_url` varchar(255) DEFAULT NULL, 
   `username` varchar(255) NOT NULL,
   `email` varchar(255) DEFAULT NULL,
   `mobile_number` varchar(255) DEFAULT NULL,
-  `photo_url` varchar(255) DEFAULT NULL, 
   `first_name` varchar(255) DEFAULT NULL,
   `last_name` varchar(255) DEFAULT NULL,
   `display_name` varchar(255) DEFAULT NULL,
@@ -860,6 +861,8 @@ CREATE TABLE `core__user` (
 
   KEY `ix_core__user_parent` (`parent_id`),
 
+  KEY `ix_core__user_photo` (`photo_id`),
+
   KEY `ix_core__user_type` (`type_id`),
 
   KEY `ix_core__user_status` (`status_id`),
@@ -875,6 +878,9 @@ CREATE TABLE `core__user` (
 
   CONSTRAINT `fk_core__user_parent` FOREIGN KEY (`parent_id`) 
         REFERENCES `core__user` (`id`) ON DELETE CASCADE,
+
+  CONSTRAINT `fk_core__user_photo` FOREIGN KEY (`photo_id`) 
+        REFERENCES `core__user_media` (`id`) ON DELETE SET NULL,
 
   CONSTRAINT `fk_core__user_status` FOREIGN KEY (`status_id`) 
         REFERENCES `core__user_status` (`id`) ON DELETE SET NULL,

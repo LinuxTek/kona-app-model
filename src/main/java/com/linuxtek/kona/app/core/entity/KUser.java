@@ -52,10 +52,11 @@ public interface KUser extends KEntityObject {
     public Long getPresenceId();
     public void setPresenceId(Long presenceId);
     
-    
+    public Long getPhotoId();
+    public void setPhotoId(Long photoId);
+
     public String getPhotoUrl();
     public void setPhotoUrl(String photoUrl);
-    
     
     /** 
      * The user's username which is used to login to the system. 
