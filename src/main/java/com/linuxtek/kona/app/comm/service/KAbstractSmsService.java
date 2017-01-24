@@ -19,18 +19,25 @@ public abstract class KAbstractSmsService extends KAbstractTwilioService impleme
     	super.sendMessage(to, body);
     }
     
-	// ----------------------------------------------------------------------------
-    
+    // ----------------------------------------------------------------------------
+
     @Override
     public void sendMessage(String to, String body, String mediaUrl) {
-        super.sendMessage(to, body, mediaUrl);
+    	super.sendMessage(to, body, mediaUrl);
     }
-    
-	// ----------------------------------------------------------------------------
-    
+
+    // ----------------------------------------------------------------------------
+
+    @Override
+    public void sendMessage(String to, String body, List<String> mediaUrls) {
+    	super.sendMessage(to, body, mediaUrls);
+    }
+
+    // ----------------------------------------------------------------------------
+
     @Override
     public void sendMessage(String from, String to, String body, List<String> mediaUrls) {
-        super.sendMessage(from, to, body, mediaUrls);
+    	super.sendMessage(from, to, body, mediaUrls);
     }
     
     

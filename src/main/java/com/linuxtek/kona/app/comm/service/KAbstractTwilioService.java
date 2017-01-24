@@ -71,6 +71,12 @@ public abstract class KAbstractTwilioService {
     
 	// ----------------------------------------------------------------------------
     
+    protected void sendMessage(String to, String body,  List<String> mediaUrls) {
+        sendMessage(getFromPhoneNumber(), to, body, mediaUrls);
+    }
+    
+	// ----------------------------------------------------------------------------
+    
     protected void sendMessage(String to, String body, String mediaUrl) {
         List<String> urls = new ArrayList<String>();
         urls.add(mediaUrl);

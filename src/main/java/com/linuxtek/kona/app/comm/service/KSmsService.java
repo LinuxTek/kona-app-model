@@ -15,6 +15,8 @@ public interface KSmsService extends KService {
     public void sendMessage(String to, String body);
     
     public void sendMessage(String to, String body, String mediaUrl);
+
+    public void sendMessage(String to, String body, List<String> mediaUrls);
     
     public void sendMessage(String from, String to, String body, List<String> mediaUrls);
     
