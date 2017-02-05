@@ -313,7 +313,7 @@ CREATE TABLE `core__auth_code` (
   `code` varchar(255) NOT NULL,
   `valid` tinyint(1) NOT NULL DEFAULT '0',
   `use_count` int(11) unsigned NOT NULL DEFAULT '0',
-  `max_use_count` int(11) unsigned NOT NULL DEFAULT '0',
+  `max_use_count` int(11) unsigned default NULL, -- null means no max 
   `expiration_date` datetime(6) DEFAULT NULL,
   `last_accessed_date` datetime(6) DEFAULT NULL,
   `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
