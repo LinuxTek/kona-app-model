@@ -42,6 +42,12 @@ public abstract class KAbstractAuthCodeService<T extends KAuthCode,EXAMPLE,
     protected abstract Date getAuthCodeExpirationDate(Long typeId, Long appId, Long userId);
     
 	// ----------------------------------------------------------------------------
+
+    protected Integer getAuthCodeMaxUseCount(Long typeId, Long appId, Long userId) {
+        return null;
+    }
+
+	// ----------------------------------------------------------------------------
     
 	protected String generateAccessCode() {
 		return uuid();
@@ -57,10 +63,6 @@ public abstract class KAbstractAuthCodeService<T extends KAuthCode,EXAMPLE,
     	
     	authCode.setUpdatedDate(new Date());
         
-		if (authCode.getMaxUseCount() == null) {
-			authCode.setMaxUseCount(1);
-		}
-		
 		if (authCode.getUseCount() == null) {
 			authCode.setUseCount(0);
 		}
@@ -246,9 +248,11 @@ public abstract class KAbstractAuthCodeService<T extends KAuthCode,EXAMPLE,
 		authCode.setUserId(userId);
 		authCode.setCode(code);
 		authCode.setUseCount(0);
-		authCode.setMaxUseCount(1);
 		authCode.setCreatedDate(now);
 		authCode.setValid(true);
+
+		Integer maxUseCount = getAuthCodeMaxUseCount(typeId, appId, userId);
+		authCode.setMaxUseCount(maxUseCount);
 		
 		Date expirationDate = getAuthCodeExpirationDate(typeId, appId, userId);
 		//authCode.setExpirationDate(KDateUtil.addMins(now, 30)); // expire in 30 mins
@@ -269,7 +273,7 @@ public abstract class KAbstractAuthCodeService<T extends KAuthCode,EXAMPLE,
 
 		Integer useCount = authCode.getUseCount();
         
-		if (useCount >= authCode.getMaxUseCount()) {
+		if (authCode.getMaxUseCount() != null && useCount >= authCode.getMaxUseCount()) {
 			logger.debug("authCode useCount exceeds maxUseCount: " + useCount);
 			return false;
 		}
