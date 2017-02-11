@@ -33,6 +33,7 @@ public abstract class KAbstractRegistrationService<R extends KRegistration, EXAM
         
 		reg.setAppId(client.getAppId());
 		reg.setUserId(user.getId());
+		reg.setAccountId(user.getAccountId());
 		reg.setUsername(user.getUsername());
 		reg.setHostname(client.getHostname());
 		reg.setBrowser(client.getBrowser());

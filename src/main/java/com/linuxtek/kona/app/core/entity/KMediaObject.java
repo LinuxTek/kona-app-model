@@ -29,6 +29,9 @@ public interface KMediaObject extends KEntityObject {
     public Long getUserId();
     public void setUserId(Long userId);
     
+    public Long getAccountId();
+    public void setAccountId(Long accountId);
+
     public Long getFileId();
     public void setFileId(Long fileId);
     
@@ -37,6 +40,12 @@ public interface KMediaObject extends KEntityObject {
     
     public String getUrlPath();
     public void setUrlPath(String urlPath);
+
+    public String getThumbnailUrlPath();
+    public void setThumbnailUrlPath(String thumbnailUrlPath);
+
+    public String getContentType();
+    public void setContentType(String contentType);
     
 	boolean isEnabled();
 	void setEnabled(boolean enabled);
@@ -61,6 +70,15 @@ public interface KMediaObject extends KEntityObject {
     
     public Long getSize();
     public void setSize(Long size);
+    
+    public Integer getThumbnailWidth();
+    public void setThumbnailWidth(Integer thumbnailWidth);
+
+    public Integer getThumbnailHeight();
+    public void setThumbnailHeight(Integer thumbnailHeight);
+
+    public Long getThumbnailSize();
+    public void setThumbnailSize(Long thumbnailSize);
 
     public Integer getBitsPerPixel();
     public void setBitsPerPixel(Integer bitPerPixel);

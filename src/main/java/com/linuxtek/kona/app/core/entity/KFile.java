@@ -23,6 +23,12 @@ public interface KFile extends KEntityObject {
     public Long getUserId();
     public void setUserId(Long userId);
 
+    public Long getAccountId();
+    public void setAccountId(Long accountId);
+
+    public Long getTokenId();
+    public void setTokenId(Long tokenId);
+
 	public String getName();
 	public void setName(String name);
 

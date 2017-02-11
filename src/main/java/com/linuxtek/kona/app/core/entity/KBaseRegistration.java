@@ -12,6 +12,7 @@ public class KBaseRegistration implements KRegistration {
     private Long id;
     private Long appId;
     private Long userId;
+    private Long accountId;
     private Long campaignId;
     private Long partnerId;
     private Long promoId;
@@ -65,6 +66,16 @@ public class KBaseRegistration implements KRegistration {
     @Override
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    @Override
+    public Long getAccountId() {
+        return accountId;
+    }
+
+    @Override
+    public void setAccountId(Long accountId) {
+        this.accountId = accountId;
     }
 
     @Override

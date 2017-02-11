@@ -14,6 +14,7 @@ public abstract class KBaseUser implements KUser {
     private Long presenceId;
     private Long photoId;
     private String photoUrl;
+    private String thumbnailUrl;
     private String username;
     private String firstName;
     private String lastName;
@@ -89,6 +90,14 @@ public abstract class KBaseUser implements KUser {
 
     public void setPhotoUrl(String photoUrl) {
         this.photoUrl = photoUrl;
+    }
+
+    public String getThumbnailUrl() {
+        return thumbnailUrl;
+    }
+
+    public void setThumbnailUrl(String thumbnailUrl) {
+        this.thumbnailUrl = thumbnailUrl;
     }
 
     public Long getStatusId() {

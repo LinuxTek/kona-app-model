@@ -351,8 +351,9 @@ CREATE TABLE `core__file` (
   `access_id` bigint(20) unsigned DEFAULT NULL,
   `parent_id` bigint(20) unsigned DEFAULT NULL,
   `user_id` bigint(20) unsigned DEFAULT NULL,
+  `account_id` bigint(20) unsigned DEFAULT NULL,
   `token_id` bigint(20) unsigned DEFAULT NULL,
-  `thumb_id` bigint(20) unsigned DEFAULT NULL,
+--  `thumb_id` bigint(20) unsigned DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
   `content_type` varchar(255) NOT NULL,
   `size` bigint(20) unsigned NOT NULL,
@@ -364,16 +365,16 @@ CREATE TABLE `core__file` (
   `enabled` tinyint(1) NOT NULL DEFAULT '0',
   `active` tinyint(1) NOT NULL DEFAULT '0',
   `temp_file` tinyint(1) NOT NULL DEFAULT '0',
-  `width` int(11) DEFAULT NULL,
-  `height` int(11) DEFAULT NULL,
-  `bits_per_pixel` int(11) DEFAULT NULL,
-  `frames_per_second` int(11) DEFAULT NULL,
-  `duration` bigint(20) unsigned DEFAULT NULL,
+--  `width` int(11) DEFAULT NULL,
+--  `height` int(11) DEFAULT NULL,
+--  `bits_per_pixel` int(11) DEFAULT NULL,
+--  `frames_per_second` int(11) DEFAULT NULL,
+--  `duration` bigint(20) unsigned DEFAULT NULL,
   `src_hostname` varchar(255) DEFAULT NULL,
   `src_filename` varchar(255) DEFAULT NULL,
   `local_path` varchar(255) DEFAULT NULL,
   `url_path` varchar(255) DEFAULT NULL,
-  `thumb_url_path` varchar(255) DEFAULT NULL,
+--  `thumb_url_path` varchar(255) DEFAULT NULL,
   `upload_time` bigint(20) unsigned DEFAULT NULL,
   `retired_date` datetime(6) DEFAULT NULL,
   `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
@@ -389,9 +390,11 @@ CREATE TABLE `core__file` (
 
   KEY `ix_core__file_user` (`user_id`),
 
+  KEY `ix_core__file_account` (`account_id`),
+
   KEY `ix_core__file_token` (`token_id`),
 
-  KEY `ix_core__file_thumb` (`thumb_id`),
+--  KEY `ix_core__file_thumb` (`thumb_id`),
 
   KEY `ix_core__file_access` (`access_id`),
 
@@ -403,14 +406,17 @@ CREATE TABLE `core__file` (
   CONSTRAINT `fk_core__file_parent` FOREIGN KEY (`parent_id`) 
         REFERENCES `core__file` (`id`) ON DELETE CASCADE,
 
-  CONSTRAINT `fk_core__file_thumb` FOREIGN KEY (`thumb_id`) 
-        REFERENCES `core__file` (`id`) ON DELETE SET NULL,
+--  CONSTRAINT `fk_core__file_thumb` FOREIGN KEY (`thumb_id`) 
+--        REFERENCES `core__file` (`id`) ON DELETE SET NULL,
 
   CONSTRAINT `fk_core__file_token` FOREIGN KEY (`token_id`) 
         REFERENCES `core__token` (`id`) ON DELETE SET NULL,
 
   CONSTRAINT `fk_core__file_type` FOREIGN KEY (`type_id`) 
         REFERENCES `core__file_type` (`id`) ON DELETE SET NULL,
+
+  CONSTRAINT `fk_core__file_account` FOREIGN KEY (`account_id`) 
+        REFERENCES `core__account` (`id`) ON DELETE CASCADE,
 
   CONSTRAINT `fk_core__file_user` FOREIGN KEY (`user_id`) 
         REFERENCES `core__user` (`id`) ON DELETE CASCADE
@@ -493,6 +499,7 @@ CREATE TABLE `core__redirect` (
 CREATE TABLE `core__registration` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `app_id` bigint(20) unsigned NOT NULL,
+  `account_id` bigint(20) unsigned NOT NULL,
   `user_id` bigint(20) unsigned NOT NULL,
   `campaign_id` bigint(20) unsigned DEFAULT NULL,
   `partner_id` bigint(20) unsigned DEFAULT NULL,
@@ -524,6 +531,8 @@ CREATE TABLE `core__registration` (
 
   KEY `ix_core__registration_app` (`app_id`),
 
+  KEY `ix_core__registration_account` (`account_id`),
+
   KEY `ix_core__registration_user` (`user_id`),
 
   KEY `ix_core__registration_campaign` (`campaign_id`),
@@ -548,6 +557,9 @@ CREATE TABLE `core__registration` (
 
   CONSTRAINT `fk_core__registration_promo` FOREIGN KEY (`promo_id`) 
         REFERENCES `sales__promo` (`id`) ON DELETE SET NULL,
+
+  CONSTRAINT `fk_core__registration_account` FOREIGN KEY (`account_id`)
+        REFERENCES `core__account` (`id`) ON DELETE CASCADE,
 
   CONSTRAINT `fk_core__registration_user` FOREIGN KEY (`user_id`) 
         REFERENCES `core__user` (`id`) ON DELETE CASCADE
@@ -663,6 +675,7 @@ CREATE TABLE `core__remote_service_user_creds` (
 
 CREATE TABLE `core__setting` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `account_id` bigint(20) unsigned DEFAULT NULL,
   `user_id` bigint(20) unsigned DEFAULT NULL,
   `name` varchar(255) NOT NULL,
   `value` varchar(4000) NOT NULL,
@@ -676,9 +689,16 @@ CREATE TABLE `core__setting` (
 
   UNIQUE KEY `ux_core__setting_user_name` (`user_id`,`name`),
 
+  UNIQUE KEY `ux_core__setting_account_name` (`account_id`,`name`),
+
   KEY `ix_core__setting_user` (`user_id`),
 
+  KEY `ix_core__setting_account` (`account_id`),
+
   KEY `ix_core__setting_name` (`name`),
+
+  CONSTRAINT `fk_core__setting_account` FOREIGN KEY (`account_id`) 
+        REFERENCES `core__account` (`id`) ON DELETE CASCADE,
 
   CONSTRAINT `fk_core__setting_user` FOREIGN KEY (`user_id`) 
         REFERENCES `core__user` (`id`) ON DELETE CASCADE
@@ -830,6 +850,7 @@ CREATE TABLE `core__user` (
   `presence_id` bigint(20) unsigned DEFAULT NULL,
   `photo_id` bigint(20) unsigned DEFAULT NULL,
   `photo_url` varchar(255) DEFAULT NULL, 
+  `thumbnail_url` varchar(255) DEFAULT NULL, 
   `username` varchar(255) NOT NULL,
   `email` varchar(255) DEFAULT NULL,
   `mobile_number` varchar(255) DEFAULT NULL,
@@ -924,9 +945,22 @@ CREATE TABLE `core__user_media` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `uid` varchar(255) NOT NULL,
   `user_id` bigint(20) unsigned NOT NULL,
+  `account_id` bigint(20) unsigned NOT NULL,
   `file_id` bigint(20) unsigned DEFAULT NULL,
   `file_type_id` bigint(20) unsigned DEFAULT NULL,
+  `thumbnail_id` bigint(20) unsigned DEFAULT NULL,
   `url_path` varchar(255) DEFAULT NULL,
+  `thumbnail_url_path` varchar(255) DEFAULT NULL,
+  `content_type` varchar(255) default NULL,
+  `width` int(11) unsigned DEFAULT NULL,
+  `height` int(11) unsigned DEFAULT NULL,
+  `size` bigint(20) unsigned DEFAULT NULL,
+  `bits_per_pixel` int(11) DEFAULT NULL,
+  `frames_per_second` int(11) DEFAULT NULL,
+  `duration` bigint(20) unsigned DEFAULT NULL,
+  `thumbnail_width` int(11) unsigned DEFAULT NULL,
+  `thumbnail_height` int(11) unsigned DEFAULT NULL,
+  `thumbnail_size` bigint(20) unsigned DEFAULT NULL,
   `latitude` double DEFAULT NULL,
   `longitude` double DEFAULT NULL,
   `floor` int(11) unsigned DEFAULT NULL,
@@ -942,10 +976,20 @@ CREATE TABLE `core__user_media` (
 
   UNIQUE KEY `ux_core__user_media_file` (`file_id`),
 
+  UNIQUE KEY `ux_core__user_media_thumbnail` (`thumbnail_id`),
+
   KEY `ix_core__user_media_user` (`user_id`),
+
+  KEY `ix_core__user_media_account` (`account_id`),
 
   CONSTRAINT `fk_core__user_media_file` FOREIGN KEY (`file_id`) 
         REFERENCES `core__file` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+
+  CONSTRAINT `fk_core__user_media_thumbnail` FOREIGN KEY (`thumbnail_id`) 
+        REFERENCES `core__file` (`id`) ON DELETE SET NULL,
+
+  CONSTRAINT `fk_core__user_media_account` FOREIGN KEY (`account_id`) 
+        REFERENCES `core__account` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
 
   CONSTRAINT `fk_core__user_media_user` FOREIGN KEY (`user_id`) 
         REFERENCES `core__user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE

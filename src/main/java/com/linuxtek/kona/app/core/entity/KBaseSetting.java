@@ -7,6 +7,7 @@ public class KBaseSetting implements KSetting {
 	
     private Long id;
     private Long userId;
+    private Long accountId;
     private String name;
     private String value;
     private boolean overwriteGlobal;
@@ -33,6 +34,17 @@ public class KBaseSetting implements KSetting {
         this.userId = userId;
     }
 
+    @Override
+    public Long getAccountId() {
+        return accountId;
+    }
+
+    @Override
+    public void setAccountId(Long accountId) {
+        this.accountId = accountId;
+    }
+
+    
     @Override
 	public String getName() {
         return name;

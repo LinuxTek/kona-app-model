@@ -44,6 +44,15 @@ public abstract class KAbstractSettingService<S extends KSetting,EXAMPLE>
         return KMyBatisUtil.fetchOne(fetchByCriteria(0, 99999, null, filter, false));
     }
     
+    // ----------------------------------------------------------------------------
+
+    @Override
+    public S fetchByAccountIdAndName(Long accountId, String name) {
+        Map<String,Object> filter = KMyBatisUtil.createFilter("accountId", accountId);
+        filter.put("name", name);
+        return KMyBatisUtil.fetchOne(fetchByCriteria(0, 99999, null, filter, false));
+    }
+
 	// ----------------------------------------------------------------------------
     
     @Override
@@ -106,17 +115,26 @@ public abstract class KAbstractSettingService<S extends KSetting,EXAMPLE>
 	// ----------------------------------------------------------------------------
     
     @Override @Transactional
-    public void save(Long userId, Map<String,Object> config, boolean overwriteGlobal) {
+    public void save(Long userId, Long accountId, Map<String,Object> config, boolean overwriteGlobal) {
     	for (String key : config.keySet()) {
-    		S setting = fetchByUserIdAndName(userId, key);
+    		S setting = null;
+
+    		if (userId != null) {
+    		    setting = fetchByUserIdAndName(userId, key);
+    		} else {
+    		    setting = fetchByAccountIdAndName(accountId, key);
+    		}
+
     		if (setting == null) {
     			setting = getNewObject();
     			setting.setUserId(userId);
+    			setting.setAccountId(accountId);
     			setting.setName(key);
     			setting.setValue(config.get(key).toString());
     			setting.setOverwriteGlobal(overwriteGlobal);
     			setting.setCreatedDate(new Date());
     		}
+
     		save(setting);
     	}
     }
@@ -136,6 +154,14 @@ public abstract class KAbstractSettingService<S extends KSetting,EXAMPLE>
         return fetchByCriteria(0, 99999, null, filter, false);
 	}
 	
+	// ----------------------------------------------------------------------------
+
+    @Override
+    public List<S> fetchByAccountId(Long accountId) {
+        Map<String,Object> filter = KMyBatisUtil.createFilter("accountId", accountId);
+        return fetchByCriteria(0, 99999, null, filter, false);
+    }
+    
 	// ----------------------------------------------------------------------------
 
 	@Override
@@ -168,4 +194,30 @@ public abstract class KAbstractSettingService<S extends KSetting,EXAMPLE>
 		//return new MapConfiguration(map);
 		return map;
 	}
+
+    // ----------------------------------------------------------------------------
+
+    @Override
+    public Map<String,Object> getAccountSettings(Long accountId) {
+        Map<String,Object> map = new HashMap<String,Object>();
+
+        // first get all global vars
+        List<S> settingList = fetchGlobal();
+
+        for (S setting : settingList) {
+            map.put(setting.getName(), setting.getValue());
+        }
+
+        // next get environment specific params
+        if (accountId != null) {
+            settingList = fetchByAccountId(accountId);
+            for (S setting : settingList) {
+                map.put(setting.getName(), setting.getValue());
+            }
+        }
+
+        // MapConfiguration is not serializable
+        //return new MapConfiguration(map);
+        return map;
+    }
 }

@@ -57,6 +57,9 @@ public interface KUser extends KEntityObject {
 
     public String getPhotoUrl();
     public void setPhotoUrl(String photoUrl);
+
+    public String getThumbnailUrl();
+    public void setThumbnailUrl(String thumbnailUrl);
     
     /** 
      * The user's username which is used to login to the system. 

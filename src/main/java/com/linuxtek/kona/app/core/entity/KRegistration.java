@@ -16,6 +16,9 @@ public interface KRegistration extends KEntityObject {
 
     public Long getUserId();
     public void setUserId(Long userId);
+    
+    public Long getAccountId();
+    public void setAccountId(Long accountId);
 
     public Long getCampaignId();
     public void setCampaignId(Long campaignId);

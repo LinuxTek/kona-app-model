@@ -10,7 +10,9 @@ public class KBaseFile implements KFile {
 	private Long typeId;
 	private Long accessId;
 	private Long userId;
-	private String name;
+	private Long accountId;
+	private Long tokenId;
+    private String name;
 	private String contentType;
 	private Long size;
 	private byte[] data;
@@ -97,6 +99,30 @@ public class KBaseFile implements KFile {
     @Override
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    // --------------------------------------------------
+
+    @Override
+    public Long getAccountId() {
+        return (accountId);
+    }
+
+    @Override
+    public void setAccountId(Long accountId) {
+        this.accountId = accountId;
+    }
+
+    // --------------------------------------------------
+    
+    @Override
+    public Long getTokenId() {
+        return tokenId;
+    }
+
+    @Override
+    public void setTokenId(Long tokenId) {
+        this.tokenId = tokenId;
     }
 
     // --------------------------------------------------

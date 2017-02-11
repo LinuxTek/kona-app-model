@@ -18,14 +18,17 @@ public interface KSettingService<S extends KSetting> extends KService, KDataServ
 	
 	   // creates or updates an setting record
     public S save(S setting);
-	public void save(Long userId, Map<String, Object> config, boolean overwriteGlobal);
+	public void save(Long userId, Long accountId, Map<String, Object> config, boolean overwriteGlobal);
 
 	public List<S> fetchGlobal();
 	public List<S> fetchByUserId(Long userId);
+	public List<S> fetchByAccountId(Long accountId);
 
 	public S fetchGlobalByName(String name);
 	public S fetchByUserIdAndName(Long userId, String name);
+	public S fetchByAccountIdAndName(Long accountId, String name);
 
     public Map<String,Object> getGlobalSettings();
+    public Map<String,Object> getAccountSettings(Long accountId);
     public Map<String,Object> getUserSettings(Long userId);
 }

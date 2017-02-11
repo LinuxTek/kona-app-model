@@ -45,18 +45,53 @@ public abstract class KAbstractUserMediaService<T extends KUserMedia, EXAMPLE, U
 	}
 	   
 	// ----------------------------------------------------------------------------
+
+    public T add(T userMedia) {
+        userMedia = super.add(userMedia);
+
+        if (userMedia.isPrimaryPhoto()) {
+            getUserService().updatePrimaryPhoto(userMedia.getUserId(), userMedia.getId(), 
+                    userMedia.getUrlPath(), userMedia.getThumbnailUrlPath());
+        }
+
+        return userMedia;
+    }
+
+	// ----------------------------------------------------------------------------
+
+    public T update(T userMedia) {
+        userMedia = super.update(userMedia);
+
+        if (userMedia.isPrimaryPhoto()) {
+            getUserService().updatePrimaryPhoto(userMedia.getUserId(), userMedia.getId(), 
+                    userMedia.getUrlPath(), userMedia.getThumbnailUrlPath());
+        }
+
+        return userMedia;
+    }
+
+	// ----------------------------------------------------------------------------
+
+    public void remove(T userMedia) {
+        super.remove(userMedia);
+
+        if (userMedia.isPrimaryPhoto()) {
+            getUserService().updatePrimaryPhoto(userMedia.getUserId(), null, null, null);
+        }
+    }
+
+	// ----------------------------------------------------------------------------
+	
 	
 	@Override 
     public T add(F file,Double latitude, Double longitude, Integer floor,
             String description, boolean primaryPhoto) throws IOException {
         
         T userMedia = add(file, latitude, longitude, floor, description);
+
         userMedia.setPrimaryPhoto(primaryPhoto);
+
         userMedia = update(userMedia);
-        
-        if (primaryPhoto) {
-        	getUserService().updatePrimaryPhoto(file.getUserId(), userMedia.getId(), file.getUrlPath());
-        }
         
         return userMedia;
     }
@@ -65,6 +100,7 @@ public abstract class KAbstractUserMediaService<T extends KUserMedia, EXAMPLE, U
 
 	private void unsetPrimaryPhoto(T current) {
 		T media = fetchPrimaryPhoto(current.getUserId());
+
 		if (media != null) {
 			if (current.getId() == null || !current.getId().equals(media.getId())) {
 				media.setPrimaryPhoto(false);

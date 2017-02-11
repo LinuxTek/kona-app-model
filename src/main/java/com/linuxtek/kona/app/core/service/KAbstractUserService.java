@@ -320,10 +320,12 @@ public abstract class KAbstractUserService<U extends KUser, EXAMPLE,
 	// ----------------------------------------------------------------------------
 	
 	@Override
-	public U updatePrimaryPhoto(Long userId, Long photoId, String urlPath) {
+	public U updatePrimaryPhoto(Long userId, Long photoId, String urlPath, String thumbnailUrlPath) {
+	    // NOTE: photoId references UserMedia object
         U user = fetchById(userId);
         user.setPhotoId(photoId);
         user.setPhotoUrl(urlPath);
+        user.setThumbnailUrl(thumbnailUrlPath);
         return update(user);
 	}
 	
