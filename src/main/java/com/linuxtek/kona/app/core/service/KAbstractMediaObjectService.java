@@ -264,11 +264,11 @@ implements KMediaService<T> {
         String localPath = file.getLocalPath() + "-thumbnail";
         thumbnailFile.setLocalPath(localPath);
 
-        Map<String,Object> thumbnailResult = KImageUtil.resize(file.getData(), width, height);
+        KImageUtil.Image thumbnailResult = KImageUtil.resize(file.getData(), width, height);
 
-        byte[] thumbnailBytes = (byte[]) thumbnailResult.get("data");
-        Integer thumbnailWidth = (Integer) thumbnailResult.get("width");
-        Integer thumbnailHeight = (Integer) thumbnailResult.get("width");
+        byte[] thumbnailBytes = thumbnailResult.data;
+        Integer thumbnailWidth = thumbnailResult.width;
+        Integer thumbnailHeight = thumbnailResult.height;
 
         thumbnailFile.setData(thumbnailBytes);
 
