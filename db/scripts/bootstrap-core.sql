@@ -949,6 +949,7 @@ CREATE TABLE `core__user_media` (
   `file_id` bigint(20) unsigned DEFAULT NULL,
   `file_type_id` bigint(20) unsigned DEFAULT NULL,
   `thumbnail_id` bigint(20) unsigned DEFAULT NULL,
+  `folder_path` varchar(255) DEFAULT NULL, -- similar to s3: flat but can be conceptually nested /folder1/subfolder2
   `url_path` varchar(255) DEFAULT NULL,
   `thumbnail_url_path` varchar(255) DEFAULT NULL,
   `content_type` varchar(255) default NULL,

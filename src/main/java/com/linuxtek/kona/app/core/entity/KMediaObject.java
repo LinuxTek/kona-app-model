@@ -38,6 +38,13 @@ public interface KMediaObject extends KEntityObject {
 	Long getFileTypeId();
 	void setFileTypeId(Long fileTypeId);
     
+	/**
+	 * User defined internal organization of the media objects.
+	 * @return
+	 */
+    public String getFolderPath();
+    public void setFolderPath(String folderPath);
+
     public String getUrlPath();
     public void setUrlPath(String urlPath);
 

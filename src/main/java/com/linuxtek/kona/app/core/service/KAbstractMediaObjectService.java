@@ -108,6 +108,7 @@ implements KMediaService<T> {
 
     // ----------------------------------------------------------------------------
 
+    @Override
     public T fetchByUid(String uid) {
         Map<String,Object> filter = KMyBatisUtil.createFilter("uid", uid);
         return KMyBatisUtil.fetchOne(fetchByCriteria(0, 99999, null, filter, false));
@@ -115,6 +116,7 @@ implements KMediaService<T> {
 
     // ----------------------------------------------------------------------------
 
+    @Override
     public T fetchByFileId(Long fileId) {
         Map<String,Object> filter = KMyBatisUtil.createFilter("fileId", fileId);
         return KMyBatisUtil.fetchOne(fetchByCriteria(0, 99999, null, filter, false));
@@ -122,8 +124,27 @@ implements KMediaService<T> {
 
     // ----------------------------------------------------------------------------
 
+    @Override
     public List<T> fetchByUserId(Long userId) {
         Map<String,Object> filter = KMyBatisUtil.createFilter("userId", userId);
+        return fetchByCriteria(0, 99999, null, filter, false);
+    }
+
+    // ----------------------------------------------------------------------------
+
+    @Override
+    public List<T> fetchByAccountId(Long accountId) {
+        Map<String,Object> filter = KMyBatisUtil.createFilter("accountId", accountId);
+        return fetchByCriteria(0, 99999, null, filter, false);
+    }
+
+    // ----------------------------------------------------------------------------
+
+    // TODO: Return all subfolder meta-data as well
+    @Override
+    public List<T> fetchByFolderPath(Long accountId, String folderPath) {
+        Map<String,Object> filter = KMyBatisUtil.createFilter("accountId", folderPath);
+        filter.put("folderPath", folderPath);
         return fetchByCriteria(0, 99999, null, filter, false);
     }
 
@@ -266,4 +287,7 @@ implements KMediaService<T> {
 
         return media;
     }
+
+    // ----------------------------------------------------------------------------
+
 }

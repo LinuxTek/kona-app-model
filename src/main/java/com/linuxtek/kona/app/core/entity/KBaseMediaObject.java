@@ -19,6 +19,9 @@ public class KBaseMediaObject implements KMediaObject {
     private Long thumbnailId;
     private Long fileId;
     private Long fileTypeId;
+
+    private String folderPath;
+
     private String urlPath;
     private String thumbnailUrlPath;
     private String contentType;
@@ -127,6 +130,16 @@ public class KBaseMediaObject implements KMediaObject {
         this.thumbnailId = thumbnailId;
     }
 
+    @Override
+    public String getFolderPath() {
+        return folderPath;
+    }
+
+    @Override
+    public void setFolderPath(String folderPath) {
+        this.folderPath = folderPath == null ? null : folderPath.trim();
+    }
+    
     @Override
     public String getUrlPath() {
         return urlPath;
