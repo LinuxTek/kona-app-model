@@ -31,10 +31,11 @@ INSERT INTO `social__friendship_status`
 VALUES 
     (100,'NONE','None',now(),now()),
     (200,'FRIENDS','Friends',now(),now()),
-    (300,'FOLLOWING','Following',now(),now()),
-    (400,'FOLLOWED','Followed',now(),now()),
-    (500,'BLOCKING','Blocking',now(),now()),
-    (600,'BLOCKED','Blocked',now(),now());
+    (300,'PENDING','Pending',now(),now()),
+    (400,'FOLLOWING','Following',now(),now()),
+    (500,'FOLLOWED','Followed',now(),now()),
+    (600,'BLOCKING','Blocking',now(),now()),
+    (700,'BLOCKED','Blocked',now(),now());
 
 -- --------------------------------------------------------------------------
 

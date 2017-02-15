@@ -41,6 +41,12 @@ public abstract class KAbstractTwilioService {
     protected abstract String getMessageStatusCallbackUrl();
     
     protected abstract List<String> getTestPhoneNumberPrefixList();
+
+	// ----------------------------------------------------------------------------
+
+    protected boolean isSendToSelfEnabled() {
+        return false;
+    }
     
 	// ----------------------------------------------------------------------------
     
@@ -90,6 +96,10 @@ public abstract class KAbstractTwilioService {
     	
         if (to == null) {
             throw new KSmsException("sendMessage: Message 'to' is null");
+        }
+        
+        if (to.equals(from) && !isSendToSelfEnabled()) {
+            throw new KSmsException("sendMessage: Message 'to' equals 'from': " + from);
         }
         
         List<String> prefixList = getTestPhoneNumberPrefixList();

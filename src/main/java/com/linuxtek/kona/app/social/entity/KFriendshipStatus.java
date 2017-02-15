@@ -8,10 +8,11 @@ import com.linuxtek.kona.data.entity.KEnumUtil;
 public enum KFriendshipStatus implements KEnumObject {
     NONE(100L, "No Friendship"), // state after unfollow, unblock, etc.
     FRIENDS(200L, "Friendship Established"),
-    FOLLOWING(300L, "Following Friend"),
-    FOLLOWED(400L, "Followed By Friend"),
-    BLOCKING(500L, "Blocking Friend"),
-    BLOCKED(600L, "Blocked By Friend");
+    PENDING(300L, "Friendship Pending"), // invited 
+    FOLLOWING(400L, "Following Friend"),
+    FOLLOWED(500L, "Followed By Friend"),
+    BLOCKING(600L, "Blocking Friend"),
+    BLOCKED(700L, "Blocked By Friend");
 
     // ---------------------------------------------------------------
     
