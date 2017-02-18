@@ -15,6 +15,7 @@ import com.linuxtek.kona.app.core.entity.KFile;
 import com.linuxtek.kona.app.core.entity.KFileType;
 import com.linuxtek.kona.app.core.entity.KMediaObject;
 import com.linuxtek.kona.data.mybatis.KMyBatisUtil;
+import com.linuxtek.kona.media.model.KImage;
 import com.linuxtek.kona.media.util.KImageInfo;
 import com.linuxtek.kona.media.util.KImageUtil;
 
@@ -159,15 +160,15 @@ implements KMediaService<T> {
 
         byte[] src = file.getData();
 
-        KImageUtil.Image image = KImageUtil.resizeToMaxWidthAndHeight(src, maxWidth, maxHeight);
+        KImage image = KImageUtil.resizeToMaxWidthAndHeight(src, maxWidth, maxHeight);
 
-        file.setData(image.data);
-        file.setSize(image.size);
+        file.setData(image.getData());
+        file.setSize(image.getSize());
 
         getFileService().update(file);
 
-        media.setWidth(image.width);
-        media.setHeight(image.height);
+        media.setWidth(image.getWidth());
+        media.setHeight(image.getHeight());
         update(media);
     }
 
@@ -264,11 +265,11 @@ implements KMediaService<T> {
         String localPath = file.getLocalPath() + "-thumbnail";
         thumbnailFile.setLocalPath(localPath);
 
-        KImageUtil.Image thumbnailResult = KImageUtil.resize(file.getData(), width, height);
+        KImage thumbnailResult = KImageUtil.resize(file.getData(), width, height);
 
-        byte[] thumbnailBytes = thumbnailResult.data;
-        Integer thumbnailWidth = thumbnailResult.width;
-        Integer thumbnailHeight = thumbnailResult.height;
+        byte[] thumbnailBytes = thumbnailResult.getData();
+        Integer thumbnailWidth = thumbnailResult.getWidth();
+        Integer thumbnailHeight = thumbnailResult.getHeight();
 
         thumbnailFile.setData(thumbnailBytes);
 
