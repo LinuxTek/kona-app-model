@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.linuxtek.kona.data.entity.KEnumObject;
 import com.linuxtek.kona.data.entity.KEnumUtil;
+import com.linuxtek.kona.util.KStringUtil;
 
 /*
  * NOTE: This enum is used as a bit field for User.roles
@@ -79,35 +80,72 @@ public enum KUserRole implements KEnumObject {
     }
 
     public static List<KUserRole> parse(String s) {
-        String[] values = s.split(",");
+        String[] values = s.split("\\s*,\\s*");
+
         List<KUserRole> result = new ArrayList<KUserRole>();
+
         for (String value : values) {
-            KUserRole role = KUserRole.valueOf(value.toUpperCase());
+            //KUserRole role = KUserRole.valueOf(value.toUpperCase());
+            KUserRole role = getInstance(value);
             result.add(role);
         }
+
         return result;
     }
     
     public static List<KUserRole> parse(Long roles) {
         List<KUserRole> result = new ArrayList<KUserRole>();
+
         KUserRole[] values = KUserRole.class.getEnumConstants();
-		for (KUserRole role : values) {
-			if ((roles & role.getId()) != 0) {
-				result.add(role);
-			}
-		}
+
+        for (KUserRole role : values) {
+            if ((roles & role.getId()) != 0) {
+                result.add(role);
+            }
+        }
         
         return result;
     }
     
+    public static String toString(List<KUserRole> roles) {
+        String s = "";
+
+        for (KUserRole role : roles) {
+            s += role.name().toLowerCase() + ",";
+        }
+
+        if (s.length() > 0) {
+            s = s.substring(0, s.length() - 1);
+        }
+
+        return s;
+    }
+    
+    public static String toString(Long roles) {
+        return toString(parse(roles));
+    }
+    
     public static boolean haveRole(Long roles, KUserRole role) {
     	List<KUserRole> list = parse(roles);
+
     	for (KUserRole r : list) {
     		if (r.equals(role)) return true;
     	}
+
         return false;
     }
+    
+    public static boolean haveRole(Long roles, String roleName) {
+        KUserRole role = getInstance(roleName);
 
+        List<KUserRole> list = parse(roles);
+
+        for (KUserRole r : list) {
+            if (r.equals(role)) return true;
+        }
+
+        return false;
+    }
 
     public static KUserRole getInstance(Long id) {
         return KEnumUtil.getInstance(KUserRole.class, id);
