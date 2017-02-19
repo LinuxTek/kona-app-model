@@ -107,22 +107,18 @@ public enum KUserRole implements KEnumObject {
         return result;
     }
     
-    public static String toString(List<KUserRole> roles) {
-        String s = "";
+    public static List<String> toStringList(List<KUserRole> roles) {
+        List<String> result = new ArrayList<String>();
 
         for (KUserRole role : roles) {
-            s += role.name().toLowerCase() + ",";
+            result.add(role.name().toLowerCase());
         }
 
-        if (s.length() > 0) {
-            s = s.substring(0, s.length() - 1);
-        }
-
-        return s;
+        return result;
     }
     
-    public static String toString(Long roles) {
-        return toString(parse(roles));
+    public static List<String> toString(Long roles) {
+        return toStringList(parse(roles));
     }
     
     public static boolean haveRole(Long roles, KUserRole role) {
