@@ -117,7 +117,7 @@ public enum KUserRole implements KEnumObject {
         return result;
     }
     
-    public static List<String> toString(Long roles) {
+    public static List<String> toStringList(Long roles) {
         return toStringList(parse(roles));
     }
     
