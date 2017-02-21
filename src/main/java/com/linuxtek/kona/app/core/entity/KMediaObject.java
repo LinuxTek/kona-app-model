@@ -45,6 +45,15 @@ public interface KMediaObject extends KEntityObject {
     public String getFolderPath();
     public void setFolderPath(String folderPath);
 
+    /**
+     * User defined name of media object. May or may not be same as file name.
+     */
+    public String getName();
+    public void setName(String name);
+    
+    public String getDescription();
+    public void setDescription(String description);
+
     public String getUrlPath();
     public void setUrlPath(String urlPath);
 
@@ -65,9 +74,7 @@ public interface KMediaObject extends KEntityObject {
     
     public Integer getFloor();
     public void setFloor(Integer floor);
-    
-    public String getDescription();
-    public void setDescription(String description);
+
     
     public Integer getWidth();
     public void setWidth(Integer width);

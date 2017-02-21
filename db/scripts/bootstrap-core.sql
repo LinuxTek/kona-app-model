@@ -950,6 +950,8 @@ CREATE TABLE `core__user_media` (
   `file_type_id` bigint(20) unsigned DEFAULT NULL,
   `thumbnail_id` bigint(20) unsigned DEFAULT NULL,
   `folder_path` varchar(255) DEFAULT NULL, -- similar to s3: flat but can be conceptually nested /folder1/subfolder2
+  `name` varchar(255) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
   `url_path` varchar(255) DEFAULT NULL,
   `thumbnail_url_path` varchar(255) DEFAULT NULL,
   `content_type` varchar(255) default NULL,
@@ -965,7 +967,6 @@ CREATE TABLE `core__user_media` (
   `latitude` double DEFAULT NULL,
   `longitude` double DEFAULT NULL,
   `floor` int(11) unsigned DEFAULT NULL,
-  `description` varchar(255) DEFAULT NULL,
   `enabled` tinyint(1) NOT NULL DEFAULT '0',
   `primary_photo` tinyint(1) NOT NULL DEFAULT '0',
   `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
@@ -978,6 +979,8 @@ CREATE TABLE `core__user_media` (
   UNIQUE KEY `ux_core__user_media_file` (`file_id`),
 
   UNIQUE KEY `ux_core__user_media_thumbnail` (`thumbnail_id`),
+
+  UNIQUE KEY `ux_core__user_media_name` (`account_id`, `folder_path`, `name`),
 
   KEY `ix_core__user_media_user` (`user_id`),
 

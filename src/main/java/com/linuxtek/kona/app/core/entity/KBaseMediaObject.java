@@ -21,6 +21,8 @@ public class KBaseMediaObject implements KMediaObject {
     private Long fileTypeId;
 
     private String folderPath;
+    private String name;
+    private String description;
 
     private String urlPath;
     private String thumbnailUrlPath;
@@ -30,7 +32,6 @@ public class KBaseMediaObject implements KMediaObject {
     private Double latitude;
     private Double longitude;
     private Integer floor;
-    private String description;
     private boolean enabled;
     private Integer framesPerSecond;
     private boolean resizeable;
@@ -190,6 +191,16 @@ public class KBaseMediaObject implements KMediaObject {
     @Override
     public void setFloor(Integer floor) {
         this.floor = floor;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name == null ? null : name.trim();
     }
 
     @Override
