@@ -26,6 +26,8 @@ public interface KUserMediaService<T extends KUserMedia, F extends KFile> extend
 
     public T fetchPrimaryPhoto(Long userId);
     
+    public T add(F file) throws IOException;
+
     public T add(F file,Double latitude, Double longitude, Integer floor,
             String description, boolean primaryPhoto) throws IOException;
 }

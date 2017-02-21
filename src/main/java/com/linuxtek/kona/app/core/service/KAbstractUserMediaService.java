@@ -81,8 +81,13 @@ public abstract class KAbstractUserMediaService<T extends KUserMedia, EXAMPLE, U
     }
 
 	// ----------------------------------------------------------------------------
-	
-	
+
+	@Override 
+    public T add(F file) throws IOException {
+	    return add(file, null, null, null, null, false);
+	}
+
+	// ----------------------------------------------------------------------------
 	@Override 
     public T add(F file,Double latitude, Double longitude, Integer floor,
             String description, boolean primaryPhoto) throws IOException {

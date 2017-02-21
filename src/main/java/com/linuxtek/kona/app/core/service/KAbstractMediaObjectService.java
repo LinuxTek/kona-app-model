@@ -72,8 +72,7 @@ implements KMediaService<T> {
 
     // ----------------------------------------------------------------------------
 
-
-    public T add(F file,Double latitude, Double longitude, 
+    public T add(F file, Double latitude, Double longitude, 
             Integer floor, String description) throws IOException {
         file = getFileService().add(file);
 
