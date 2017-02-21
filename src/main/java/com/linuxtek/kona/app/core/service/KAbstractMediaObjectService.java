@@ -84,6 +84,7 @@ implements KMediaService<T> {
         media.setFileId(file.getId());
         media.setFileTypeId(file.getTypeId());
         media.setUrlPath(file.getUrlPath());
+        media.setName(file.getName());
         media.setEnabled(true);
         media.setLatitude(latitude);
         media.setLongitude(longitude);
