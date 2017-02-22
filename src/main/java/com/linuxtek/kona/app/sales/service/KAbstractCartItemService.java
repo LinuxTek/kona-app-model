@@ -57,6 +57,10 @@ public abstract class KAbstractCartItemService<CART_ITEM extends KCartItem,
         if (cartItem.getCreatedDate() == null) {
         	cartItem.setCreatedDate(new Date());
         }
+
+		if (cartItem.getUid() == null) {
+			cartItem.setUid(uuid());
+		}
         
         cartItem.setUpdatedDate(new Date());
     }

@@ -166,6 +166,7 @@ CREATE TABLE `sales__campaign_type` (
 
 CREATE TABLE `sales__cart` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `uid` varchar(255) NOT NULL,
   `app_id` bigint(20) unsigned NOT NULL,
   `user_id` bigint(20) unsigned DEFAULT NULL,
   `account_id` bigint(20) unsigned DEFAULT NULL,
@@ -197,6 +198,8 @@ CREATE TABLE `sales__cart` (
   PRIMARY KEY (`id`),
 
   UNIQUE KEY `id` (`id`),
+
+  UNIQUE KEY `ux_sales__cart_uid` (`uid`),
 
   KEY `ix_sales__cart_app` (`app_id`),
 
@@ -230,6 +233,7 @@ CREATE TABLE `sales__cart` (
 
 CREATE TABLE `sales__cart_item` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `uid` varchar(255) NOT NULL,
   `cart_id` bigint(20) unsigned NOT NULL,
   `product_id` bigint(20) unsigned DEFAULT NULL,
   `promo_id` bigint(20) unsigned DEFAULT NULL,
@@ -249,6 +253,8 @@ CREATE TABLE `sales__cart_item` (
   PRIMARY KEY (`id`),
 
   UNIQUE KEY `id` (`id`),
+
+  UNIQUE KEY `ux_sales__cart_item_uid` (`uid`),
 
   KEY `ix_sales__cart_item_cart` (`cart_id`),
 
@@ -294,6 +300,7 @@ CREATE TABLE `sales__currency` (
 
 CREATE TABLE `sales__invoice` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `uid` varchar(255) NOT NULL,
   `app_id` bigint(20) unsigned NOT NULL,
   `user_id` bigint(20) unsigned NOT NULL,
   `account_id` bigint(20) unsigned NOT NULL,
@@ -330,6 +337,8 @@ CREATE TABLE `sales__invoice` (
 
   UNIQUE KEY `id` (`id`),
 
+  UNIQUE KEY `ux_sales__invoice_uid` (`uid`),
+
   UNIQUE KEY `ux_sales__invoice_invoice_no` (`invoice_no`),
 
   KEY `ix_sales__invoice_app` (`app_id`),
@@ -360,6 +369,7 @@ CREATE TABLE `sales__invoice` (
 
 CREATE TABLE `sales__invoice_item` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `uid` varchar(255) NOT NULL,
   `invoice_id` bigint(20) unsigned NOT NULL,
   `product_id` bigint(20) unsigned DEFAULT NULL,
   `promo_id` bigint(20) unsigned DEFAULT NULL,
@@ -378,6 +388,8 @@ CREATE TABLE `sales__invoice_item` (
   PRIMARY KEY (`id`),
 
   UNIQUE KEY `id` (`id`),
+
+  UNIQUE KEY `ux_sales__invoice_item_uid` (`uid`),
 
   KEY `ix_sales__invoice_item_invoice` (`invoice_id`),
 
@@ -446,6 +458,7 @@ CREATE TABLE `sales__partner` (
 
 CREATE TABLE `sales__payment` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `uid` varchar(255) NOT NULL,
   `app_id` bigint(20) unsigned NOT NULL,
   `type_id` bigint(20) unsigned DEFAULT NULL,
   `status_id` bigint(20) unsigned DEFAULT NULL,
@@ -482,6 +495,8 @@ CREATE TABLE `sales__payment` (
   PRIMARY KEY (`id`),
 
   UNIQUE KEY `id` (`id`),
+
+  UNIQUE KEY `ux_sales__payment_uid` (`uid`),
 
   UNIQUE KEY `ux_sales__payment_processor_ref` (`processor_ref`),
 
@@ -643,6 +658,7 @@ CREATE TABLE `sales__pre_order` (
 
 CREATE TABLE `sales__promo` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `uid` varchar(255) NOT NULL,
   `app_id` bigint(20) unsigned NOT NULL,
   `product_id` bigint(20) unsigned NOT NULL,
   `name` varchar(255) NOT NULL,
@@ -669,6 +685,8 @@ CREATE TABLE `sales__promo` (
 
   UNIQUE KEY `id` (`id`),
 
+  UNIQUE KEY `ix_sales__promo_uid` (`uid`),
+
   UNIQUE KEY `ix_sales__promo_name` (`name`),
 
   KEY `ix_sales__promo_app` (`app_id`),
@@ -686,57 +704,57 @@ CREATE TABLE `sales__promo` (
 
 -- --------------------------------------------------------------------------
 
-CREATE TABLE `sales__promo_page` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `app_id` bigint(20) unsigned DEFAULT NULL,
-  `promo_id` bigint(20) unsigned DEFAULT NULL,
-  `partner_id` bigint(20) unsigned DEFAULT NULL,
-  `campaign_id` bigint(20) unsigned DEFAULT NULL,
-  `name` varchar(255) NOT NULL,
-  `path` varchar(255) DEFAULT NULL,
-  `phone_number` varchar(255) DEFAULT NULL,
-  `title` varchar(255) DEFAULT NULL,
-  `banner_url` varchar(255) DEFAULT NULL,
-  `logo_url` varchar(255) DEFAULT NULL,
-  `intro_message` varchar(2000) DEFAULT NULL,
-  `registered_message` varchar(2000) DEFAULT NULL,
-  `facebook_tracking_id` varchar(255) DEFAULT NULL,
-  `google_tracking_id` varchar(255) DEFAULT NULL,
-  `enabled` tinyint(1) NOT NULL DEFAULT '0',
-  `root` tinyint(1) NOT NULL DEFAULT '0',
-  `expired_date` datetime(6) DEFAULT NULL,
-  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
-  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-
-  PRIMARY KEY (`id`),
-
-  UNIQUE KEY `id` (`id`),
-
-  UNIQUE KEY `ux_sales__promo_page_phone_number` (`phone_number`),
-
-  UNIQUE KEY `ux_sales__promo_page_path_name` (`path`,`name`),
-
-  KEY `ix_sales__promo_page_app` (`app_id`),
-
-  KEY `ix_sales__promo_page_promo` (`promo_id`),
-
-  KEY `ix_sales__promo_page_partner` (`partner_id`),
-
-  KEY `ix_sales__promo_page_campaign` (`campaign_id`),
-
-  CONSTRAINT `fk_sales__promo_page_app` FOREIGN KEY (`app_id`) 
-        REFERENCES `core__app` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-
-  CONSTRAINT `fk_sales__promo_page_campaign` FOREIGN KEY (`campaign_id`) 
-        REFERENCES `sales__campaign` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-
-  CONSTRAINT `fk_sales__promo_page_partner` FOREIGN KEY (`partner_id`) 
-        REFERENCES `sales__partner` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-
-  CONSTRAINT `fk_sales__promo_page_promo` FOREIGN KEY (`promo_id`) 
-        REFERENCES `sales__promo` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+-- CREATE TABLE `sales__promo_page` (
+--   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+--   `app_id` bigint(20) unsigned DEFAULT NULL,
+--   `promo_id` bigint(20) unsigned DEFAULT NULL,
+--   `partner_id` bigint(20) unsigned DEFAULT NULL,
+--   `campaign_id` bigint(20) unsigned DEFAULT NULL,
+--   `name` varchar(255) NOT NULL,
+--   `path` varchar(255) DEFAULT NULL,
+--   `phone_number` varchar(255) DEFAULT NULL,
+--   `title` varchar(255) DEFAULT NULL,
+--   `banner_url` varchar(255) DEFAULT NULL,
+--   `logo_url` varchar(255) DEFAULT NULL,
+--   `intro_message` varchar(2000) DEFAULT NULL,
+--   `registered_message` varchar(2000) DEFAULT NULL,
+--   `facebook_tracking_id` varchar(255) DEFAULT NULL,
+--   `google_tracking_id` varchar(255) DEFAULT NULL,
+--   `enabled` tinyint(1) NOT NULL DEFAULT '0',
+--   `root` tinyint(1) NOT NULL DEFAULT '0',
+--   `expired_date` datetime(6) DEFAULT NULL,
+--   `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+--   `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+-- 
+--   PRIMARY KEY (`id`),
+-- 
+--   UNIQUE KEY `id` (`id`),
+-- 
+--   UNIQUE KEY `ux_sales__promo_page_phone_number` (`phone_number`),
+-- 
+--   UNIQUE KEY `ux_sales__promo_page_path_name` (`path`,`name`),
+-- 
+--   KEY `ix_sales__promo_page_app` (`app_id`),
+-- 
+--   KEY `ix_sales__promo_page_promo` (`promo_id`),
+-- 
+--   KEY `ix_sales__promo_page_partner` (`partner_id`),
+-- 
+--   KEY `ix_sales__promo_page_campaign` (`campaign_id`),
+-- 
+--   CONSTRAINT `fk_sales__promo_page_app` FOREIGN KEY (`app_id`) 
+--         REFERENCES `core__app` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+-- 
+--   CONSTRAINT `fk_sales__promo_page_campaign` FOREIGN KEY (`campaign_id`) 
+--         REFERENCES `sales__campaign` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+-- 
+--   CONSTRAINT `fk_sales__promo_page_partner` FOREIGN KEY (`partner_id`) 
+--         REFERENCES `sales__partner` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+-- 
+--   CONSTRAINT `fk_sales__promo_page_promo` FOREIGN KEY (`promo_id`) 
+--         REFERENCES `sales__promo` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+-- 
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 -- --------------------------------------------------------------------------
 
@@ -796,6 +814,7 @@ CREATE TABLE `sales__sales_lead` (
 
 CREATE TABLE `sales__product` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `uid` varchar(255) NOT NULL,
   `app_id` bigint(20) unsigned NOT NULL,
   `name` varchar(255) NOT NULL,
   `display_name` varchar(255) DEFAULT NULL,
@@ -816,6 +835,8 @@ CREATE TABLE `sales__product` (
 
   UNIQUE KEY `id` (`id`),
 
+  UNIQUE KEY `ux_sales__product_uid` (`uid`),
+
   UNIQUE KEY `ux_sales__product_app_name` (`app_id`,`name`),
 
   KEY `ix_sales__product_name` (`name`),
@@ -829,6 +850,7 @@ CREATE TABLE `sales__product` (
 
 CREATE TABLE `sales__purchase` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `uid` varchar(255) NOT NULL,
   `parent_id` bigint(20) unsigned DEFAULT NULL,
   `account_id` bigint(20) unsigned NOT NULL,
   `user_id` bigint(20) unsigned NOT NULL,
@@ -847,6 +869,8 @@ CREATE TABLE `sales__purchase` (
   `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
   PRIMARY KEY (`id`),
+
+  UNIQUE KEY `ux_sales__purchase_uid` (`account_id`,`product_id`),
 
   UNIQUE KEY `ux_sales__purchase` (`account_id`,`product_id`),
 

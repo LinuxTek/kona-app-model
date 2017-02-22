@@ -33,6 +33,10 @@ public abstract class KAbstractInvoiceItemService<INVOICE_ITEM extends KInvoiceI
         if (invoiceItem.getCreatedDate() == null) {
         	invoiceItem.setCreatedDate(new Date());
         }
+
+		if (invoiceItem.getUid() == null) {
+			invoiceItem.setUid(uuid());
+		}
         
         invoiceItem.setUpdatedDate(new Date());
     }

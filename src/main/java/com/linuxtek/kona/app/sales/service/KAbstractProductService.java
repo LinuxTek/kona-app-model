@@ -25,6 +25,10 @@ public abstract class KAbstractProductService<PRODUCT extends KProduct,
         if (product.getCreatedDate() == null) {
         	product.setCreatedDate(new Date());
         }
+
+		if (product.getUid() == null) {
+			product.setUid(uuid());
+		}
         
         product.setUpdatedDate(new Date());
     }

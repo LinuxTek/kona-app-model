@@ -48,6 +48,10 @@ public abstract class KAbstractCartService<CART extends KCart,
         	cart.setCreatedDate(new Date());
         }
         
+		if (cart.getUid() == null) {
+			cart.setUid(uuid());
+		}
+
         cart.setUpdatedDate(new Date());
     }
     

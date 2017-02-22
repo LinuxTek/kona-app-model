@@ -53,6 +53,10 @@ public abstract class KAbstractPaymentService<PAYMENT extends KPayment,
         if (payment.getCreatedDate() == null) {
         	payment.setCreatedDate(new Date());
         }
+
+		if (payment.getUid() == null) {
+			payment.setUid(uuid());
+		}
         
         payment.setUpdatedDate(new Date());
     }

@@ -47,6 +47,10 @@ public abstract class KAbstractPurchaseService<PURCHASE extends KPurchase,
 		if (purchase.getCreatedDate() == null) {
 			purchase.setCreatedDate(new Date());
 		}
+
+		if (purchase.getUid() == null) {
+			purchase.setUid(uuid());
+		}
         
 		purchase.setUpdatedDate(new Date());
 	}
