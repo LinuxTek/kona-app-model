@@ -141,9 +141,13 @@ public abstract class KAbstractPaymentService<PAYMENT extends KPayment,
         
         if (chargeItem != null) {
         	paymentRef = chargeItem.getId();
+
         	cardLast4 = chargeItem.getCard().getLast4();
+
         	amountPaid = toBigDecimal(chargeItem.getAmount());
+
         	fee = toBigDecimal(chargeItem.getFee());
+
             if (paymentError == null) {
             	paymentError = chargeItem.getFailureMessage();
             }
@@ -178,6 +182,7 @@ public abstract class KAbstractPaymentService<PAYMENT extends KPayment,
 		payment.setAppId(invoice.getAppId());
 		payment.setAccountId(invoice.getAccountId());
 		payment.setInvoiceId(invoice.getId());
+
 		if (client != null) {
 			payment.setAccessToken(client.getAccessToken());
 			payment.setSessionId(client.getSessionId());
@@ -186,6 +191,7 @@ public abstract class KAbstractPaymentService<PAYMENT extends KPayment,
 			payment.setLatitude(client.getLatitude());
 			payment.setLongitude(client.getLongitude());
 		}
+
 		payment.setCardToken(cardToken);
 		payment.setCardLast4(cardLast4);
         payment.setAmount(amountPaid);

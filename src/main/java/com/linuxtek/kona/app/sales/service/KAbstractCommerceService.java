@@ -267,10 +267,14 @@ public abstract class KAbstractCommerceService<
                 logger.debug("invoice item list size: " + invoiceItemList.size());
                 
             	Long userId = invoice.getUserId();
+
             	ACCOUNT account = getAccountByUserId(userId);
+
             	for (INVOICE_ITEM item : invoiceItemList) {
             		boolean autoRenew = false;
+
             		KPaymentType paymentType = KPaymentType.PROMO;
+
             		if (paymentRequired) {
             			autoRenew = true;
             			paymentType = KPaymentType.CARD;
@@ -528,8 +532,11 @@ public abstract class KAbstractCommerceService<
         getInvoiceService().updateInvoice(invoice);
         
         ACCOUNT account = getAccountService().fetchById(invoice.getAccountId());
+
         KPaymentType type = KPaymentType.CARD;
+
         KPaymentStatus status = null;
+
         String error = null;
 
         if (account == null) {
