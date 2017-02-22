@@ -127,7 +127,6 @@ public abstract class KAbstractUserService<U extends KUser, EXAMPLE,
 	
 	@Override
 	public U registerUser(U user, String password, KServiceClient client) {
-        checkUserExists(user.getUsername(), user.getEmail());
         
         if (user.getUid() == null) {
             user.setUid(generateUid());
@@ -136,6 +135,9 @@ public abstract class KAbstractUserService<U extends KUser, EXAMPLE,
         if (user.getUsername() == null) {
             user.setUsername(user.getUid());
         }
+
+        // Check if user is valid so far
+        checkUserExists(user.getUsername(), user.getEmail());
 
 
         if (user.getTypeId() == null) {
@@ -172,6 +174,7 @@ public abstract class KAbstractUserService<U extends KUser, EXAMPLE,
         user.setCreatedDate(new Date());
         
         user.setActive(true);
+        
 
         
         A account = null;
