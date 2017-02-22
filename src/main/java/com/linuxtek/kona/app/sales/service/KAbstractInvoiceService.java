@@ -1,6 +1,7 @@
 package com.linuxtek.kona.app.sales.service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +17,7 @@ import com.linuxtek.kona.app.sales.entity.KCartItem;
 import com.linuxtek.kona.app.sales.entity.KCurrency;
 import com.linuxtek.kona.app.sales.entity.KInvoice;
 import com.linuxtek.kona.app.sales.entity.KInvoiceItem;
+import com.linuxtek.kona.app.sales.entity.KProduct;
 import com.linuxtek.kona.data.mybatis.KMyBatisUtil;
 import com.linuxtek.kona.sequence.flake.KFlake;
 
@@ -24,6 +26,7 @@ public abstract class KAbstractInvoiceService<INVOICE extends KInvoice,
 										   	  INVOICE_ITEM extends KInvoiceItem,
 										   	  CART extends KCart,
 										   	  CART_ITEM extends KCartItem,
+										   	  PRODUCT extends KProduct,
 										   	  ACCOUNT extends KAccount>
 		extends KAbstractService<INVOICE,INVOICE_EXAMPLE>
 		implements KInvoiceService<INVOICE,INVOICE_ITEM,CART,CART_ITEM> {
@@ -39,6 +42,8 @@ public abstract class KAbstractInvoiceService<INVOICE extends KInvoice,
 	protected abstract <S extends KAccountService<ACCOUNT>> S getAccountService();
     
 	protected abstract <S extends KCartService<CART>> S getCartService();
+
+	protected abstract <S extends KProductService<PRODUCT>> S getProductService();
     
 	protected abstract <S extends KCartItemService<CART_ITEM,CART>> S getCartItemService();
     
@@ -160,6 +165,8 @@ public abstract class KAbstractInvoiceService<INVOICE extends KInvoice,
 
         return invoice;
     }
+
+    // ----------------------------------------------------------------------------
     
     @Override
     public INVOICE createInvoice(Long appId, Long accountId, List<INVOICE_ITEM> itemList) {
@@ -218,6 +225,42 @@ public abstract class KAbstractInvoiceService<INVOICE extends KInvoice,
         invoice.setAmountDue(total);
         invoice = update(invoice);
 
+        return invoice;
+    }
+
+	// ----------------------------------------------------------------------------
+    
+    @Override
+    public INVOICE createInvoice(Long appId, Long accountId, String productName, String description) {
+        
+        PRODUCT product = getProductService().fetchByName(appId, productName);
+        
+        if (product == null) {
+            throw new IllegalArgumentException("Invalid product name: " + productName);
+        }
+        
+        if (description == null) {
+            description = product.getDescription();
+        }
+        
+        List<INVOICE_ITEM> items = new ArrayList<INVOICE_ITEM>();
+        BigDecimal zero = new BigDecimal(0);
+        
+        INVOICE_ITEM item = getNewInvoiceItemObject();
+        item.setProductId(product.getId());
+        item.setQuantity(1);
+        item.setUnitPrice(product.getPrice());
+        item.setSubtotal(product.getPrice());
+        item.setDiscount(zero);
+        item.setSetupFee(zero);
+        item.setTotal(product.getPrice());
+        item.setDescription(description);
+        item.setCreatedDate(new Date());
+        
+        items.add(item);
+        
+        INVOICE invoice = createInvoice(appId, accountId, items);
+        
         return invoice;
     }
     

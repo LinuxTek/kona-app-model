@@ -183,6 +183,29 @@ public abstract class KAbstractCommerceService<
     public PAYMENT charge(INVOICE invoice, KServiceClient client) {
         return charge(invoice, null, true, client);
     }
+	// ----------------------------------------------------------------------------
+    
+    
+    @Override
+    public PAYMENT charge(KServiceClient client, Long accountId, String productName) {
+        logger.debug("KAbstractCommerceService: client: " + client + " accountId: " + accountId + " productName: " + productName);
+        
+        Long appId = client.getAppId();
+        
+        INVOICE invoice = getInvoiceService().createInvoice(appId, accountId, productName, null);
+        
+        PAYMENT payment = charge(invoice, client);
+        
+        if (payment == null 
+                || payment.getStatusId() == null 
+                || !payment.getStatusId().equals(KPaymentStatus.SUCCESS.getId())) {
+            
+            String notes = payment.getProcessorError();
+            getInvoiceService().closeInvoice(invoice, false, null, null, null, notes);
+        }
+        
+        return payment;
+    }
     
 	// ----------------------------------------------------------------------------
  

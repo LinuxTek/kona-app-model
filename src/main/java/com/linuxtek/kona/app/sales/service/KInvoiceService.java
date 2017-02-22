@@ -33,11 +33,11 @@ public interface KInvoiceService<INVOICE extends KInvoice,
 	public INVOICE createInvoice(CART cart, List<CART_ITEM> itemList);
     
 	public INVOICE createInvoice(Long appId, Long accountId, List<INVOICE_ITEM> itemList);
+
+    public INVOICE createInvoice(Long appId, Long accountId, String productName, String description);
     
 	public void updateInvoice(INVOICE invoice);
     
 	public void closeInvoice(INVOICE invoice, boolean paid, BigDecimal amount,
 			String paymentRef, String cardLast4, String notes);
-
-
 }
