@@ -158,17 +158,20 @@ public abstract class KAbstractCommerceService<
             }
             
             boolean paymentRequired = false;
+
             if (cart.getTotal() != null && 
             		cart.getTotal().compareTo(new BigDecimal(0))>0) {
                 paymentRequired = true;
             }
             
             INVOICE invoice = getInvoiceService().createInvoice(cart);
+
             PAYMENT payment = charge(invoice, cardToken, paymentRequired, client);
             
             if (paymentRequired && payment != null) {
             	KPaymentStatus status = 
             			KPaymentStatus.getInstance(payment.getStatusId());
+
             	if (status != KPaymentStatus.SUCCESS || !payment.isPaid()) {
             		getInvoiceService().closeInvoice(invoice, false, null, null, null, null);
             	}
@@ -187,20 +190,21 @@ public abstract class KAbstractCommerceService<
     
     
     @Override
-    public PAYMENT charge(KServiceClient client, Long accountId, String productName) {
+    public PAYMENT charge(KServiceClient client, Long accountId, String cardToken, String productName) {
         logger.debug("KAbstractCommerceService: client: " + client + " accountId: " + accountId + " productName: " + productName);
         
         Long appId = client.getAppId();
         
         INVOICE invoice = getInvoiceService().createInvoice(appId, accountId, productName, null);
         
-        PAYMENT payment = charge(invoice, client);
+        PAYMENT payment = charge(invoice, cardToken, true, client);
         
         if (payment == null 
                 || payment.getStatusId() == null 
                 || !payment.getStatusId().equals(KPaymentStatus.SUCCESS.getId())) {
             
             String notes = payment.getProcessorError();
+
             getInvoiceService().closeInvoice(invoice, false, null, null, null, notes);
         }
         
@@ -508,11 +512,19 @@ public abstract class KAbstractCommerceService<
         String chargeDescription = getChargeDescription(invoice);
         
         invoice.setPaymentAttempted(true);
+
         Integer attemptCount = invoice.getPaymentAttemptCount();
-        if (attemptCount == null) attemptCount = 0;
+
+        if (attemptCount == null) {
+            attemptCount = 0;
+        }
+
         attemptCount += 1;
+
         invoice.setPaymentAttemptCount(attemptCount);
+
         invoice.setLastPaymentAttemptDate(new Date());
+
         getInvoiceService().updateInvoice(invoice);
         
         ACCOUNT account = getAccountService().fetchById(invoice.getAccountId());
@@ -531,6 +543,7 @@ public abstract class KAbstractCommerceService<
             error = "Account disabled. accountId: " + account.getId();
             return getPaymentService().createPayment(type, status, cardToken, invoice, error, client);
         } 
+
         // see if we have a stripeUid for this customer
         if (cardToken == null && account.getStripeUid() == null) {
             status = KPaymentStatus.CARD_MISSING;
@@ -538,6 +551,7 @@ public abstract class KAbstractCommerceService<
             return getPaymentService().createPayment(type, status, cardToken, invoice, error, client);
         } else if (cardToken == null && account.getStripeUid() != null) {
         	String cardLast4 = getStripeService().getPrimaryCardLast4ByUserId(client.getAppId(), invoice.getUserId());
+
         	if (cardLast4 == null) {
                 Long userId = invoice.getUserId();
         		status = KPaymentStatus.CARD_MISSING;
@@ -547,7 +561,8 @@ public abstract class KAbstractCommerceService<
         }
         
         BigDecimal total = invoice.getAmountDue();
-        if (total == null || total.compareTo(new BigDecimal(0))<=0) {
+
+        if (total == null || total.compareTo(new BigDecimal(0)) <= 0) {
             status = KPaymentStatus.AMOUNT_INVALID;
         	error = "Invoice amount due is null, zero or negative: " + total;
             return getPaymentService().createPayment(type, status, cardToken, invoice, error, client);

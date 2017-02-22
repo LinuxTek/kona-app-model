@@ -89,7 +89,7 @@ public abstract class KAbstractStripeService<ACCOUNT extends KAccount,
 	// ----------------------------------------------------------------------------
 	
     @Override
-	public ACCOUNT updateAccountStripeUidByCardToken(Long appId, ACCOUNT account, String cardToken)  {
+	public ACCOUNT updateAccountStripeUid(Long appId, ACCOUNT account, String cardToken)  {
         USER user = getUserService().fetchById(account.getOwnerId());
         
         String email = user.getEmail();

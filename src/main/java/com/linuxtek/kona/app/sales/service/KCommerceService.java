@@ -33,7 +33,7 @@ public interface KCommerceService<PAYMENT extends KPayment,
 	public PAYMENT charge(INVOICE invoice, String cardToken,
 			boolean paymentRequired, KServiceClient client);
 
-    public PAYMENT charge(KServiceClient client, Long accountId, String productName);
+    public PAYMENT charge(KServiceClient client, Long accountId, String cardToken, String productName);
 	
 	public PAYMENT externalCharge(CART cart, Long paymentTypeId, BigDecimal paidAmount,
 			String processorRef, BigDecimal processorFee, KServiceClient client);

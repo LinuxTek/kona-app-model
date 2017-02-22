@@ -38,6 +38,6 @@ public interface KStripeService<ACCOUNT extends KAccount>
 	
 	public String getPrimaryCardLast4ByUserId(Long appId, Long userId);
 
-	public ACCOUNT updateAccountStripeUidByCardToken(Long appId, ACCOUNT account, String cardToken);
+	public ACCOUNT updateAccountStripeUid(Long appId, ACCOUNT account, String cardToken);
 
 }
