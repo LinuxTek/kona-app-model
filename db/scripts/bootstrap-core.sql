@@ -226,6 +226,39 @@ CREATE TABLE `core__app_creds` (
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
+
+-- --------------------------------------------------------------------------
+
+CREATE TABLE `core__app_legal` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `uid` varchar(255) NOT NULL,
+  `app_id` bigint(20) unsigned NOT NULL,
+  `type` enum('terms','privacy') NOT NULL,
+  `content` mediumtext NOT NULL,
+  `version` int(11) unsigned NOT NULL,
+  `active` tinyint(1) NOT NULL DEFAULT '0',
+  `published_date` datetime(6) DEFAULT NULL,
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+
+  PRIMARY KEY (`id`),
+
+  UNIQUE KEY `id` (`id`),
+
+  UNIQUE KEY `ux_core__app_legal_uid` (`uid`),
+
+  UNIQUE KEY `core__app_legal_type_version` (`app_id`, `type`, `version`),
+
+  KEY `ix_core__app_legal_app` (`app_id`),
+
+  KEY `ix_core__app_legal_type` (`type`),
+
+  CONSTRAINT `fk_core__app_legal_app` FOREIGN KEY (`app_id`)
+        REFERENCES `core__app` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+
+
 -- --------------------------------------------------------------------------
 
 CREATE TABLE `core__app_type` (
