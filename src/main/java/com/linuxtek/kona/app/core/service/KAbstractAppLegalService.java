@@ -32,6 +32,10 @@ implements KAppLegalService<T> {
 	    
 	    if (appLegal.isActive()) {
             unsetActive(appLegal);
+
+            if (appLegal.getPublishedDate() == null) {
+                appLegal.setPublishedDate(new Date());
+            }
         }
 	}
 
