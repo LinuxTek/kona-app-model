@@ -41,6 +41,8 @@ import com.linuxtek.kona.app.comm.entity.KEmailFooter;
 import com.linuxtek.kona.app.comm.entity.KEmailGroup;
 import com.linuxtek.kona.app.comm.entity.KEmailGroupAddress;
 import com.linuxtek.kona.app.comm.entity.KEmailStats;
+import com.linuxtek.kona.app.comm.model.KEmailMedia;
+
 import com.linuxtek.kona.app.util.KUtil;
 import com.linuxtek.kona.data.dao.KMyBatisDao;
 import com.linuxtek.kona.data.mybatis.KMyBatisUtil;
@@ -159,10 +161,16 @@ public abstract class KAbstractEmailService<EMAIL extends KEmail,
 	}
 	
 	// ----------------------------------------------------------------------
-
 	@Override
 	public void send(String body, String subject, String from, String replyTo, 
 			String to, String cc, String bcc, boolean html) throws KEmailException {
+	    //send(body, subject, from, replyTo, to, cc, bcc, html, null);
+	}
+
+
+	@Override
+	public void send(String body, String subject, String from, String replyTo, 
+			String to, String cc, String bcc, boolean html, List<KEmailMedia> mediaList) throws KEmailException {
 
 		String mailhost = getSystemMailhost();
 		String sender = getSystemSenderEmailAddress();
@@ -175,6 +183,12 @@ public abstract class KAbstractEmailService<EMAIL extends KEmail,
 		mailer.setCc(cc);
 		mailer.setBcc(bcc);
 		mailer.setSubject(subject);
+		
+		if (mediaList != null) {
+		    for (KEmailMedia media : mediaList) {
+		        mailer.addByteArray(media.getName(), media.getData(), media.getContentType());
+		    }
+		}
         
 		if (body == null) {
 			body = "";

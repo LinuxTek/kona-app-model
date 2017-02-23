@@ -6,6 +6,7 @@ import com.linuxtek.kona.app.comm.entity.KEmail;
 import com.linuxtek.kona.app.comm.entity.KEmailEvent;
 import com.linuxtek.kona.app.comm.entity.KEmailFooter;
 import com.linuxtek.kona.app.comm.entity.KEmailStats;
+import com.linuxtek.kona.app.comm.model.KEmailMedia;
 import com.linuxtek.kona.data.service.KDataService;
 import com.linuxtek.kona.remote.service.KService;
 
@@ -17,6 +18,9 @@ public interface KEmailService<EMAIL extends KEmail,
 
 	public void send(String body, String subject, String from, String replyTo, String to, String cc, String bcc,
 			boolean html) throws KEmailException;
+
+	public void send(String body, String subject, String from, String replyTo, String to, String cc, String bcc, 
+	        boolean html, List<KEmailMedia> mediaList) throws KEmailException;
 
 	public String sendAWS(String from, String to, String subject, String textBody, String htmlBody) 
 			throws KEmailException;
@@ -60,4 +64,5 @@ public interface KEmailService<EMAIL extends KEmail,
 			String subject, String text, String html, KEmailFooter footer);
     
 	public void processSESNotifications();
+ 
 }
