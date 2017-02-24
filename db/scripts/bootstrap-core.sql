@@ -1246,6 +1246,41 @@ CREATE TABLE `core__notification_delivery` (
 
 -- --------------------------------------------------------------------------
 
+CREATE TABLE `core__support_message` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `uid` varchar(255) NOT NULL,
+  `app_id` bigint(20) unsigned DEFAULT NULL,
+  `user_id` bigint(20) unsigned DEFAULT NULL,
+  `first_name` varchar(255) DEFAULT NULL,
+  `last_name` varchar(255) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `mobile_number` varchar(255) DEFAULT NULL,
+  `message` varchar(4000) DEFAULT NULL,
+  `hostname` varchar(255) DEFAULT NULL,
+  `browser` varchar(512) DEFAULT NULL,
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+  PRIMARY KEY (`id`),
+
+  UNIQUE KEY `id` (`id`),
+
+  UNIQUE KEY `ux_core__support_message_uid` (`uid`),
+
+  KEY `ix_core__support_message_user` (`user_id`),
+
+  KEY `ix_core__support_message_app` (`app_id`),
+
+  CONSTRAINT `fk_core__support_message_app` FOREIGN KEY (`app_id`)
+        REFERENCES `core__app` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+
+  CONSTRAINT `fk_core__support_message_user` FOREIGN KEY (`user_id`)
+        REFERENCES `core__user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+
+-- --------------------------------------------------------------------------
+
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
