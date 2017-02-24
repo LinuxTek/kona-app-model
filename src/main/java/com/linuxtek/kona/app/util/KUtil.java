@@ -46,6 +46,13 @@ public class KUtil {
         return KClassUtil.toString(obj);
     }
     
+    public static String toHtml(String s) {
+        if (s == null) {
+            return "";
+        }
+        return KStringUtil.toHtml(s);
+    }
+    
     public static <Email extends KEmailAddress> String emailFirstName(Email email) {
         if (email == null) return "";
         if (email.getFirstName() != null) {
