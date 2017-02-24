@@ -58,6 +58,20 @@ implements KSupportMessageService<SUPPORT_MESSAGE> {
                 supportMessage.setUserId(u.getId());
             }
         }
+        
+        if (supportMessage.getUserId() != null 
+                && (supportMessage.getFirstName() == null || supportMessage.getLastName() == null)) {
+
+            USER u = getUserService().fetchById(supportMessage.getUserId());
+
+            if (supportMessage.getFirstName() == null) {
+                supportMessage.setFirstName(u.getFirstName());
+            }
+
+            if (supportMessage.getLastName() == null) {
+                supportMessage.setLastName(u.getLastName());
+            }
+        }
     }
 
     // ----------------------------------------------------------------------------
