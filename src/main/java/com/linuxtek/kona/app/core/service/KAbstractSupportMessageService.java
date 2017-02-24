@@ -11,6 +11,7 @@ import com.linuxtek.kona.app.core.entity.KSupportMessage;
 import com.linuxtek.kona.app.core.entity.KUser;
 import com.linuxtek.kona.data.mybatis.KMyBatisUtil;
 import com.linuxtek.kona.remote.service.KServiceClient;
+import com.linuxtek.kona.util.KNameParser;
 
 public abstract class KAbstractSupportMessageService<
 SUPPORT_MESSAGE extends KSupportMessage,
@@ -126,11 +127,22 @@ implements KSupportMessageService<SUPPORT_MESSAGE> {
     // ----------------------------------------------------------------------------
 
     @Override
-    public SUPPORT_MESSAGE send(KServiceClient client, Long userId, String email, String mobileNumber, String message) {
+    public SUPPORT_MESSAGE send(KServiceClient client, String name, String email, String mobileNumber, String message) {
         SUPPORT_MESSAGE supportMessage = getNewObject();
+        
+        String firstName = null;
+        String lastName = null;
+        
+        if (name != null) {
+            KNameParser parser = KNameParser.parse(name, true);
+            firstName = parser.getFirstName();
+            lastName = parser.getLastName();
+        }
 
         supportMessage.setAppId(client.getAppId());
-        supportMessage.setUserId(userId);
+        supportMessage.setUserId(client.getUserId());
+        supportMessage.setFirstName(firstName);
+        supportMessage.setLastName(lastName);
         supportMessage.setEmail(email);
         supportMessage.setMobileNumber(mobileNumber);
         supportMessage.setMessage(message);

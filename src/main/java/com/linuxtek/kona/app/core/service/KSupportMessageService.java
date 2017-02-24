@@ -12,17 +12,17 @@ import com.linuxtek.kona.remote.service.KServiceClient;
  */
 public interface KSupportMessageService<SUPPORT_MESSAGE extends KSupportMessage> extends KService, KDataService<SUPPORT_MESSAGE> {
     
-    public SUPPORT_MESSAGE fetchByUid(String uid);
+    SUPPORT_MESSAGE fetchByUid(String uid);
 
-    public List<SUPPORT_MESSAGE> fetchByAppId(Long appId);
+    List<SUPPORT_MESSAGE> fetchByAppId(Long appId);
 
-    public List<SUPPORT_MESSAGE> fetchByUserId(Long userId);
+    List<SUPPORT_MESSAGE> fetchByUserId(Long userId);
 
-    public List<SUPPORT_MESSAGE> fetchByEmail(String email);
+    List<SUPPORT_MESSAGE> fetchByEmail(String email);
 
-    public List<SUPPORT_MESSAGE> fetchByMobileNumber(String mobileNumber);
+    List<SUPPORT_MESSAGE> fetchByMobileNumber(String mobileNumber);
     
-    public SUPPORT_MESSAGE send(SUPPORT_MESSAGE message);
+    SUPPORT_MESSAGE send(SUPPORT_MESSAGE message);
 
-    public SUPPORT_MESSAGE send(KServiceClient client, Long userId, String email, String mobileNumber, String message);
+    SUPPORT_MESSAGE send(KServiceClient client, String name, String email, String mobileNumber, String message);
 }
