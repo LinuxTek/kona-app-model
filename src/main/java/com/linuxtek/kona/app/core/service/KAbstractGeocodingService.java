@@ -150,35 +150,51 @@ public abstract class KAbstractGeocodingService implements KGeocodingService {
         KPlace place = new KBasePlace();
         place.setAddress(placeDetails.formattedAddress);
         place.setPhoneNumber(placeDetails.internationalPhoneNumber);
-        place.setLatitude(placeDetails.geometry.location.lat);
-        place.setLongitude(placeDetails.geometry.location.lng);
-        place.setIconUrl(placeDetails.icon.toString());
-        place.setGoogleUrl(placeDetails.url.toString());
-        place.setPlaceUrl(placeDetails.website.toString());
+        
+        if (placeDetails.geometry != null) {
+            place.setLatitude(placeDetails.geometry.location.lat);
+            place.setLongitude(placeDetails.geometry.location.lng);
+        }
+        
+        if (placeDetails.icon != null) {
+            place.setIconUrl(placeDetails.icon.toString());
+        }
+        
+        if (placeDetails.url != null) {
+            place.setGoogleUrl(placeDetails.url.toString());
+        }
+
+        if (placeDetails.website != null) {
+            place.setPlaceUrl(placeDetails.website.toString());
+        }
+
         place.setName(placeDetails.name);
         place.setUtcOffset(placeDetails.utcOffset); // in minutes
         place.setPlaceId(placeDetails.placeId);
         place.setRating(Double.valueOf(placeDetails.rating));
-        
-        List<KMedia> photos = new ArrayList<KMedia>();
 
-        for (Photo photo : placeDetails.photos) {
-            KBaseMedia media = new KBaseMedia();
-            
-            //https://developers.google.com/places/web-service/photos
-            String url = "https://maps.googleapis.com/maps/api/place/photo" 
-                    + "?photoreference=" + photo.photoReference 
-                    + "&key=" + getGoogleApiKey();
 
-            media.setUrl(url);
-            media.setWidth(photo.width);
-            media.setHeight(photo.height);
-            
-            photos.add(media);
+        if (placeDetails.photos != null) {
+            List<KMedia> photos = new ArrayList<KMedia>();
+
+            for (Photo photo : placeDetails.photos) {
+                KBaseMedia media = new KBaseMedia();
+
+                //https://developers.google.com/places/web-service/photos
+                String url = "https://maps.googleapis.com/maps/api/place/photo" 
+                        + "?photoreference=" + photo.photoReference 
+                        + "&key=" + getGoogleApiKey();
+
+                media.setUrl(url);
+                media.setWidth(photo.width);
+                media.setHeight(photo.height);
+
+                photos.add(media);
+            }
+
+            place.setPhotos(photos);
         }
 
-        place.setPhotos(photos);
-        
         // TODO:
         //placeDetails.openingHours
 
@@ -189,33 +205,44 @@ public abstract class KAbstractGeocodingService implements KGeocodingService {
 
     private KPlace toPlace(PlacesSearchResult result) {
         KPlace place = new KBasePlace();
+
         place.setAddress(result.formattedAddress);
-        place.setLatitude(result.geometry.location.lat);
-        place.setLongitude(result.geometry.location.lng);
-        place.setIconUrl(result.icon.toString());
+        
+        if (result.geometry != null) {
+            place.setLatitude(result.geometry.location.lat);
+            place.setLongitude(result.geometry.location.lng);
+        }
+        
+        if (result.icon != null) {
+            place.setIconUrl(result.icon.toString());
+        }
+
         place.setName(result.name);
         place.setPlaceId(result.placeId);
         place.setRating(Double.valueOf(result.rating));
-        
-        List<KMedia> photos = new ArrayList<KMedia>();
 
-        for (Photo photo : result.photos) {
-            KBaseMedia media = new KBaseMedia();
-            
-            //https://developers.google.com/places/web-service/photos
-            String url = "https://maps.googleapis.com/maps/api/place/photo" 
-                    + "?photoreference=" + photo.photoReference 
-                    + "&key=" + getGoogleApiKey();
+        if (result.photos != null) {
+            List<KMedia> photos = new ArrayList<KMedia>();
 
-            media.setUrl(url);
-            media.setWidth(photo.width);
-            media.setHeight(photo.height);
-            
-            photos.add(media);
+            for (Photo photo : result.photos) {
+                KBaseMedia media = new KBaseMedia();
+
+                //https://developers.google.com/places/web-service/photos
+                String url = "https://maps.googleapis.com/maps/api/place/photo" 
+                        + "?photoreference=" + photo.photoReference 
+                        + "&key=" + getGoogleApiKey();
+
+                media.setUrl(url);
+                media.setWidth(photo.width);
+                media.setHeight(photo.height);
+
+                photos.add(media);
+            }
+
+            place.setPhotos(photos);
         }
 
-        place.setPhotos(photos);
-        
+
         // TODO:
         //placeDetails.openingHours
 
