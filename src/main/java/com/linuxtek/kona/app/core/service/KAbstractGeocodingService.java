@@ -7,6 +7,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;
 import com.google.maps.PlacesApi;
@@ -23,6 +24,7 @@ import com.linuxtek.kona.app.core.model.KBasePlace;
 import com.linuxtek.kona.app.core.model.KGeoLocation;
 import com.linuxtek.kona.app.core.model.KMedia;
 import com.linuxtek.kona.app.core.model.KPlace;
+import com.linuxtek.kona.locale.KLocaleUtil;
 
 
 public abstract class KAbstractGeocodingService implements KGeocodingService {
@@ -149,7 +151,15 @@ public abstract class KAbstractGeocodingService implements KGeocodingService {
     private KPlace toPlace(PlaceDetails placeDetails) {
         KPlace place = new KBasePlace();
         place.setAddress(placeDetails.formattedAddress);
-        place.setPhoneNumber(placeDetails.internationalPhoneNumber);
+        
+        if (placeDetails.internationalPhoneNumber != null) {
+            try {
+                String phoneNumber = KLocaleUtil.toE164PhoneNumber(placeDetails.internationalPhoneNumber);
+                place.setPhoneNumber(phoneNumber);
+            } catch (NumberParseException e) {
+                logger.error(e.getMessage(), e);
+            }
+        }
         
         if (placeDetails.geometry != null) {
             place.setLatitude(placeDetails.geometry.location.lat);
