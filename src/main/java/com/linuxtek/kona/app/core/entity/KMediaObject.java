@@ -5,13 +5,14 @@ package com.linuxtek.kona.app.core.entity;
 
 import java.util.Date;
 
+import com.linuxtek.kona.app.core.model.KMedia;
 import com.linuxtek.kona.data.entity.KEntityObject;
 
 /**
  * KMediaObject.
  */
     
-public interface KMediaObject extends KEntityObject {
+public interface KMediaObject extends KEntityObject, KMedia {
 	
 	@Override
     public Long getId();

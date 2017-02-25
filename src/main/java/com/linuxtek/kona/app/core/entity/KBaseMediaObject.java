@@ -24,6 +24,9 @@ public class KBaseMediaObject implements KMediaObject {
     private String name;
     private String description;
 
+    // from KMedia - the absolute url for this media object if exists
+    private String url;
+
     private String urlPath;
     private String thumbnailUrlPath;
     private String contentType;
@@ -151,6 +154,16 @@ public class KBaseMediaObject implements KMediaObject {
         this.urlPath = urlPath == null ? null : urlPath.trim();
     }
 
+    @Override
+    public String getUrl() {
+        return url;
+    }
+
+    @Override
+    public void setUrl(String url) {
+        this.url = url;
+        
+    }
     
     @Override
     public String getContentType() {
@@ -368,6 +381,8 @@ public class KBaseMediaObject implements KMediaObject {
         sb.append("]");
         return sb.toString();
     }
+
+   
 
 
 

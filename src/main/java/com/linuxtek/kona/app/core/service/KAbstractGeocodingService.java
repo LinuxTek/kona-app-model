@@ -1,16 +1,28 @@
 package com.linuxtek.kona.app.core.service;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;
+import com.google.maps.PlacesApi;
 import com.google.maps.model.GeocodingResult;
 import com.google.maps.model.Geometry;
 import com.google.maps.model.LatLng;
+import com.google.maps.model.Photo;
+import com.google.maps.model.PlaceDetails;
+import com.google.maps.model.PlacesSearchResponse;
+import com.google.maps.model.PlacesSearchResult;
 import com.linuxtek.kona.app.core.model.KBaseGeoLocation;
+import com.linuxtek.kona.app.core.model.KBaseMedia;
+import com.linuxtek.kona.app.core.model.KBasePlace;
 import com.linuxtek.kona.app.core.model.KGeoLocation;
+import com.linuxtek.kona.app.core.model.KMedia;
+import com.linuxtek.kona.app.core.model.KPlace;
 
 
 public abstract class KAbstractGeocodingService implements KGeocodingService {
@@ -21,14 +33,14 @@ public abstract class KAbstractGeocodingService implements KGeocodingService {
 
     // ----------------------------------------------------------------------------
 
-    protected abstract String getGoogleApiServerKey();
+    protected abstract String getGoogleApiKey();
 
     // ----------------------------------------------------------------------------
 
     private GeoApiContext getGoogleContext() {
 
         if (googleGeoApiContext == null) {
-            String apiKey = getGoogleApiServerKey();
+            String apiKey = getGoogleApiKey();
             googleGeoApiContext = new GeoApiContext().setApiKey(apiKey);
         }
 
@@ -119,4 +131,134 @@ public abstract class KAbstractGeocodingService implements KGeocodingService {
          */
         return null;
     }
+
+    // ----------------------------------------------------------------------------
+
+    @Override
+    public KPlace getPlace(String placeId) {
+        try {
+            PlaceDetails placeDetails = PlacesApi.placeDetails(getGoogleContext(), placeId).await(); 
+            return toPlace(placeDetails);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return null;
+        }
+    }
+
+    // ----------------------------------------------------------------------------
+    private KPlace toPlace(PlaceDetails placeDetails) {
+        KPlace place = new KBasePlace();
+        place.setAddress(placeDetails.formattedAddress);
+        place.setPhoneNumber(placeDetails.internationalPhoneNumber);
+        place.setLatitude(placeDetails.geometry.location.lat);
+        place.setLongitude(placeDetails.geometry.location.lng);
+        place.setIconUrl(placeDetails.icon.toString());
+        place.setGoogleUrl(placeDetails.url.toString());
+        place.setPlaceUrl(placeDetails.website.toString());
+        place.setName(placeDetails.name);
+        place.setUtcOffset(placeDetails.utcOffset); // in minutes
+        place.setPlaceId(placeDetails.placeId);
+        place.setRating(Double.valueOf(placeDetails.rating));
+        
+        List<KMedia> photos = new ArrayList<KMedia>();
+
+        for (Photo photo : placeDetails.photos) {
+            KBaseMedia media = new KBaseMedia();
+            
+            //https://developers.google.com/places/web-service/photos
+            String url = "https://maps.googleapis.com/maps/api/place/photo" 
+                    + "?photoreference=" + photo.photoReference 
+                    + "&key=" + getGoogleApiKey();
+
+            media.setUrl(url);
+            media.setWidth(photo.width);
+            media.setHeight(photo.height);
+            
+            photos.add(media);
+        }
+
+        place.setPhotos(photos);
+        
+        // TODO:
+        //placeDetails.openingHours
+
+        return place;
+    }
+
+    // ----------------------------------------------------------------------------
+
+    private KPlace toPlace(PlacesSearchResult result) {
+        KPlace place = new KBasePlace();
+        place.setAddress(result.formattedAddress);
+        place.setLatitude(result.geometry.location.lat);
+        place.setLongitude(result.geometry.location.lng);
+        place.setIconUrl(result.icon.toString());
+        place.setName(result.name);
+        place.setPlaceId(result.placeId);
+        place.setRating(Double.valueOf(result.rating));
+        
+        List<KMedia> photos = new ArrayList<KMedia>();
+
+        for (Photo photo : result.photos) {
+            KBaseMedia media = new KBaseMedia();
+            
+            //https://developers.google.com/places/web-service/photos
+            String url = "https://maps.googleapis.com/maps/api/place/photo" 
+                    + "?photoreference=" + photo.photoReference 
+                    + "&key=" + getGoogleApiKey();
+
+            media.setUrl(url);
+            media.setWidth(photo.width);
+            media.setHeight(photo.height);
+            
+            photos.add(media);
+        }
+
+        place.setPhotos(photos);
+        
+        // TODO:
+        //placeDetails.openingHours
+
+        return place;
+    }
+
+    // ----------------------------------------------------------------------------
+
+    @Override
+    public List<KPlace> findPlaces(String query) {
+        try {
+
+            PlacesSearchResponse response = PlacesApi.textSearchQuery(getGoogleContext(), query).await(); 
+
+            PlacesSearchResult[] results = response.results;
+
+            List<KPlace> places = new ArrayList<KPlace>();
+
+            for (PlacesSearchResult result : results) {
+                places.add(toPlace(result));
+            }
+
+            return places;
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return null;
+        }
+    }
+
+    // ----------------------------------------------------------------------------
+    
+    @Override
+    public KPlace findPlaceDetail(String query) {
+        KPlace place = null;
+
+        List<KPlace> places = findPlaces(query);
+
+        if (places != null) {
+            place = getPlace(places.get(0).getPlaceId());
+        }
+
+        return place;
+    }
+
+    // ----------------------------------------------------------------------------
 }
