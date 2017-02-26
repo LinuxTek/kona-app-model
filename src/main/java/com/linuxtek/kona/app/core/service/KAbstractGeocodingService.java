@@ -290,7 +290,7 @@ public abstract class KAbstractGeocodingService implements KGeocodingService {
 
         List<KPlace> places = findPlaces(query);
 
-        if (places != null) {
+        if (places != null && places.size() > 0 && places.get(0) != null) {
             place = getPlace(places.get(0).getPlaceId());
         }
 
