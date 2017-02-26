@@ -53,28 +53,41 @@ public abstract class KAbstractGeocodingService implements KGeocodingService {
 
     @Override
     public KGeoLocation geocode(String address) {
+        KGeoLocation location = null;
+
         try {
             // address = "1600 Amphitheatre Parkway Mountain View, CA 94043"
             GeocodingResult[] results =  GeocodingApi.geocode(getGoogleContext(), address).await();
-            return process(results[0]);
+
+            if (results.length > 0) {
+                location = process(results[0]);
+            }
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
-            return null;
         }
+        
+        return location;
     }
 
     // ----------------------------------------------------------------------------
 
     @Override
     public KGeoLocation geocode(double latitude, double longitude) {
+        KGeoLocation location = null;
+
         try {
             GeocodingResult[] results = GeocodingApi.newRequest(getGoogleContext())
                     .latlng(new LatLng(latitude, longitude)).await();
-            return process(results[0]);
+
+            if (results.length > 0) {
+                location = process(results[0]);
+            }
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return null;
         }
+
+        return location;
     }
 
     // ----------------------------------------------------------------------------
@@ -149,7 +162,12 @@ public abstract class KAbstractGeocodingService implements KGeocodingService {
 
     // ----------------------------------------------------------------------------
     private KPlace toPlace(PlaceDetails placeDetails) {
+        if (placeDetails == null) {
+            return null;
+        }
+
         KPlace place = new KBasePlace();
+
         place.setAddress(placeDetails.formattedAddress);
         
         if (placeDetails.internationalPhoneNumber != null) {
@@ -214,6 +232,10 @@ public abstract class KAbstractGeocodingService implements KGeocodingService {
     // ----------------------------------------------------------------------------
 
     private KPlace toPlace(PlacesSearchResult result) {
+        if (result == null) {
+            return null;
+        }
+
         KPlace place = new KBasePlace();
 
         place.setAddress(result.formattedAddress);
@@ -263,23 +285,21 @@ public abstract class KAbstractGeocodingService implements KGeocodingService {
 
     @Override
     public List<KPlace> findPlaces(String query) {
-        try {
+        List<KPlace> places = new ArrayList<KPlace>();
 
+        try {
             PlacesSearchResponse response = PlacesApi.textSearchQuery(getGoogleContext(), query).await(); 
 
             PlacesSearchResult[] results = response.results;
 
-            List<KPlace> places = new ArrayList<KPlace>();
-
             for (PlacesSearchResult result : results) {
                 places.add(toPlace(result));
             }
-
-            return places;
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
-            return null;
         }
+
+        return places;
     }
 
     // ----------------------------------------------------------------------------
@@ -290,7 +310,7 @@ public abstract class KAbstractGeocodingService implements KGeocodingService {
 
         List<KPlace> places = findPlaces(query);
 
-        if (places != null && places.size() > 0 && places.get(0) != null) {
+        if (places.size() > 0 && places.get(0) != null) {
             place = getPlace(places.get(0).getPlaceId());
         }
 
