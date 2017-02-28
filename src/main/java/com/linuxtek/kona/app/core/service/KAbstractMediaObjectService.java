@@ -153,6 +153,16 @@ implements KMediaService<T> {
 
     // ----------------------------------------------------------------------------
 
+    @Override
+    public T fetchByName(Long accountId, String folderPath, String name) {
+        Map<String,Object> filter = KMyBatisUtil.createFilter("accountId", folderPath);
+        filter.put("folderPath", folderPath);
+        filter.put("name", name);
+        return KMyBatisUtil.fetchOne(fetchByCriteria(0, 99999, null, filter, false));
+    }
+
+    // ----------------------------------------------------------------------------
+
     protected void resizeImage(T media, Integer maxWidth, Integer maxHeight) throws IOException {
         if (!media.isResizeable()) {
             return;

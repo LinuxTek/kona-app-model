@@ -18,8 +18,10 @@ public interface KMediaService<T extends KMediaObject> extends KDataService<T> {
     List<T> fetchByUserId(Long userId);
 
     List<T> fetchByAccountId(Long accountId);
-	
-    T createThumbnail(T mediaObject, Integer width, Integer height, boolean force) throws IOException;
 
     List<T> fetchByFolderPath(Long accountId, String folder);
+
+    T fetchByName(Long accountId, String folder, String name);
+
+    T createThumbnail(T mediaObject, Integer width, Integer height, boolean force) throws IOException;
 }
