@@ -12,6 +12,58 @@
 -- ------------------------------------------------
 -- Comm tables
 -- ------------------------------------------------
+CREATE TABLE `comm__sms` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `uid` varchar(255) NOT NULL,
+  `campaign_id` bigint(20) unsigned DEFAULT NULL,
+  `campaign_channel_id` bigint(20) unsigned DEFAULT NULL,
+  `to_user_id` bigint(20) unsigned DEFAULT NULL,
+  `to_number` varchar(255) NOT NULL,
+  `from_number` varchar(255) NOT NULL,
+  `message` varchar(4000) NOT NULL,
+  `media_urls` varchar(4000) DEFAULT NULL,
+  `message_sid` varchar(255) DEFAULT NULL,
+  `status` varchar(255) DEFAULT NULL,
+  `error_code` varchar(255) DEFAULT NULL,
+  `error_message` varchar(2000) DEFAULT NULL,
+  `failed` tinyint(1) NOT NULL DEFAULT '0',
+  `delivered` tinyint(1) NOT NULL DEFAULT '0',
+  `opted_out` tinyint(1) NOT NULL DEFAULT '0',
+  `click_count` int(11) NOT NULL DEFAULT '0',
+  `sent_date` datetime(6) NOT NULL,
+  `created_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `updated_date` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+
+  PRIMARY KEY (`id`),
+
+  UNIQUE KEY `id` (`id`),
+
+  UNIQUE KEY `ux_comm__sms_uid` (`uid`),
+
+  UNIQUE KEY `ix_comm__sms_message_sid` (`message_sid`),
+
+  UNIQUE KEY `ix_comm__sms_campaign_channel_to` (`campaign_id`,`campaign_channel_id`,`to_number`),
+
+  KEY `ix_comm__sms_campaign` (`campaign_id`),
+
+  KEY `ix_comm__sms_to_user` (`to_user_id`),
+
+  KEY `ix_comm__sms_to_number` (`to_number`),
+
+  KEY `ix_comm__sms_campaign_channel` (`campaign_channel_id`),
+
+  CONSTRAINT `fk_comm__sms_campaign` FOREIGN KEY (`campaign_id`)
+        REFERENCES `sales__campaign` (`id`) ON DELETE SET NULL,
+
+  CONSTRAINT `fk_comm__sms_campaign_channel` FOREIGN KEY (`campaign_channel_id`)
+        REFERENCES `sales__campaign_channel` (`id`) ON DELETE SET NULL,
+
+  CONSTRAINT `fk_comm__sms_to_user` FOREIGN KEY (`to_user_id`) 
+        REFERENCES `core__user` (`id`) ON DELETE SET NULL
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+
+-- ------------------------------------------------
 
 CREATE TABLE `comm__email` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
@@ -55,16 +107,16 @@ CREATE TABLE `comm__email` (
 
   KEY `ix_comm__email_campaign_channel` (`campaign_channel_id`),
 
-  CONSTRAINT `fk_email_campaign` FOREIGN KEY (`campaign_id`) 
-        REFERENCES `sales_campaign` (`id`) ON DELETE SET NULL,
+  CONSTRAINT `fk_comm__email_campaign` FOREIGN KEY (`campaign_id`) 
+        REFERENCES `sales__campaign` (`id`) ON DELETE SET NULL,
 
-  CONSTRAINT `fk_email_campaign_channel` FOREIGN KEY (`campaign_channel_id`) 
-        REFERENCES `sales_campaign_channel` (`id`) ON DELETE SET NULL,
+  CONSTRAINT `fk_comm__email_campaign_channel` FOREIGN KEY (`campaign_channel_id`) 
+        REFERENCES `sales__campaign_channel` (`id`) ON DELETE SET NULL,
 
-  CONSTRAINT `fk_email_group` FOREIGN KEY (`group_id`) 
+  CONSTRAINT `fk_comm__email_group` FOREIGN KEY (`group_id`) 
         REFERENCES `comm__email_group` (`id`) ON DELETE SET NULL,
 
-  CONSTRAINT `fk_email_to_address` FOREIGN KEY (`to_address_id`) 
+  CONSTRAINT `fk_comm__email_to_address` FOREIGN KEY (`to_address_id`) 
         REFERENCES `comm__email_address` (`id`) ON DELETE SET NULL
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
@@ -110,7 +162,7 @@ CREATE TABLE `comm__email_address` (
 
   KEY `ix_comm__email_address_user` (`user_id`),
 
-  CONSTRAINT `fk_email_address_user` FOREIGN KEY (`user_id`) 
+  CONSTRAINT `fk_comm__email_address_user` FOREIGN KEY (`user_id`) 
         REFERENCES `core__user` (`id`) ON DELETE SET NULL
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;

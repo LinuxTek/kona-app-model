@@ -8,6 +8,7 @@ import java.util.Map;
 
 import com.linuxtek.kona.app.core.entity.KApp;
 import com.linuxtek.kona.app.core.entity.KUser;
+import com.linuxtek.kona.app.util.KCallback;
 import com.linuxtek.kona.app.comm.model.KEmailMedia;
 import com.linuxtek.kona.app.comm.service.KEmailException;
 import com.linuxtek.kona.app.comm.service.KSmsException;
@@ -25,7 +26,7 @@ public interface KSystemService<APP extends KApp, USER extends KUser> extends KS
 	public void sendEmail(String templateName, Map<String,Object> params, String subject, String to) throws KEmailException;
 		
 	
-    public void sendSms(String to, String body) throws KSmsException;
+    public void sendSms(String to, String body,  KCallback callback) throws KSmsException;
 
 	public void alert(String subject, Throwable t);
 
