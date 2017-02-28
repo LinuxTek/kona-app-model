@@ -163,7 +163,7 @@ implements KMediaService<T,F> {
     // TODO: Return all subfolder meta-data as well
     @Override
     public List<T> fetchByFolderPath(Long accountId, String folderPath) {
-        Map<String,Object> filter = KMyBatisUtil.createFilter("accountId", folderPath);
+        Map<String,Object> filter = KMyBatisUtil.createFilter("accountId", accountId);
         filter.put("folderPath", folderPath);
         return fetchByCriteria(0, 99999, null, filter, false);
     }
@@ -172,7 +172,7 @@ implements KMediaService<T,F> {
 
     @Override
     public T fetchByName(Long accountId, String folderPath, String name) {
-        Map<String,Object> filter = KMyBatisUtil.createFilter("accountId", folderPath);
+        Map<String,Object> filter = KMyBatisUtil.createFilter("accountId", accountId);
         filter.put("folderPath", folderPath);
         filter.put("name", name);
         return KMyBatisUtil.fetchOne(fetchByCriteria(0, 99999, null, filter, false));
