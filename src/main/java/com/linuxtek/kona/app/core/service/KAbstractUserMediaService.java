@@ -46,6 +46,7 @@ public abstract class KAbstractUserMediaService<T extends KUserMedia, EXAMPLE, U
 	   
 	// ----------------------------------------------------------------------------
 
+    @Override 
     public T add(T userMedia) {
         userMedia = super.add(userMedia);
 
@@ -59,6 +60,7 @@ public abstract class KAbstractUserMediaService<T extends KUserMedia, EXAMPLE, U
 
 	// ----------------------------------------------------------------------------
 
+    @Override 
     public T update(T userMedia) {
         userMedia = super.update(userMedia);
 
@@ -72,6 +74,7 @@ public abstract class KAbstractUserMediaService<T extends KUserMedia, EXAMPLE, U
 
 	// ----------------------------------------------------------------------------
 
+    @Override 
     public void remove(T userMedia) {
         super.remove(userMedia);
 
@@ -82,17 +85,11 @@ public abstract class KAbstractUserMediaService<T extends KUserMedia, EXAMPLE, U
 
 	// ----------------------------------------------------------------------------
 
-	@Override 
-    public T add(F file) throws IOException {
-	    return add(file, null, null, null, null, false);
-	}
-
-	// ----------------------------------------------------------------------------
-	@Override 
-    public T add(F file,Double latitude, Double longitude, Integer floor,
+    @Override 
+    public T add(F file, String folderPath, Double latitude, Double longitude, Integer floor,
             String description, boolean primaryPhoto) throws IOException {
         
-        T userMedia = add(file, latitude, longitude, floor, description);
+        T userMedia = add(file, folderPath, latitude, longitude, floor, description);
 
         userMedia.setPrimaryPhoto(primaryPhoto);
 

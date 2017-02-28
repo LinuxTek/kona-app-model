@@ -12,7 +12,7 @@ import com.linuxtek.kona.remote.service.KService;
 /**
  * The client side stub for the RPC service.
  */
-public interface KUserMediaService<T extends KUserMedia, F extends KFile> extends KService, KMediaService<T> {
+public interface KUserMediaService<T extends KUserMedia, F extends KFile> extends KService, KMediaService<T,F> {
 	public static final String SERVICE_PATH = "rpc/kona/UserMediaService";
 	
 	/*
@@ -26,8 +26,6 @@ public interface KUserMediaService<T extends KUserMedia, F extends KFile> extend
 
     public T fetchPrimaryPhoto(Long userId);
     
-    public T add(F file) throws IOException;
-
-    public T add(F file,Double latitude, Double longitude, Integer floor,
-            String description, boolean primaryPhoto) throws IOException;
+    public T add(F file, String folderPath, Double latitude, Double longitude, Integer floor,
+            String description, boolean primaryPhoto) throws IOException; 
 }

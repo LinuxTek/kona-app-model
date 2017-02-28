@@ -21,7 +21,7 @@ import com.linuxtek.kona.media.util.KImageUtil;
 
 public abstract class KAbstractMediaObjectService<T extends KMediaObject, EXAMPLE, F extends KFile> 
 extends KAbstractService<T,EXAMPLE> 
-implements KMediaService<T> {
+implements KMediaService<T,F> {
 
     private static Logger logger = LoggerFactory.getLogger(KAbstractMediaObjectService.class);
 
@@ -69,12 +69,28 @@ implements KMediaService<T> {
 
         return mediaObject;
     }
+    
+    
+    // ----------------------------------------------------------------------------
+
+    @Override 
+    public T add(F file) throws IOException {
+        return add(file, null);
+    }
+    
+    // ----------------------------------------------------------------------------
+
+    @Override 
+    public T add(F file, String folderPath) throws IOException {
+        return add(file, folderPath, null, null, null, null);
+    }
 
     // ----------------------------------------------------------------------------
 
-    public T add(F file, Double latitude, Double longitude, 
+    @Override
+    public T add(F file, String folderPath, Double latitude, Double longitude, 
             Integer floor, String description) throws IOException {
-        file = getFileService().add(file);
+        file = getFileService().save(file);
 
         T media = getNewMediaObject();
 
@@ -86,6 +102,7 @@ implements KMediaService<T> {
         media.setContentType(file.getContentType());
         media.setSize(file.getSize());
         media.setName(file.getName());
+        media.setFolderPath(folderPath);
         media.setEnabled(true);
         media.setLatitude(latitude);
         media.setLongitude(longitude);
