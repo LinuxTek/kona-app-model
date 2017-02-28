@@ -87,13 +87,13 @@ public enum KFileType implements KEnumObject {
         
     	for (String type : KMimeTypes.DOCUMENT_MIME_TYPES) {
     		if (contentType.equalsIgnoreCase(type)) {
-    			return KFileType.VIDEO;
+    			return KFileType.DOCUMENT;
     		}
     	}
         
     	for (String type : KMimeTypes.ARCHIVE_MIME_TYPES) {
     		if (contentType.equalsIgnoreCase(type)) {
-    			return KFileType.VIDEO;
+    			return KFileType.ARCHIVE;
     		}
     	}
     	

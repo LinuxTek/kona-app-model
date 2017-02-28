@@ -685,7 +685,7 @@ CREATE TABLE `sales__promo` (
 
   UNIQUE KEY `id` (`id`),
 
-  UNIQUE KEY `ix_sales__promo_uid` (`uid`),
+  UNIQUE KEY `ux_sales__promo_uid` (`uid`),
 
   UNIQUE KEY `ix_sales__promo_name` (`name`),
 
