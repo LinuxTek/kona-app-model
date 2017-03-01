@@ -10,6 +10,9 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<compiler.version>1.8</compiler.version>
 		<spring.version>4.2.6.RELEASE</spring.version>
+
+         <!-- Apache Commons -->
+        <commons-configuration.version>1.10</commons-configuration.version>
 	</properties>
 
 
@@ -64,6 +67,14 @@
             <version>1.7.21</version>
         </dependency>
         <!-- Apache Log4j -->
+
+        <!-- Apache Commons -->
+        <dependency>
+            <groupId>commons-configuration</groupId>
+            <artifactId>commons-configuration</artifactId>
+            <version>${commons-configuration.version}</version>
+        </dependency>
+        <!-- Apache Commons -->
 
         <!-- Groovy -->
         <dependency>

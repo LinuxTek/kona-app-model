@@ -18,6 +18,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.linuxtek.kona.app.core.entity.KAccount;
 import com.linuxtek.kona.app.core.entity.KApp;
+import com.linuxtek.kona.app.core.entity.KFile;
 import com.linuxtek.kona.app.core.entity.KUser;
 import com.linuxtek.kona.app.core.service.KAccountService;
 import com.linuxtek.kona.app.core.service.KSystemService;
@@ -44,6 +45,7 @@ import com.linuxtek.kona.util.KSystemUtil;
 public abstract class KAbstractCommerceService<
 							APP extends KApp,
 							USER extends KUser,
+							FILE extends KFile,
 							ACCOUNT extends KAccount,
 							CART extends KCart,
 							CART_ITEM extends KCartItem, 
@@ -99,7 +101,7 @@ public abstract class KAbstractCommerceService<
     
 	protected abstract <S extends KGooglePlayService<PURCHASE>> S getGooglePlayService();
     
-	protected abstract <S extends KSystemService<APP,USER>> S getSystemService();
+	protected abstract <S extends KSystemService<APP,USER,FILE>> S getSystemService();
     
 	// ----------------------------------------------------------------------------
     
