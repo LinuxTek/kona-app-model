@@ -302,10 +302,12 @@ public abstract class KAbstractTwilioService<SMS extends KSms,SMS_EXAMPLE,USER e
                 case "sent":
                 case "delivered":
                     sms.setDelivered(true);
+                    break;
 
                 case "undelivered":
                 case "failed":
                     sms.setFailed(true);
+                    break;
             }
         }
 
